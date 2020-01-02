@@ -1,16 +1,15 @@
-import { Container, Content } from 'native-base';
+import { Container } from 'native-base';
 import React from 'react';
-import { Text } from 'react-native';
 import NativeFooter from '../../components/native-footer/native-footer.component';
-import NativeHeader from '../../components/native-header/native-header.component';
-import CardList from '../../components/card-list/card-list.component';
+import PaymentListMonthly from '../../components/payment-list-monthly/payment-list-monthly.component';
 
-const HomeScreen = () => (
-  <Container>
-    <NativeHeader />
-    <CardList />
-    <NativeFooter />
-  </Container>
-);
+const HomeScreen = ({ navigation }) => {
+  return (
+    <Container>
+      <PaymentListMonthly navigation={navigation} />
+      <NativeFooter />
+    </Container>
+  );
+};
 
 export default HomeScreen;

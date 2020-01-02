@@ -1,13 +1,11 @@
-// import { UserActionTypes } from './user.types';
-
-// export const setCurrentUser = user => ({
-//   type: UserActionTypes.SET_CURRENT_USER,
-//   payload: user
-// });
-
 import firebase from 'firebase';
 import { Actions } from 'react-native-router-flux';
 import { UserActionTypes } from './user.types';
+
+export const setCurrentUser = user => ({
+  type: UserActionTypes.SET_CURRENT_USER,
+  payload: user
+});
 
 export const emailChanged = text => {
   return {

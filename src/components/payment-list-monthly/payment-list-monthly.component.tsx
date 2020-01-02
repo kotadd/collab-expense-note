@@ -1,16 +1,22 @@
 import {
+  Body,
   Card,
   CardItem,
   Content,
   Icon,
-  Right,
-  Text,
   Left,
-  Body
+  Right,
+  Text
 } from 'native-base';
+import { NavigationStackProp } from 'react-navigation-stack';
+
 import React, { Component } from 'react';
 
-class CardList extends Component {
+type Props = {
+  navigation: NavigationStackProp;
+};
+
+class PaymentListMonthly extends Component<Props> {
   render() {
     return (
       <Content>
@@ -24,9 +30,15 @@ class CardList extends Component {
             </Body>
             <Right />
           </CardItem>
-          <CardItem bordered>
+          <CardItem
+            bordered
+            button
+            onPress={() => {
+              this.props.navigation.navigate('Daily');
+            }}
+          >
             <Left>
-              <Text>2020/01</Text>
+              <Text>2020年01月</Text>
             </Left>
             <Body>
               <Text>¥127,721</Text>
@@ -35,9 +47,15 @@ class CardList extends Component {
               <Icon name='arrow-forward' />
             </Right>
           </CardItem>
-          <CardItem bordered>
+          <CardItem
+            bordered
+            button
+            onPress={() => {
+              alert('2019年12月の支出額');
+            }}
+          >
             <Left>
-              <Text>2019/12</Text>
+              <Text>2019年12月</Text>
             </Left>
             <Body>
               <Text>¥467,269</Text>
@@ -52,4 +70,4 @@ class CardList extends Component {
   }
 }
 
-export default CardList;
+export default PaymentListMonthly;
