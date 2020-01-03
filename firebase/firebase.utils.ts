@@ -15,7 +15,7 @@ const config = {
 
 firebase.initializeApp(config);
 
-export const createUserProfileDocument = async (userAuth, name) => {
+export const createUserProfileDocument = async userAuth => {
   if (!userAuth) return;
 
   const userRef = firestore.doc(`users/${userAuth.uid}`);
@@ -27,7 +27,6 @@ export const createUserProfileDocument = async (userAuth, name) => {
     const _createdAt = _updatedAt;
     try {
       await userRef.set({
-        name,
         email,
         _createdAt,
         _updatedAt
@@ -40,7 +39,12 @@ export const createUserProfileDocument = async (userAuth, name) => {
   return userRef;
 };
 
-export const addUserProfileDocument = async (userAuth, groupID, accountID) => {
+export const addUserProfileDocument = async (
+  userAuth,
+  groupID,
+  accountID,
+  name
+) => {
   if (!userAuth) return;
 
   const userRef = firestore.doc(`users/${userAuth.uid}`);
@@ -50,6 +54,7 @@ export const addUserProfileDocument = async (userAuth, groupID, accountID) => {
     const _updatedAt = new Date();
     try {
       await userRef.update({
+        name,
         groupID,
         accountID,
         _updatedAt
@@ -60,6 +65,30 @@ export const addUserProfileDocument = async (userAuth, groupID, accountID) => {
   }
 
   return userRef;
+};
+
+export const loginUser = async (email, password) => {
+  if (!email || !password) return;
+  const userAuth = auth.signInWithEmailAndPassword(email, password);
+  return userAuth;
+};
+
+export const fetchPaymentsData = async userAuth => {
+  if (!userAuth) return;
+
+  const userRef = firestore.doc(`users/${userAuth.uid}`);
+  const userSnapshot = await userRef.get();
+  const userInfo = userSnapshot.data();
+
+  const { accountID, groupID } = userInfo;
+
+  if (!accountID || !groupID) return;
+
+  const accountRef = firestore.doc(`accounts/${accountID}`);
+  const accountSnapshot = await accountRef.get();
+  const accountInfo = accountSnapshot.data();
+
+  return accountInfo;
 };
 
 export const auth = firebase.auth();

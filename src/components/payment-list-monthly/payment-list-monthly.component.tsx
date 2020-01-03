@@ -11,12 +11,34 @@ import {
 import { NavigationStackProp } from 'react-navigation-stack';
 
 import React, { Component } from 'react';
+import { fetchPaymentsData } from '../../../firebase/firebase.utils';
+import { connect } from 'react-redux';
+interface IStateToProps {
+  user: {
+    currentUser: {};
+  };
+  currentUser: {};
+}
 
-type Props = {
+interface INavProps {
   navigation: NavigationStackProp;
-};
+}
+
+type Props = IStateToProps & INavProps;
 
 class PaymentListMonthly extends Component<Props> {
+  constructor(props) {
+    super(props);
+    let resultDoms = [];
+  }
+
+  componentWillMount() {
+    const payments = fetchPaymentsData(this.props.currentUser);
+    let tempDom = [];
+
+    console.log(payments);
+  }
+
   render() {
     return (
       <Content>
@@ -70,4 +92,8 @@ class PaymentListMonthly extends Component<Props> {
   }
 }
 
-export default PaymentListMonthly;
+const mapStateToProps = ({ user }: IStateToProps) => ({
+  currentUser: user.currentUser
+});
+
+export default connect(mapStateToProps)(PaymentListMonthly);
