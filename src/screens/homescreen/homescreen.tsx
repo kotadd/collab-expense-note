@@ -1,26 +1,26 @@
 import { Container, Toast } from 'native-base';
-import React from 'react';
-import { NavigationStackProp } from 'react-navigation-stack';
-import NativeFooter from '../../components/native-footer/native-footer.component';
-import PaymentListMonthly from '../../components/payment-list-monthly/payment-list-monthly.component';
-
+import React, { Dispatch, useEffect } from 'react';
+import { Button } from 'react-native';
 import { connect } from 'react-redux';
+import { Action } from 'redux';
+import { fetchPaymentsData } from '../../../firebase/firebase.utils';
+import PaymentListMonthly from '../../components/payment-list-monthly/payment-list-monthly.component';
+import { setCurrentPayments } from '../../redux/account/account.actions';
+import { IDispatchToAccountProps, IStateToProps, Props } from '../types';
 
-interface IStateToProps {
-  user: {
-    currentUser: {};
-  };
-  currentUser: {};
-}
-interface INavProps {
-  navigation: NavigationStackProp;
-}
+const HomeScreen = ({
+  currentUser,
+  setCurrentPayments,
+  navigation
+}: Props & IDispatchToAccountProps) => {
+  // console.log(`currentUser: ${JSON.stringify(currentUser)}`);
 
-type Props = IStateToProps & INavProps;
-
-class HomeScreen extends React.Component<Props> {
-  componentDidMount() {
-    const { currentUser } = this.props;
+  useEffect(() => {
+    async function fetchData() {
+      const payments = await fetchPaymentsData(currentUser);
+      setCurrentPayments(payments);
+      // console.log(`paymentsData: ${JSON.stringify(payments, null, '  ')}`);
+    }
 
     if (currentUser) {
       Toast.show({
@@ -28,19 +28,32 @@ class HomeScreen extends React.Component<Props> {
         type: 'success'
       });
     }
-  }
-  render() {
-    return (
-      <Container>
-        <PaymentListMonthly navigation={this.props.navigation} />
-        <NativeFooter />
-      </Container>
-    );
-  }
-}
+    fetchData();
+  }, []);
+
+  return (
+    <Container>
+      <PaymentListMonthly navigation={navigation} />
+      {/* <NativeFooter /> */}
+    </Container>
+  );
+};
+
+HomeScreen.navigationOptions = ({ navigation }) => ({
+  title: '月ごとの支出',
+  headerRight: () => (
+    <Button title='＋' onPress={() => navigation.navigate('CreateNew')} />
+  )
+});
 
 const mapStateToProps = ({ user }: IStateToProps) => ({
   currentUser: user.currentUser
 });
 
-export default connect(mapStateToProps)(HomeScreen);
+const mapDispatchToProps = (
+  dispatch: Dispatch<Action>
+): IDispatchToAccountProps => ({
+  setCurrentPayments: payments => dispatch(setCurrentPayments(payments))
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(HomeScreen);

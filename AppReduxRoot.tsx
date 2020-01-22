@@ -1,28 +1,13 @@
 import React from 'react';
-import AppContainer from './AppContainer';
-import { setCurrentUser } from './src/redux/user/user.actions';
-import { Action, Dispatch } from 'redux';
-
-import { connect } from 'react-redux';
-import { auth, createUserProfileDocument } from './firebase/firebase.utils';
-import HomeScreen from './src/screens/homescreen/homescreen';
+import { Button } from 'react-native';
 import { NavigationStackProp } from 'react-navigation-stack';
+import { connect } from 'react-redux';
+import { Action, Dispatch } from 'redux';
+import { auth, createUserProfileDocument } from './firebase/firebase.utils';
+import { setCurrentUser } from './src/redux/user/user.actions';
+import HomeScreen from './src/screens/homescreen/homescreen';
 import LoginScreen from './src/screens/loginscreen/loginscreen';
-
-interface IStateToProps {
-  user: {
-    currentUser: {};
-  };
-}
-interface IDispatchToProps {
-  setCurrentUser: (user: {}) => void;
-}
-
-interface INavProps {
-  navigation: NavigationStackProp;
-}
-
-type Props = IStateToProps & IDispatchToProps & INavProps;
+import { Props, IDispatchToProps, IStateToProps } from './src/screens/types';
 
 class AppReduxRoot extends React.Component<Props> {
   unsubscribeFromAuth = null;
@@ -33,16 +18,17 @@ class AppReduxRoot extends React.Component<Props> {
     this.unsubscribeFromAuth = auth.onAuthStateChanged(async userAuth => {
       if (userAuth) {
         const userRef = await createUserProfileDocument(userAuth);
-
         userRef.onSnapshot(snapShot => {
+          // console.log(`snapShotId: ${snapShot.id}`);
           setCurrentUser({
             id: snapShot.id,
             ...snapShot.data()
           });
         });
+        // console.log(`userRef: ${userRef}`);
+      } else {
+        setCurrentUser(userAuth);
       }
-
-      setCurrentUser(userAuth);
     });
   }
 
@@ -55,6 +41,12 @@ class AppReduxRoot extends React.Component<Props> {
     );
   }
 }
+
+AppReduxRoot.navigationOptions = ({ navigation }) => ({
+  headerRight: () => (
+    <Button title='＋' onPress={() => navigation.navigate('CreateNew')} />
+  )
+});
 
 const mapStateToProps = ({ user }: IStateToProps) => ({
   currentUser: user.currentUser

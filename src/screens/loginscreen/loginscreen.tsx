@@ -1,26 +1,18 @@
 import { Container } from 'native-base';
 import React from 'react';
-import { NavigationStackProp } from 'react-navigation-stack';
 import LoginForm from '../../components/login-form/login-form.component';
+import { INavProps } from '../types';
 
-type Props = {
-  navigation: NavigationStackProp;
+const LoginScreen = ({ navigation }: INavProps) => {
+  return (
+    <Container>
+      <LoginForm navigation={navigation} />
+    </Container>
+  );
 };
 
-class LoginScreen extends React.Component<Props> {
-  static navigationOptions = () => {
-    return {
-      title: 'ログイン'
-    };
-  };
-
-  render() {
-    return (
-      <Container>
-        <LoginForm navigation={this.props.navigation} />
-      </Container>
-    );
-  }
-}
+LoginScreen.navigationOptions = () => ({
+  title: 'ログイン'
+});
 
 export default LoginScreen;

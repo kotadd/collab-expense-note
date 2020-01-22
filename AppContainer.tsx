@@ -1,9 +1,10 @@
 import { createAppContainer } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
-import PaymentListDaily from './src/components/payment-list-daily/payment-list-daily.component';
+import AppReduxRoot from './AppReduxRoot';
 import HomeScreen from './src/screens/homescreen/homescreen';
 import LoginScreen from './src/screens/loginscreen/loginscreen';
-import AppReduxRoot from './AppReduxRoot';
+import ModalScreen from './src/screens/modalscreen/modalscreen';
+import paymentListDailyScreen from './src/screens/payment-list-daily-screen/payment-list-daily-screen';
 
 const MainStack = createStackNavigator(
   {
@@ -14,7 +15,7 @@ const MainStack = createStackNavigator(
       screen: AppReduxRoot
     },
     Daily: {
-      screen: PaymentListDaily
+      screen: paymentListDailyScreen
     },
     Login: {
       screen: LoginScreen
@@ -23,7 +24,7 @@ const MainStack = createStackNavigator(
   {
     initialRouteName: 'Root',
     defaultNavigationOptions: {
-      title: '一覧'
+      title: 'ログイン'
     }
   }
 );
@@ -32,9 +33,13 @@ const RootStack = createStackNavigator(
   {
     Main: {
       screen: MainStack
+    },
+    CreateNew: {
+      screen: ModalScreen
     }
   },
   {
+    mode: 'modal',
     headerMode: 'none'
   }
 );
