@@ -26,22 +26,23 @@ interface IDispatchToProps {
   setCurrentUser: (user: {}) => void;
 }
 
-const LoginForm = ({ navigation }: INavProps) => {
+const LoginForm = ({ navigation, setCurrentUser }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   const validateLogin = async (email, password) => {
     const userAuth = await loginUser(email, password);
-
-    if (!userAuth) {
+    // console.log(`ユーザーは：${JSON.stringify(userAuth.user, null, '  ')}`);
+    if (userAuth) {
+      setCurrentUser(userAuth.user);
+      navigation.navigate('App');
+    } else {
+      setCurrentUser(userAuth);
       return Toast.show({
         text: 'ログイン情報が正しくありません',
         type: 'danger'
       });
     }
-    await setCurrentUser(userAuth.user);
-    // console.log(`userAuth.user: ${userAuth.user}`);
-    navigation.navigate('Home');
   };
 
   return (

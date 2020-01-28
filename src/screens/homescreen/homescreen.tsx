@@ -15,8 +15,11 @@ const HomeScreen = ({
 }: Props & IDispatchToAccountProps) => {
   // console.log(`currentUser: ${JSON.stringify(currentUser)}`);
 
+  navigation.isFocused();
+
   useEffect(() => {
     async function fetchData() {
+      // console.log(`ユーザーは: ${JSON.stringify(currentUser, null, '  ')}`);
       const payments = await fetchPaymentsData(currentUser);
       setCurrentPayments(payments);
       // console.log(`paymentsData: ${JSON.stringify(payments, null, '  ')}`);
@@ -29,7 +32,7 @@ const HomeScreen = ({
       });
     }
     fetchData();
-  }, []);
+  });
 
   return (
     <Container>

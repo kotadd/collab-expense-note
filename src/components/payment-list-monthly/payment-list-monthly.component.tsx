@@ -1,8 +1,10 @@
-import { Body, CardItem, Left, Text, Accordion } from 'native-base';
-import React from 'react';
+import { Body, CardItem, Left, Text } from 'native-base';
+import React, { Dispatch } from 'react';
+import { Button } from 'react-native';
 import { connect } from 'react-redux';
-import { paymentType } from '../../screens/types';
-import PaymentListDaily from '../payment-list-daily/payment-list-daily.component';
+import { Action } from 'redux';
+import { setCurrentPayments } from '../../redux/account/account.actions';
+import { IStateToProps, paymentType, INavProps } from '../../screens/types';
 
 export type IDispatchToProps = {
   setCurrentPayments: (account: {}) => void;
@@ -68,7 +70,7 @@ const PaymentListMonthly = props => {
         return accumulator;
       }, {});
 
-      console.log(`paymentsMap: ${JSON.stringify(paymentsMap, null, '  ')}`);
+      // console.log(`paymentsMap: ${JSON.stringify(paymentsMap, null, '  ')}`);
 
       let amount: number;
       let date: Date;
@@ -79,38 +81,26 @@ const PaymentListMonthly = props => {
       for (let j = 0; j < monthlyKeys.length; j++) {
         resultVal = paymentsMap[monthlyKeys[j]];
         // console.log(`resultVal: ${JSON.stringify(resultVal, null, '  ')}`);
-        console.log(`resultKey: ${resultKey}`);
-        // currentDom = (
-        //   <CardItem
-        //     bordered
-        //     button
-        //     key={resultKey + j}
-        //     onPress={() => {
-        //       navigation.navigate('Daily', [resultKey]);
-        //     }}
-        //   >
-        //     <Left>
-        //       <Text>{resultKey}</Text>
-        //     </Left>
-        //     <Body>
-        //       <Text>{resultVal.toLocaleString()} 円</Text>
-        //     </Body>
-        //   </CardItem>
-        // );
-        const dataArray = [
-          { title: 'First Element', content: 'Lorem ipsum dolor sit amet' },
-          { title: 'Second Element', content: 'Lorem ipsum dolor sit amet' },
-          { title: 'Third Element', content: 'Lorem ipsum dolor sit amet' }
-        ];
-
+        // console.log(`resultKey: ${resultKey}`);
+        const date = resultKey;
         currentDom = (
-          <Accordion
-            dataArray={dataArray}
-            icon='add'
-            expandedIcon='remove'
-            iconStyle={{ color: 'green' }}
-            expandedIconStyle={{ color: 'red' }}
-          />
+          <CardItem
+            bordered
+            button
+            key={resultKey + j}
+            onPress={() => {
+              navigation.navigate('Daily', {
+                date: date
+              });
+            }}
+          >
+            <Left>
+              <Text>{resultKey}</Text>
+            </Left>
+            <Body>
+              <Text>{resultVal.toLocaleString()} 円</Text>
+            </Body>
+          </CardItem>
         );
         resultDom.push(currentDom);
       }

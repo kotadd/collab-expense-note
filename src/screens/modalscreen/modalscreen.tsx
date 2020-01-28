@@ -28,15 +28,6 @@ class ModalScreen extends Component<Props> {
     weeday: 'long'
   };
 
-  static navigationOptions = ({ navigation }) => {
-    return {
-      title: '月ごとの支出',
-      headerRight: () => (
-        <Button title='＋' onPress={() => navigation.navigate('CreateNew')} />
-      )
-    };
-  };
-
   constructor(props) {
     super(props);
     this.state = {
@@ -81,7 +72,10 @@ class ModalScreen extends Component<Props> {
           text: 'データが作成されました',
           type: 'success'
         });
-        this.props.navigation.goBack();
+        // this.props.navigation.goBack();
+        this.props.navigation.navigate('Home', {
+          refresh: () => console.log('refreshed')
+        });
       }
     } catch (e) {
       console.log(`failed to create data: ${e}`);

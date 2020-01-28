@@ -12,25 +12,25 @@ import { Props, IDispatchToProps, IStateToProps } from './src/screens/types';
 class AppReduxRoot extends React.Component<Props> {
   unsubscribeFromAuth = null;
 
-  componentDidMount() {
-    const { setCurrentUser } = this.props;
+  // componentDidMount() {
+  //   const { setCurrentUser } = this.props;
 
-    this.unsubscribeFromAuth = auth.onAuthStateChanged(async userAuth => {
-      if (userAuth) {
-        const userRef = await createUserProfileDocument(userAuth);
-        userRef.onSnapshot(snapShot => {
-          // console.log(`snapShotId: ${snapShot.id}`);
-          setCurrentUser({
-            id: snapShot.id,
-            ...snapShot.data()
-          });
-        });
-        // console.log(`userRef: ${userRef}`);
-      } else {
-        setCurrentUser(userAuth);
-      }
-    });
-  }
+  //   this.unsubscribeFromAuth = auth.onAuthStateChanged(async userAuth => {
+  //     if (userAuth) {
+  //       const userRef = await createUserProfileDocument(userAuth);
+  //       userRef.onSnapshot(snapShot => {
+  //         // console.log(`snapShotId: ${snapShot.id}`);
+  //         setCurrentUser({
+  //           uid: snapShot.id,
+  //           ...snapShot.data()
+  //         });
+  //       });
+  //       // console.log(`userRef: ${userRef}`);
+  //     } else {
+  //       setCurrentUser(userAuth);
+  //     }
+  //   });
+  // }
 
   render() {
     const { navigation } = this.props;
@@ -41,12 +41,6 @@ class AppReduxRoot extends React.Component<Props> {
     );
   }
 }
-
-AppReduxRoot.navigationOptions = ({ navigation }) => ({
-  headerRight: () => (
-    <Button title='＋' onPress={() => navigation.navigate('CreateNew')} />
-  )
-});
 
 const mapStateToProps = ({ user }: IStateToProps) => ({
   currentUser: user.currentUser

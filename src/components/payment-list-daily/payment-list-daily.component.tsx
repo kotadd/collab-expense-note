@@ -1,9 +1,9 @@
 import { Body, CardItem, Left, Right, Text } from 'native-base';
 import React from 'react';
-import { paymentType } from '../../screens/types';
 import { connect } from 'react-redux';
+import { paymentType } from '../../screens/types';
 
-const PaymentListDaily = ({ currentPayments }) => {
+const PaymentListDaily = ({ currentPayments, navigation }) => {
   let resultDom = [
     <CardItem
       header
@@ -26,21 +26,19 @@ const PaymentListDaily = ({ currentPayments }) => {
     </CardItem>
   ];
 
+  // console.log(`date: ${navigation.state.params.date}`);
+
   if (currentPayments) {
     let resultKey: string;
-    let prevDom = <></>;
     let currentDom = <></>;
     let payment: paymentType;
 
-    let prevYear: string;
-    let prevMonth: string;
-    let currentYear: string;
-    let currentMonth: string;
     let currentDay: string;
 
     // console.log(`currentPayments: ${JSON.stringify(currentPayments, null, '  ')}`);
 
-    const targetPayments = currentPayments[Object.keys(currentPayments)[0]];
+    const targetPayments = currentPayments[navigation.state.params.date];
+    // console.log(targetPayments);
     for (let i = 0; i < targetPayments.length; i++) {
       payment = targetPayments[i];
       resultKey = `result-${i}`;
@@ -48,25 +46,6 @@ const PaymentListDaily = ({ currentPayments }) => {
       currentYear = payment.date.replace(/年.*$/, '');
       currentMonth = payment.date.replace(/.*年/, '').replace(/月.*$/, '');
       currentDay = payment.date.replace(/.*月/, '');
-
-      // if (prevYear !== currentYear || prevMonth !== currentMonth) {
-      //   prevDom = (
-      //     <CardItem
-      //       bordered
-      //       key='headerYear'
-      //       style={{ backgroundColor: '#dce3ea' }}
-      //     >
-      //       <Left>
-      //         <Text note={true}>
-      //           {currentYear}年 {currentMonth}月
-      //         </Text>
-      //       </Left>
-      //     </CardItem>
-      //   );
-      //   prevYear = currentYear;
-      //   prevMonth = currentMonth;
-      //   resultDom.push(prevDom);
-      // }
 
       currentDom = (
         <CardItem

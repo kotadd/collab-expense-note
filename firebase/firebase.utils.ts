@@ -77,11 +77,11 @@ export const fetchPaymentsData = async userAuth => {
   // console.log(`userAuth: ${userAuth}`);
   if (!userAuth) return;
 
-  const userRef = firestore.doc(`users/${userAuth.id}`);
+  const userRef = firestore.doc(`users/${userAuth.uid}`);
   const userSnapshot = await userRef.get();
   const userInfo = userSnapshot.data();
 
-  // console.log(`userAuth.id: ${userAuth.id}`);
+  // console.log(`userAuth.id: ${userAuth.uid}`);
 
   if (!userInfo) return;
   const { accountID, groupID } = userInfo;
@@ -120,7 +120,7 @@ export const createPaymentsData = async (userAuth, props: Props) => {
 
   if (!userAuth) return;
 
-  const userID = userAuth.id;
+  const userID = userAuth.uid;
 
   const userRef = firestore.doc(`users/${userID}`);
   const userSnapshot = await userRef.get();

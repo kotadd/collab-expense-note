@@ -9,7 +9,7 @@ import { Action } from 'redux';
 import { setCurrentPayments } from '../../redux/account/account.actions';
 
 const PaymentListDailyScreen = ({ currentUser, navigation }: Props) => {
-  console.log(navigation.state.params);
+  // console.log(navigation.state.params);
   useEffect(() => {
     async function fetchData() {
       const payments = await fetchPaymentsData(currentUser);
@@ -21,7 +21,7 @@ const PaymentListDailyScreen = ({ currentUser, navigation }: Props) => {
   return (
     <Content>
       <Card>
-        <PaymentListDaily />
+        <PaymentListDaily navigation={navigation} />
         {/* <NativeFooter /> */}
       </Card>
     </Content>
@@ -29,7 +29,7 @@ const PaymentListDailyScreen = ({ currentUser, navigation }: Props) => {
 };
 
 PaymentListDailyScreen.navigationOptions = ({ navigation }) => ({
-  title: '日付ごとの支出',
+  title: `${navigation.state.params.date}の支出` || '日付ごとの支出',
   headerRight: () => (
     <Button title='＋' onPress={() => navigation.navigate('CreateNew')} />
   )
