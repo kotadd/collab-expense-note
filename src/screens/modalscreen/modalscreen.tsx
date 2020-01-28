@@ -8,7 +8,8 @@ import {
   Input,
   Item,
   Label,
-  Toast
+  Toast,
+  Textarea
 } from 'native-base';
 import React, { Component } from 'react';
 import { Platform, Text } from 'react-native';
@@ -36,7 +37,8 @@ class ModalScreen extends Component<Props> {
       show: false,
       shopName: '',
       userAmount: 0,
-      usage: ''
+      usage: '',
+      purchaseMemo: ''
     };
   }
 
@@ -87,11 +89,11 @@ class ModalScreen extends Component<Props> {
       <Container>
         <NativeHeader navigation={this.props.navigation} />
         <Content>
-          <Form>
+          <Form style={{ marginRight: 16 }}>
             <Item fixedLabel>
-              <Label>　日付：</Label>
+              <Label>日付：</Label>
               <Button transparent onPress={() => this.setState({ show: true })}>
-                <Text>
+                <Text style={{ fontSize: 16 }}>
                   {this.state.date.toLocaleDateString('ja-JP', this.dateOption)}
                 </Text>
               </Button>
@@ -102,48 +104,71 @@ class ModalScreen extends Component<Props> {
             )}
             <PickerInput
               key='shop'
-              title='　店舗'
+              title='店舗'
               placeholder='購入したお店を選択して下さい'
               items={OPTIONS.SHOP_OPTIONS}
               onChange={this.changeShop.bind(this)}
             />
             <PickerInput
               key='usage'
-              title='　用途'
+              title='用途'
               placeholder='購入した用途を選択して下さい'
               items={OPTIONS.SITUATION_OPTIONS}
               onChange={this.changeUsage.bind(this)}
             />
             <Item fixedLabel>
-              <Label>　金額：</Label>
+              <Label>支払額：</Label>
               <Input
                 keyboardType='numeric'
                 maxLength={6}
-                style={{ textAlign: 'right' }}
+                style={{ textAlign: 'right', lineHeight: 18 }}
                 onChangeText={text =>
                   this.setState({ groupAmount: parseInt(text), show: false })
                 }
               />
-              <Label style={{ textAlign: 'right' }}>円</Label>
+              <Text
+                style={{
+                  color: '#575757',
+                  paddingRight: 5,
+                  fontSize: 17
+                }}
+              >
+                円
+              </Text>
             </Item>
-            <Item fixedLabel last>
-              <Label>本人分：</Label>
+            <Item fixedLabel>
+              <Label>個人分：</Label>
               <Input
                 keyboardType='numeric'
                 maxLength={6}
-                style={{ textAlign: 'right' }}
+                style={{ textAlign: 'right', lineHeight: 18 }}
                 onChangeText={text =>
                   this.setState({ userAmount: parseInt(text), show: false })
                 }
               />
-              <Label style={{ textAlign: 'right' }}>円</Label>
+              <Text style={{ color: '#575757', paddingRight: 5, fontSize: 17 }}>
+                円
+              </Text>
             </Item>
-
+            <Textarea
+              onChangeText={text => this.setState({ purchaseMemo: text })}
+              rowSpan={3}
+              bordered
+              placeholder='メモ'
+              style={{
+                marginLeft: 16,
+                backgroundColor: '#f8fbfd'
+              }}
+            />
             <Grid>
               <Col style={{ height: 40 }}></Col>
             </Grid>
-            <Button block onPress={this.handleSubmit.bind(this)}>
-              <Text>確定する</Text>
+            <Button
+              block
+              onPress={this.handleSubmit.bind(this)}
+              style={{ marginLeft: 16 }}
+            >
+              <Text style={{ color: 'white', fontSize: 16 }}>確定する</Text>
             </Button>
           </Form>
         </Content>

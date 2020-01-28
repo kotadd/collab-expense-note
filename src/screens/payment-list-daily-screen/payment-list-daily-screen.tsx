@@ -20,10 +20,8 @@ const PaymentListDailyScreen = ({ currentUser, navigation }: Props) => {
 
   return (
     <Content>
-      <Card>
-        <PaymentListDaily navigation={navigation} />
-        {/* <NativeFooter /> */}
-      </Card>
+      <PaymentListDaily navigation={navigation} />
+      {/* <NativeFooter /> */}
     </Content>
   );
 };

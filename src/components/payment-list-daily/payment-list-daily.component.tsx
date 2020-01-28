@@ -43,8 +43,6 @@ const PaymentListDaily = ({ currentPayments, navigation }) => {
       payment = targetPayments[i];
       resultKey = `result-${i}`;
 
-      currentYear = payment.date.replace(/年.*$/, '');
-      currentMonth = payment.date.replace(/.*年/, '').replace(/月.*$/, '');
       currentDay = payment.date.replace(/.*月/, '');
 
       currentDom = (

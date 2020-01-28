@@ -1,10 +1,6 @@
 import { Body, CardItem, Left, Text } from 'native-base';
-import React, { Dispatch } from 'react';
-import { Button } from 'react-native';
+import React from 'react';
 import { connect } from 'react-redux';
-import { Action } from 'redux';
-import { setCurrentPayments } from '../../redux/account/account.actions';
-import { IStateToProps, paymentType, INavProps } from '../../screens/types';
 
 export type IDispatchToProps = {
   setCurrentPayments: (account: {}) => void;
@@ -32,18 +28,9 @@ const PaymentListMonthly = props => {
   if (currentPayments) {
     let resultKey: string;
     let resultVal: string;
-    let prevDom = <></>;
     let currentDom = <></>;
-    let payment: paymentType;
-
-    let prevYear: string;
-    let prevMonth: string;
-    let currentYear: string;
-    let currentMonth: string;
-    let currentDay: string;
 
     let currentDate: string;
-    let amount = 0;
 
     // console.log(
     //   `currentPayments: ${JSON.stringify(currentPayments, null, '  ')}`
@@ -73,7 +60,6 @@ const PaymentListMonthly = props => {
       // console.log(`paymentsMap: ${JSON.stringify(paymentsMap, null, '  ')}`);
 
       let amount: number;
-      let date: Date;
 
       let monthlyKeys = Object.keys(paymentsMap);
       // console.log(`monthlyKeys: ${JSON.stringify(monthlyKeys, null, '  ')}`);

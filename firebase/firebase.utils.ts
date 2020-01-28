@@ -100,13 +100,21 @@ export const fetchPaymentsData = async userAuth => {
 interface Props {
   date: Date;
   groupAmount: string;
+  purchaseMemo: string;
   shopName: string;
   usage: string;
   userAmount: string;
 }
 
 export const createPaymentsData = async (userAuth, props: Props) => {
-  const { date, groupAmount, shopName, usage, userAmount } = props;
+  const {
+    date,
+    groupAmount,
+    shopName,
+    usage,
+    userAmount,
+    purchaseMemo
+  } = props;
 
   // console.log(userAuth);
   // console.log(props);
@@ -148,6 +156,7 @@ export const createPaymentsData = async (userAuth, props: Props) => {
       date: targetDate,
       groupID,
       groupAmount,
+      purchaseMemo,
       shopName,
       usage,
       userID,
@@ -176,24 +185,6 @@ export const createPaymentsData = async (userAuth, props: Props) => {
 
   return null;
 };
-
-// export const convertAccountsSnapshotToMap = accounts => {
-//   const transformedCollection = accounts.docs.map(doc => {
-//     const { payments } = doc.data();
-
-//     return {
-//       _createdAt: payments,
-//       id: doc.id,
-//       title,
-//       items
-//     };
-//   });
-
-//   return transformedCollection.reduce((accumulator, collection) => {
-//     accumulator[collection.title.toLowerCase()] = collection;
-//     return accumulator;
-//   }, {});
-// };
 
 export const auth = firebase.auth();
 export const firestore = firebase.firestore();
