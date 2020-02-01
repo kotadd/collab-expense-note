@@ -22,10 +22,13 @@ export type IDispatchToAccountProps = {
 export type Props = IStateToProps & INavProps;
 
 export type paymentType = {
-  date: string;
-  group: string;
+  collected: boolean;
+  date: firebase.firestore.Timestamp;
   groupAmount: number;
+  groupID: string;
+  purchaseMemo: string;
   shopName: string;
-  user: string;
+  usage: string;
   userAmount: number;
+  userID: string;
 };

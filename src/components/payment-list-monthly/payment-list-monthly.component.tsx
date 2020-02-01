@@ -1,12 +1,21 @@
-import { Body, CardItem, Left, Text } from 'native-base';
+import { Body, CardItem, Left, Text, Right } from 'native-base';
 import React from 'react';
 import { connect } from 'react-redux';
+import { paymentType } from '../../screens/types';
 
 export type IDispatchToProps = {
   setCurrentPayments: (account: {}) => void;
 };
 
-const PaymentListMonthly = props => {
+let dateOption = {
+  year: 'numeric',
+  month: 'short',
+  day: 'numeric',
+  weeday: 'long'
+};
+
+const PaymentListMonthly = ({ currentPayments, navigation }) => {
+  // console.log('called PaymentListMonthly');
   let resultDom = [
     <CardItem
       header
@@ -15,22 +24,25 @@ const PaymentListMonthly = props => {
       style={{ backgroundColor: '#dce3ea' }}
     >
       <Left>
-        <Text>該当月</Text>
+        <Text>該当年月</Text>
       </Left>
       <Body>
         <Text>支出総額</Text>
       </Body>
+      <Right>
+        <Text>残徴収額</Text>
+      </Right>
     </CardItem>
   ];
 
-  const { currentPayments, navigation } = props;
+  // const { currentPayments, navigation } = props;
   // console.log(`props: ${JSON.stringify(props, null, '  ')}`);
   if (currentPayments) {
     let resultKey: string;
-    let resultVal: string;
     let currentDom = <></>;
 
     let currentDate: string;
+    let yearMonth: string;
 
     // console.log(
     //   `currentPayments: ${JSON.stringify(currentPayments, null, '  ')}`
@@ -41,6 +53,33 @@ const PaymentListMonthly = props => {
     // console.log(`resultKeys: ${resultKeys}`);
     // console.log(`length: ${resultKeys.length}`);
 
+    resultKeys.sort((a, b) => {
+      let leftVal = a.match(/\d+/g);
+      let leftYear = parseInt(leftVal[0]);
+      let leftMonth = parseInt(leftVal[1]);
+
+      let rightVal = b.match(/\d+/g);
+      let rightYear = parseInt(rightVal[0]);
+      let rightMonth = parseInt(rightVal[1]);
+
+      // console.log(`a: ${a.match(/\d+/g)}`);
+      // console.log(`b: ${b.match(/\d+/g)}`);
+
+      if (
+        leftYear < rightYear ||
+        (leftYear == rightYear && leftMonth < rightMonth)
+      ) {
+        return 1;
+      }
+      if (
+        leftYear > rightYear ||
+        (leftYear == rightYear && leftMonth > rightMonth)
+      ) {
+        return -1;
+      }
+      return 0;
+    });
+
     for (let i = 0; i < resultKeys.length; i++) {
       resultKey = resultKeys[i];
 
@@ -48,27 +87,48 @@ const PaymentListMonthly = props => {
 
       let resultVals = currentPayments[resultKey];
 
-      const paymentsMap = resultVals.reduce((accumulator, collection) => {
-        currentDate = collection.date.replace(/(\d\d|\d)日/, '');
-        amount = collection.groupAmount;
-        accumulator[currentDate]
-          ? (accumulator[currentDate] += amount)
-          : (accumulator[currentDate] = amount);
-        return accumulator;
-      }, {});
+      const paymentsMap = resultVals.reduce(
+        (accumulator, payment: paymentType) => {
+          currentDate = payment.date
+            .toDate()
+            .toLocaleDateString('ja-JP', dateOption);
 
-      // console.log(`paymentsMap: ${JSON.stringify(paymentsMap, null, '  ')}`);
+          yearMonth = currentDate.replace(/(\d\d|\d)日/, '');
 
-      let amount: number;
+          let totalAmountKey = `${yearMonth}_total`;
+          let uncollectedAmountKey = `${yearMonth}_uncollected`;
+
+          let groupAmount = payment.groupAmount;
+          let uncollectedAmount = 0;
+          if (!payment.collected) {
+            uncollectedAmount = groupAmount - payment.userAmount;
+          }
+
+          accumulator[totalAmountKey]
+            ? (accumulator[totalAmountKey] += groupAmount)
+            : (accumulator[totalAmountKey] = groupAmount);
+
+          accumulator[uncollectedAmountKey]
+            ? (accumulator[uncollectedAmountKey] += uncollectedAmount)
+            : (accumulator[uncollectedAmountKey] = uncollectedAmount);
+
+          return accumulator;
+        },
+        {}
+      );
+
+      console.log(`paymentsMap: ${JSON.stringify(paymentsMap, null, '  ')}`);
 
       let monthlyKeys = Object.keys(paymentsMap);
-      // console.log(`monthlyKeys: ${JSON.stringify(monthlyKeys, null, '  ')}`);
+      console.log(`monthlyKeys: ${JSON.stringify(monthlyKeys, null, '  ')}`);
 
-      for (let j = 0; j < monthlyKeys.length; j++) {
-        resultVal = paymentsMap[monthlyKeys[j]];
-        // console.log(`resultVal: ${JSON.stringify(resultVal, null, '  ')}`);
+      for (let j = 0; j < monthlyKeys.length / 2; j++) {
+        let totalAmount = paymentsMap[monthlyKeys[j]];
+        let uncollectedAmount = paymentsMap[monthlyKeys[j + 1]];
+
+        // console.log(`totalAmount: ${JSON.stringify(totalAmount, null, '  ')}`);
         // console.log(`resultKey: ${resultKey}`);
-        const date = resultKey;
+        const yearMonth = resultKey;
         currentDom = (
           <CardItem
             bordered
@@ -76,7 +136,7 @@ const PaymentListMonthly = props => {
             key={resultKey + j}
             onPress={() => {
               navigation.navigate('Daily', {
-                date: date
+                date: yearMonth
               });
             }}
           >
@@ -84,8 +144,11 @@ const PaymentListMonthly = props => {
               <Text>{resultKey}</Text>
             </Left>
             <Body>
-              <Text>{resultVal.toLocaleString()} 円</Text>
+              <Text>{totalAmount.toLocaleString()} 円</Text>
             </Body>
+            <Right>
+              <Text>{uncollectedAmount.toLocaleString()} 円</Text>
+            </Right>
           </CardItem>
         );
         resultDom.push(currentDom);

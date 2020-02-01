@@ -10,13 +10,19 @@ import { setCurrentPayments } from '../../redux/account/account.actions';
 
 const PaymentListDailyScreen = ({ currentUser, navigation }: Props) => {
   // console.log(navigation.state.params);
+  // navigation.isFocused();
+
   useEffect(() => {
+    // console.log('called again');
     async function fetchData() {
       const payments = await fetchPaymentsData(currentUser);
+      // console.log(`paymentsData: ${JSON.stringify(payments, null, '  ')}`);
+
       setCurrentPayments(payments);
+      // console.log(`paymentsData: ${JSON.stringify(payments, null, '  ')}`);
     }
     fetchData();
-  }, []);
+  });
 
   return (
     <Content>
@@ -29,7 +35,14 @@ const PaymentListDailyScreen = ({ currentUser, navigation }: Props) => {
 PaymentListDailyScreen.navigationOptions = ({ navigation }) => ({
   title: `${navigation.state.params.date}の支出` || '日付ごとの支出',
   headerRight: () => (
-    <Button title='＋' onPress={() => navigation.navigate('CreateNew')} />
+    <Button
+      title='＋'
+      onPress={() =>
+        navigation.navigate('CreateNew', {
+          from: 'daily'
+        })
+      }
+    />
   )
 });
 

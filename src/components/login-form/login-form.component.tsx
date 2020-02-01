@@ -12,15 +12,10 @@ import {
   Toast
 } from 'native-base';
 import React, { useState } from 'react';
-import { NavigationStackProp } from 'react-navigation-stack';
 import { connect } from 'react-redux';
 import { Action, Dispatch } from 'redux';
 import { loginUser } from '../../../firebase/firebase.utils';
 import { setCurrentUser } from '../../redux/user/user.actions';
-
-type INavProps = {
-  navigation: NavigationStackProp;
-};
 
 interface IDispatchToProps {
   setCurrentUser: (user: {}) => void;
@@ -50,7 +45,7 @@ const LoginForm = ({ navigation, setCurrentUser }) => {
       <Form>
         <Item floatingLabel>
           <Icon active name='mail' />
-          <Label>Email</Label>
+          <Label>メールアドレス</Label>
           <Input
             defaultValue=''
             onChangeText={text => setEmail(text)}
@@ -59,7 +54,7 @@ const LoginForm = ({ navigation, setCurrentUser }) => {
         </Item>
         <Item floatingLabel last>
           <Icon active name='lock' />
-          <Label>Password</Label>
+          <Label>パスワード</Label>
           <Input
             secureTextEntry={true}
             defaultValue=''

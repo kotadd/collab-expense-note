@@ -98,6 +98,7 @@ export const fetchPaymentsData = async userAuth => {
 };
 
 interface Props {
+  checked: boolean;
   date: Date;
   groupAmount: string;
   purchaseMemo: string;
@@ -108,6 +109,7 @@ interface Props {
 
 export const createPaymentsData = async (userAuth, props: Props) => {
   const {
+    checked,
     date,
     groupAmount,
     shopName,
@@ -153,12 +155,13 @@ export const createPaymentsData = async (userAuth, props: Props) => {
     const currentPayment = {
       _createdAt,
       _updatedAt,
-      date: targetDate,
+      collected: checked,
+      date,
       groupID,
       groupAmount,
       purchaseMemo,
-      shopName,
-      usage,
+      shopName: shopName || 'その他',
+      usage: usage || 'その他',
       userID,
       userAmount
     };

@@ -9,7 +9,10 @@ import {
   Item,
   Label,
   Toast,
-  Textarea
+  Textarea,
+  ListItem,
+  CheckBox,
+  Body
 } from 'native-base';
 import React, { Component } from 'react';
 import { Platform, Text } from 'react-native';
@@ -32,6 +35,7 @@ class ModalScreen extends Component<Props> {
   constructor(props) {
     super(props);
     this.state = {
+      checked: false,
       date: new Date(),
       groupAmount: 0,
       show: false,
@@ -75,9 +79,35 @@ class ModalScreen extends Component<Props> {
           type: 'success'
         });
         // this.props.navigation.goBack();
-        this.props.navigation.navigate('Home', {
+        const { navigation } = this.props;
+        // console.log(
+        //   `navigation.state.from: ${JSON.stringify(
+        //     navigation.state,
+        //     null,
+        //     '  '
+        //   )}`
+        // );
+
+        navigation.navigate('Home', {
           refresh: () => console.log('refreshed')
         });
+
+        // if (navigation.state.params.from === 'monthly') {
+        //   navigation.navigate('Home', {
+        //     refresh: () => console.log('refreshed')
+        //   });
+        // } else {
+        //   const targetDate = this.state.date.toLocaleDateString(
+        //     'ja-JP',
+        //     this.dateOption
+        //   );
+        //   const yearMonth = targetDate.replace(/(\d\d|\d)日/, '');
+
+        //   navigation.navigate('Daily', {
+        //     date: yearMonth,
+        //     refresh: () => console.log('refreshed')
+        //   });
+        // }
       }
     } catch (e) {
       console.log(`failed to create data: ${e}`);
@@ -117,7 +147,7 @@ class ModalScreen extends Component<Props> {
               onChange={this.changeUsage.bind(this)}
             />
             <Item fixedLabel>
-              <Label>支払額：</Label>
+              <Label>負担額：</Label>
               <Input
                 keyboardType='numeric'
                 maxLength={6}
@@ -137,7 +167,7 @@ class ModalScreen extends Component<Props> {
               </Text>
             </Item>
             <Item fixedLabel>
-              <Label>個人分：</Label>
+              <Label>個人用：</Label>
               <Input
                 keyboardType='numeric'
                 maxLength={6}
@@ -160,6 +190,18 @@ class ModalScreen extends Component<Props> {
                 backgroundColor: '#f8fbfd'
               }}
             />
+            <ListItem
+              onPress={() => this.setState({ checked: !this.state.checked })}
+            >
+              <CheckBox
+                checked={this.state.checked}
+                color='green'
+                style={{ marginRight: 16 }}
+              />
+              <Body>
+                <Text>家計費から徴収済み</Text>
+              </Body>
+            </ListItem>
             <Grid>
               <Col style={{ height: 40 }}></Col>
             </Grid>

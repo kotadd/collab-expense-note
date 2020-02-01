@@ -1,9 +1,18 @@
-import { Body, CardItem, Left, Right, Text } from 'native-base';
+import { Body, CardItem, Left, Right, Text, CheckBox, Icon } from 'native-base';
 import React from 'react';
 import { connect } from 'react-redux';
 import { paymentType } from '../../screens/types';
 
+let dateOption = {
+  year: 'numeric',
+  month: 'short',
+  day: 'numeric',
+  weeday: 'long'
+};
+
 const PaymentListDaily = ({ currentPayments, navigation }) => {
+  // console.log('called PaymentListDaily');
+
   let resultDom = [
     <CardItem
       header
@@ -23,6 +32,9 @@ const PaymentListDaily = ({ currentPayments, navigation }) => {
       <Right>
         <Text>自分用</Text>
       </Right>
+      <Right>
+        <Text>徴収済</Text>
+      </Right>
     </CardItem>
   ];
 
@@ -33,44 +45,68 @@ const PaymentListDaily = ({ currentPayments, navigation }) => {
     let currentDom = <></>;
     let payment: paymentType;
 
+    let currentDate: string;
     let currentDay: string;
 
     // console.log(`currentPayments: ${JSON.stringify(currentPayments, null, '  ')}`);
 
     const targetPayments = currentPayments[navigation.state.params.date];
-    // console.log(targetPayments);
-    for (let i = 0; i < targetPayments.length; i++) {
-      payment = targetPayments[i];
-      resultKey = `result-${i}`;
 
-      currentDay = payment.date.replace(/.*月/, '');
+    if (targetPayments) {
+      for (let i = 0; i < targetPayments.length; i++) {
+        payment = targetPayments[i];
+        resultKey = `result-${i}`;
 
-      currentDom = (
-        <CardItem
-          bordered
-          button
-          key={resultKey}
-          onPress={() => {
-            // navigation.navigate('Details');
-            alert('fetched from firestore');
-          }}
-        >
-          <Left>
-            <Text>{currentDay}</Text>
-          </Left>
-          <Body>
-            <Text>{payment.shopName}</Text>
-          </Body>
+        currentDate = payment.date
+          .toDate()
+          .toLocaleDateString('ja-JP', dateOption);
+
+        currentDay = currentDate.replace(/.*月/, '');
+
+        // console.log(`currentDay: ${currentDay}`);
+
+        const collectCheckDom = payment.collected ? (
           <Right>
-            <Text>¥{payment.groupAmount.toLocaleString()}</Text>
+            <Icon
+              type='FontAwesome'
+              name='check'
+              style={{ color: 'green', marginRight: 8 }}
+            />
           </Right>
+        ) : (
           <Right>
-            <Text>¥{payment.userAmount.toLocaleString()}</Text>
+            <Icon type='FontAwesome' name='minus' style={{ marginRight: 10 }} />
           </Right>
-        </CardItem>
-      );
+        );
 
-      resultDom.push(currentDom);
+        currentDom = (
+          <CardItem
+            bordered
+            button
+            key={resultKey}
+            onPress={() => {
+              // navigation.navigate('Details');
+              alert('fetched from firestore');
+            }}
+          >
+            <Left>
+              <Text>{currentDay.toString()}</Text>
+            </Left>
+            <Body>
+              <Text style={{ marginTop: 4 }}>{payment.shopName}</Text>
+            </Body>
+            <Right>
+              <Text>¥{payment.groupAmount.toLocaleString()}</Text>
+            </Right>
+            <Right>
+              <Text>¥{payment.userAmount.toLocaleString()}</Text>
+            </Right>
+            {collectCheckDom}
+          </CardItem>
+        );
+
+        resultDom.push(currentDom);
+      }
     }
   }
   // console.log(resultDom);

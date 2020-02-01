@@ -13,9 +13,9 @@ const HomeScreen = ({
   setCurrentPayments,
   navigation
 }: Props & IDispatchToAccountProps) => {
-  // console.log(`currentUser: ${JSON.stringify(currentUser)}`);
+  // console.log(`currentUserは: ${JSON.stringify(currentUser, null, '  ')}`);
 
-  navigation.isFocused();
+  // navigation.isFocused();
 
   useEffect(() => {
     async function fetchData() {
@@ -45,7 +45,14 @@ const HomeScreen = ({
 HomeScreen.navigationOptions = ({ navigation }) => ({
   title: '月ごとの支出',
   headerRight: () => (
-    <Button title='＋' onPress={() => navigation.navigate('CreateNew')} />
+    <Button
+      title='＋'
+      onPress={() =>
+        navigation.navigate('CreateNew', {
+          from: 'monthly'
+        })
+      }
+    />
   )
 });
 
