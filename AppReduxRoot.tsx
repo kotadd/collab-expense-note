@@ -10,33 +10,32 @@ import LoginScreen from './src/screens/loginscreen/loginscreen';
 import { Props, IDispatchToProps, IStateToProps } from './src/screens/types';
 
 class AppReduxRoot extends React.Component<Props> {
-  unsubscribeFromAuth = null;
-  componentDidMount() {
-    const { setCurrentUser } = this.props;
-    this.unsubscribeFromAuth = auth.onAuthStateChanged(async userAuth => {
-      console.log(`userAuth: ${userAuth}`);
-      if (userAuth) {
-        const userRef = await createUserProfileDocument(userAuth);
-        userRef.onSnapshot(snapShot => {
-          // console.log(`snapShotId: ${snapShot.id}`);
-          setCurrentUser({
-            uid: snapShot.id,
-            ...snapShot.data()
-          });
-        });
-        // console.log(`userRef: ${userRef}`);
-      } else {
-        setCurrentUser(userAuth);
-      }
-    });
-  }
+  // unsubscribeFromAuth = null;
+  // componentDidMount() {
+  //   const { setCurrentUser } = this.props;
+  //   this.unsubscribeFromAuth = auth.onAuthStateChanged(async userAuth => {
+  //     if (userAuth) {
+  //       const userRef = await createUserProfileDocument(userAuth);
+  //       userRef.onSnapshot(snapShot => {
+  //         // console.log(`snapShotId: ${snapShot.id}`);
+  //         setCurrentUser({
+  //           uid: snapShot.id,
+  //           ...snapShot.data()
+  //         });
+  //       });
+  //       // console.log(`userRef: ${userRef}`);
+  //     } else {
+  //       setCurrentUser(userAuth);
+  //     }
+  //   });
+  // }
   render() {
     const { navigation } = this.props;
-    return this.unsubscribeFromAuth ? (
-      <HomeScreen navigation={navigation} />
-    ) : (
-      <LoginScreen navigation={navigation} />
-    );
+    // return this.unsubscribeFromAuth ? (
+    //   <HomeScreen navigation={navigation} />
+    // ) : (
+    return <LoginScreen navigation={navigation} />;
+    // );
   }
 }
 

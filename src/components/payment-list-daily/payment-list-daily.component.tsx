@@ -1,5 +1,15 @@
-import { Body, CardItem, Left, Right, Text, CheckBox, Icon } from 'native-base';
-import React from 'react';
+import {
+  Body,
+  CardItem,
+  Left,
+  Right,
+  Text,
+  CheckBox,
+  Icon,
+  Item,
+  Picker
+} from 'native-base';
+import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { paymentType } from '../../screens/types';
 
@@ -13,7 +23,29 @@ let dateOption = {
 const PaymentListDaily = ({ currentPayments, navigation }) => {
   // console.log('called PaymentListDaily');
 
+  const [selectedUser, setSelectedUser] = useState('');
+
+  const onValueChange = (user: string) => {
+    setSelectedUser(user);
+  };
+
   let resultDom = [
+    <Item picker>
+      <Picker
+        mode='dropdown'
+        iosIcon={<Icon name='arrow-down' />}
+        style={{ width: undefined }}
+        placeholder='全体'
+        placeholderStyle={{ color: '#bfc6ea' }}
+        placeholderIconColor='#007aff'
+        selectedValue={selectedUser}
+        onValueChange={onValueChange.bind(this)}
+      >
+        <Picker.Item label='あなた' value='key0' />
+        <Picker.Item label='ゆうや' value='key1' />
+        <Picker.Item label='母' value='key1' />
+      </Picker>
+    </Item>,
     <CardItem
       header
       bordered
@@ -33,7 +65,7 @@ const PaymentListDaily = ({ currentPayments, navigation }) => {
         <Text>自分用</Text>
       </Right>
       <Right>
-        <Text>徴収済</Text>
+        <Text>精算済</Text>
       </Right>
     </CardItem>
   ];

@@ -1,5 +1,14 @@
-import { Body, CardItem, Left, Text, Right } from 'native-base';
-import React from 'react';
+import {
+  Body,
+  CardItem,
+  Icon,
+  Item,
+  Left,
+  Picker,
+  Right,
+  Text
+} from 'native-base';
+import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { paymentType } from '../../screens/types';
 
@@ -16,7 +25,29 @@ let dateOption = {
 
 const PaymentListMonthly = ({ currentPayments, navigation }) => {
   // console.log('called PaymentListMonthly');
+  const [selectedUser, setSelectedUser] = useState('');
+
+  const onValueChange = (user: string) => {
+    setSelectedUser(user);
+  };
+
   let resultDom = [
+    <Item picker>
+      <Picker
+        mode='dropdown'
+        iosIcon={<Icon name='arrow-down' />}
+        style={{ width: undefined }}
+        placeholder='全体'
+        placeholderStyle={{ color: '#bfc6ea' }}
+        placeholderIconColor='#007aff'
+        selectedValue={selectedUser}
+        onValueChange={onValueChange.bind(this)}
+      >
+        <Picker.Item label='あなた' value='key0' />
+        <Picker.Item label='ゆうや' value='key1' />
+        <Picker.Item label='母' value='key1' />
+      </Picker>
+    </Item>,
     <CardItem
       header
       bordered
@@ -30,7 +61,7 @@ const PaymentListMonthly = ({ currentPayments, navigation }) => {
         <Text>支出総額</Text>
       </Body>
       <Right>
-        <Text>残徴収額</Text>
+        <Text>未精算額</Text>
       </Right>
     </CardItem>
   ];
@@ -117,10 +148,10 @@ const PaymentListMonthly = ({ currentPayments, navigation }) => {
         {}
       );
 
-      console.log(`paymentsMap: ${JSON.stringify(paymentsMap, null, '  ')}`);
+      // console.log(`paymentsMap: ${JSON.stringify(paymentsMap, null, '  ')}`);
 
       let monthlyKeys = Object.keys(paymentsMap);
-      console.log(`monthlyKeys: ${JSON.stringify(monthlyKeys, null, '  ')}`);
+      // console.log(`monthlyKeys: ${JSON.stringify(monthlyKeys, null, '  ')}`);
 
       for (let j = 0; j < monthlyKeys.length / 2; j++) {
         let totalAmount = paymentsMap[monthlyKeys[j]];

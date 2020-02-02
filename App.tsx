@@ -1,11 +1,10 @@
 import 'firebase/auth';
 import 'firebase/firestore';
+import { Root } from 'native-base';
 import React from 'react';
 import { Provider } from 'react-redux';
-import store from './src/redux/store';
-import AppReduxRoot from './AppReduxRoot';
 import AppContainer from './AppContainer';
-import { Root } from 'native-base';
+import store from './src/redux/store';
 
 class App extends React.Component {
   render() {

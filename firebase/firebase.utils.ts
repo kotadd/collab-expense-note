@@ -19,9 +19,9 @@ export const createUserProfileDocument = async userAuth => {
   if (!userAuth) return;
 
   const userRef = firestore.doc(`users/${userAuth.uid}`);
-  const snapShot = await userRef.get();
+  const userSnapshot = await userRef.get();
 
-  if (!snapShot.exists) {
+  if (!userSnapshot.exists) {
     const { email } = userAuth;
     const _updatedAt = new Date();
     const _createdAt = _updatedAt;
@@ -39,26 +39,31 @@ export const createUserProfileDocument = async userAuth => {
   return userRef;
 };
 
-export const addUserProfileDocument = async (
-  userAuth,
-  groupID,
-  accountID,
-  name
-) => {
+export const addUserProfileDocument = async (userAuth, groupID, name) => {
   if (!userAuth) return;
 
   const userRef = firestore.doc(`users/${userAuth.uid}`);
-  const snapShot = await userRef.get();
+  const userSnapshot = await userRef.get();
 
-  if (snapShot.exists) {
+  // console.log(`userAuth.id: ${userAuth.uid}`);
+
+  const groupRef = firestore.doc(`groups/${groupID}`);
+  const groupSnapshot = await groupRef.get();
+  const groupInfo = groupSnapshot.data();
+
+  const { accountID } = groupInfo;
+  if (!accountID) return;
+
+  if (userSnapshot.exists) {
     const _updatedAt = new Date();
     try {
       await userRef.update({
         name,
-        groupID,
         accountID,
+        groupID,
         _updatedAt
       });
+      addUserToGroups(userAuth, groupID);
     } catch (error) {
       console.log('error creating user', error.message);
     }
@@ -71,6 +76,36 @@ export const loginUser = async (email, password) => {
   if (!email || !password) return;
   const userAuth = auth.signInWithEmailAndPassword(email, password);
   return userAuth;
+};
+
+export const fetchGroupUserData = async userAuth => {
+  // console.log(`userAuth: ${userAuth}`);
+  if (!userAuth) return;
+
+  const userRef = firestore.doc(`users/${userAuth.uid}`);
+  const userSnapshot = await userRef.get();
+  const userInfo = userSnapshot.data();
+
+  // console.log(`userAuth.id: ${userAuth.uid}`);
+
+  if (!userInfo) return;
+  const { accountID, groupID } = userInfo;
+
+  if (!accountID || !groupID) return;
+
+  const groupRef = firestore.doc(`groups/${groupID}`);
+  const groupSnapshot = await groupRef.get();
+  const groupInfo = groupSnapshot.data();
+
+  console.log(`groupInfo: ${JSON.stringify(groupInfo, null, '  ')}`);
+
+  return groupInfo;
+};
+
+export const fetchGroupData = async () => {
+  const groupCollectionRef = firestore.collection('groups');
+  const groupCollectionSnapshot = await groupCollectionRef.get();
+  return groupCollectionSnapshot.docs;
 };
 
 export const fetchPaymentsData = async userAuth => {
@@ -97,7 +132,7 @@ export const fetchPaymentsData = async userAuth => {
   return accountInfo.payments;
 };
 
-interface Props {
+interface PaymentProps {
   checked: boolean;
   date: Date;
   groupAmount: string;
@@ -107,7 +142,58 @@ interface Props {
   userAmount: string;
 }
 
-export const createPaymentsData = async (userAuth, props: Props) => {
+interface GroupProps {
+  accountID: string;
+  groupName: string;
+  userIDs: [string];
+}
+
+interface UserProps {
+  accountID: string;
+  email: string;
+  groupID: string;
+  name: string;
+}
+
+export const addUserToGroups = async (userAuth, groupID) => {
+  if (!userAuth || !groupID) return;
+
+  const userID = userAuth.uid;
+  const userRef = firestore.doc(`users/${userID}`);
+  const userSnapshot = await userRef.get();
+
+  const _updatedAt = new Date();
+  if (userSnapshot.exists) {
+    try {
+      await userRef.update({ _updatedAt });
+    } catch (error) {
+      console.log('error groupdID to the user', error.message);
+    }
+  }
+
+  const groupRef = firestore.doc(`groups/${groupID}`);
+  const groupSnapshot = await groupRef.get();
+  const groupInfo = groupSnapshot.data();
+
+  if (groupSnapshot.exists) {
+    try {
+      let { userIDs } = groupInfo;
+
+      // console.log(`userIDs: ${userIDs}`);
+      // console.log(`userID: ${userID}`);
+      if (userIDs.indexOf(userID) > 0)
+        return console.log('このユーザーはすでにグループに含まれています');
+      userIDs ? userIDs.push(userID) : (userIDs = userID);
+      // console.log(`userIDs: ${JSON.stringify(userIDs, null, '  ')}`);
+      // console.log(`typeof userIDs: ${userIDs}`);
+      await groupRef.update({ _updatedAt, userIDs });
+    } catch (error) {
+      console.log('error add user to group', error.message);
+    }
+  }
+};
+
+export const createPaymentsData = async (userAuth, props: PaymentProps) => {
   const {
     checked,
     date,

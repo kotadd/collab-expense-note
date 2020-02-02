@@ -22,7 +22,7 @@ const PaymentListDailyScreen = ({ currentUser, navigation }: Props) => {
       // console.log(`paymentsData: ${JSON.stringify(payments, null, '  ')}`);
     }
     fetchData();
-  });
+  }, []);
 
   return (
     <Content>

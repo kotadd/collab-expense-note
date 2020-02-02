@@ -32,7 +32,7 @@ const HomeScreen = ({
       });
     }
     fetchData();
-  });
+  }, []);
 
   return (
     <Container>

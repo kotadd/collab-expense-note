@@ -27,7 +27,7 @@ const LoginForm = ({ navigation, setCurrentUser }) => {
 
   const validateLogin = async (email, password) => {
     const userAuth = await loginUser(email, password);
-    // console.log(`ユーザーは：${JSON.stringify(userAuth.user, null, '  ')}`);
+    console.log(`ユーザーは：${JSON.stringify(userAuth.user, null, '  ')}`);
     if (userAuth) {
       setCurrentUser(userAuth.user);
       navigation.navigate('App');
@@ -67,6 +67,10 @@ const LoginForm = ({ navigation, setCurrentUser }) => {
         </Grid>
         <Button block dark onPress={() => validateLogin(email, password)}>
           <Text> ログイン </Text>
+        </Button>
+
+        <Button transparent onPress={() => navigation.navigate('Signup')}>
+          <Text>まだ登録していませんか？</Text>
         </Button>
       </Form>
     </Content>

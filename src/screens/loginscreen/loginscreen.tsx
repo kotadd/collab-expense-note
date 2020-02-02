@@ -3,12 +3,11 @@ import React from 'react';
 import { connect } from 'react-redux';
 import LoginForm from '../../components/login-form/login-form.component';
 import { IStateToProps } from '../types';
-import { auth } from '../../../firebase/firebase.utils';
 
 const LoginScreen = ({ navigation, currentUser }) => {
-  if (currentUser) {
-    navigation.navigate('App');
-  }
+  // if (currentUser) {
+  //   navigation.navigate('App');
+  // }
 
   return (
     <Container>
