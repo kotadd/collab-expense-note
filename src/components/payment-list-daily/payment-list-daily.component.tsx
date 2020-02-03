@@ -7,7 +7,10 @@ import {
   CheckBox,
   Icon,
   Item,
-  Picker
+  Picker,
+  Header,
+  Button,
+  Title
 } from 'native-base';
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
@@ -20,18 +23,27 @@ let dateOption = {
   weeday: 'long'
 };
 
-const PaymentListDaily = ({ currentPayments, navigation }) => {
-  
-
+const PaymentListDaily = ({ currentPayments, navigation, userList }) => {
   const [selectedUser, setSelectedUser] = useState('');
 
   const onValueChange = (user: string) => {
     setSelectedUser(user);
   };
 
+  let pickerItems = [
+    <Picker.Item label='全体' value='all-items' key='all-items' />
+  ];
+  for (let key in userList) {
+    let pickerItem = (
+      <Picker.Item label={userList[key]} value={key} key={key} />
+    );
+    pickerItems.push(pickerItem);
+  }
+
   let resultDom = [
-    <Item picker>
+    <Item picker key='picker-item'>
       <Picker
+        key='picker-dropdown'
         mode='dropdown'
         iosIcon={<Icon name='arrow-down' />}
         style={{ width: undefined }}
@@ -40,10 +52,21 @@ const PaymentListDaily = ({ currentPayments, navigation }) => {
         placeholderIconColor='#007aff'
         selectedValue={selectedUser}
         onValueChange={onValueChange.bind(this)}
+        renderHeader={backAction => (
+          <Header style={{ backgroundColor: '#f44242' }}>
+            <Left>
+              <Button transparent onPress={backAction}>
+                <Icon name='arrow-back' style={{ color: '#fff' }} />
+              </Button>
+            </Left>
+            <Body style={{ flex: 3 }}>
+              <Title style={{ color: '#fff' }}>メンバーの一覧</Title>
+            </Body>
+            <Right />
+          </Header>
+        )}
       >
-        <Picker.Item label='あなた' value='key0' />
-        <Picker.Item label='ゆうや' value='key1' />
-        <Picker.Item label='母' value='key1' />
+        {pickerItems}
       </Picker>
     </Item>,
     <CardItem
@@ -70,8 +93,6 @@ const PaymentListDaily = ({ currentPayments, navigation }) => {
     </CardItem>
   ];
 
-  
-
   if (currentPayments) {
     let resultKey: string;
     let currentDom = <></>;
@@ -79,8 +100,6 @@ const PaymentListDaily = ({ currentPayments, navigation }) => {
 
     let currentDate: string;
     let currentDay: string;
-
-    
 
     const targetPayments = currentPayments[navigation.state.params.date];
 
@@ -94,8 +113,6 @@ const PaymentListDaily = ({ currentPayments, navigation }) => {
           .toLocaleDateString('ja-JP', dateOption);
 
         currentDay = currentDate.replace(/.*月/, '');
-
-        
 
         const collectCheckDom = payment.collected ? (
           <Right>
@@ -141,7 +158,7 @@ const PaymentListDaily = ({ currentPayments, navigation }) => {
       }
     }
   }
-  
+
   return resultDom;
 };
 

@@ -1,32 +1,49 @@
-import { Card, Content } from 'native-base';
+import { Card, Content, Toast } from 'native-base';
 import React, { useEffect, useState, Dispatch } from 'react';
 import { Button } from 'react-native';
 import { connect } from 'react-redux';
-import { fetchPaymentsData } from '../../../firebase/firebase.utils';
+import {
+  fetchPaymentsData,
+  fetchAllGroupUserDataByUser
+} from '../../../firebase/firebase.utils';
 import PaymentListDaily from '../../components/payment-list-daily/payment-list-daily.component';
 import { IStateToProps, Props, IDispatchToAccountProps } from '../types';
 import { Action } from 'redux';
 import { setCurrentPayments } from '../../redux/account/account.actions';
 
 const PaymentListDailyScreen = ({ currentUser, navigation }: Props) => {
-  
+  const [userList, setUserList] = useState({});
+
   // navigation.isFocused();
 
   useEffect(() => {
     console.log('called again');
     async function fetchData() {
       const payments = await fetchPaymentsData(currentUser);
-      
 
       setCurrentPayments(payments);
-      
     }
     fetchData();
-  }, []);
+  });
 
+  useEffect(() => {
+    async function fetchData() {
+      const users = await fetchAllGroupUserDataByUser(currentUser);
+
+      setUserList(users);
+    }
+    fetchData();
+
+    if (currentUser) {
+      Toast.show({
+        text: 'ログインしました',
+        type: 'success'
+      });
+    }
+  }, []);
   return (
     <Content>
-      <PaymentListDaily navigation={navigation} />
+      <PaymentListDaily navigation={navigation} userList={userList} />
       {/* <NativeFooter /> */}
     </Content>
   );
