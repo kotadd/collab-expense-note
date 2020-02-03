@@ -4,12 +4,15 @@ import { Button } from 'react-native';
 import { connect } from 'react-redux';
 import { Action } from 'redux';
 import {
-  fetchPaymentsData,
-  fetchAllGroupUserDataByUser
+  fetchGroupByUser,
+  fetchUserByUserAuth,
+  fetchPaymentsByUser,
+  fetchAllUserData
 } from '../../../firebase/firebase.utils';
 import PaymentListMonthly from '../../components/payment-list-monthly/payment-list-monthly.component';
 import { setCurrentPayments } from '../../redux/account/account.actions';
 import { IDispatchToAccountProps, IStateToProps, Props } from '../types';
+import { findGroupUsers } from '../utils';
 
 const PaymentListMonthlyScreen = ({
   currentUser,
@@ -19,7 +22,8 @@ const PaymentListMonthlyScreen = ({
   const [userList, setUserList] = useState({});
   useEffect(() => {
     async function fetchData() {
-      const payments = await fetchPaymentsData(currentUser);
+      const userInfo = await fetchUserByUserAuth(currentUser);
+      const payments = await fetchPaymentsByUser(userInfo);
       setCurrentPayments(payments);
     }
     fetchData();
@@ -27,10 +31,15 @@ const PaymentListMonthlyScreen = ({
 
   useEffect(() => {
     async function fetchData() {
-      const users = await fetchAllGroupUserDataByUser(currentUser);
+      const userInfo = await fetchUserByUserAuth(currentUser);
+      const group = await fetchGroupByUser(userInfo);
+      const userIDs = group.userIDs;
 
-      setUserList(users);
+      const users = await fetchAllUserData();
+      const userList = findGroupUsers(userIDs, users);
+      setUserList(userList);
     }
+
     fetchData();
 
     if (currentUser) {

@@ -3,13 +3,16 @@ import React, { useEffect, useState, Dispatch } from 'react';
 import { Button } from 'react-native';
 import { connect } from 'react-redux';
 import {
-  fetchPaymentsData,
-  fetchAllGroupUserDataByUser
+  fetchPaymentsByUser,
+  fetchGroupByUser,
+  fetchUserByUserAuth,
+  fetchAllUserData
 } from '../../../firebase/firebase.utils';
 import PaymentListDaily from '../../components/payment-list-daily/payment-list-daily.component';
 import { IStateToProps, Props, IDispatchToAccountProps } from '../types';
 import { Action } from 'redux';
 import { setCurrentPayments } from '../../redux/account/account.actions';
+import { findGroupUsers } from '../utils';
 
 const PaymentListDailyScreen = ({ currentUser, navigation }: Props) => {
   const [userList, setUserList] = useState({});
@@ -17,9 +20,9 @@ const PaymentListDailyScreen = ({ currentUser, navigation }: Props) => {
   // navigation.isFocused();
 
   useEffect(() => {
-    console.log('called again');
     async function fetchData() {
-      const payments = await fetchPaymentsData(currentUser);
+      const userInfo = await fetchUserByUserAuth(currentUser);
+      const payments = await fetchPaymentsByUser(userInfo);
 
       setCurrentPayments(payments);
     }
@@ -28,9 +31,14 @@ const PaymentListDailyScreen = ({ currentUser, navigation }: Props) => {
 
   useEffect(() => {
     async function fetchData() {
-      const users = await fetchAllGroupUserDataByUser(currentUser);
+      const userInfo = await fetchUserByUserAuth(currentUser);
+      const group = await fetchGroupByUser(userInfo);
+      const userIDs = group.userIDs;
 
-      setUserList(users);
+      const users = await fetchAllUserData();
+      const userList = findGroupUsers(userIDs, users);
+
+      setUserList(userList);
     }
     fetchData();
 

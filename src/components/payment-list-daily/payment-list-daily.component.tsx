@@ -24,7 +24,7 @@ let dateOption = {
 };
 
 const PaymentListDaily = ({ currentPayments, navigation, userList }) => {
-  const [selectedUser, setSelectedUser] = useState('');
+  const [selectedUser, setSelectedUser] = useState('all-items');
 
   const onValueChange = (user: string) => {
     setSelectedUser(user);
@@ -60,7 +60,7 @@ const PaymentListDaily = ({ currentPayments, navigation, userList }) => {
               </Button>
             </Left>
             <Body style={{ flex: 3 }}>
-              <Title style={{ color: '#fff' }}>メンバーの一覧</Title>
+              <Title style={{ color: '#fff' }}>同じグループのメンバー</Title>
             </Body>
             <Right />
           </Header>
@@ -105,6 +105,9 @@ const PaymentListDaily = ({ currentPayments, navigation, userList }) => {
 
     if (targetPayments) {
       for (let i = 0; i < targetPayments.length; i++) {
+        if (selectedUser !== 'all-items' && selectedUser !== payment.userID)
+          return;
+
         payment = targetPayments[i];
         resultKey = `result-${i}`;
 

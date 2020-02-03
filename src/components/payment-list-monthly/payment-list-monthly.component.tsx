@@ -27,7 +27,8 @@ let dateOption = {
 };
 
 const PaymentListMonthly = ({ currentPayments, navigation, userList }) => {
-  const [selectedUser, setSelectedUser] = useState('');
+  // console.log(`userList: ${Object.keys(userList)}`);
+  const [selectedUser, setSelectedUser] = useState('all-items');
 
   const onValueChange = async (user: string) => {
     setSelectedUser(user);
@@ -36,6 +37,7 @@ const PaymentListMonthly = ({ currentPayments, navigation, userList }) => {
   let pickerItems = [
     <Picker.Item label='全体' value='all-items' key='all-items' />
   ];
+
   for (let key in userList) {
     let pickerItem = (
       <Picker.Item label={userList[key]} value={key} key={key} />
@@ -63,7 +65,7 @@ const PaymentListMonthly = ({ currentPayments, navigation, userList }) => {
               </Button>
             </Left>
             <Body style={{ flex: 3 }}>
-              <Title style={{ color: '#fff' }}>メンバーの一覧</Title>
+              <Title style={{ color: '#fff' }}>同じグループのメンバー</Title>
             </Body>
             <Right />
           </Header>
@@ -135,28 +137,31 @@ const PaymentListMonthly = ({ currentPayments, navigation, userList }) => {
 
       const paymentsMap = resultVals.reduce(
         (accumulator, payment: paymentType) => {
-          currentDate = payment.date
-            .toDate()
-            .toLocaleDateString('ja-JP', dateOption);
+          console.log(`selectedUser: ${selectedUser}`);
+          if (selectedUser === 'all-items' || selectedUser === payment.userID) {
+            currentDate = payment.date
+              .toDate()
+              .toLocaleDateString('ja-JP', dateOption);
 
-          yearMonth = currentDate.replace(/(\d\d|\d)日/, '');
+            yearMonth = currentDate.replace(/(\d\d|\d)日/, '');
 
-          let totalAmountKey = `${yearMonth}_total`;
-          let uncollectedAmountKey = `${yearMonth}_uncollected`;
+            let totalAmountKey = `${yearMonth}_total`;
+            let uncollectedAmountKey = `${yearMonth}_uncollected`;
 
-          let groupAmount = payment.groupAmount;
-          let uncollectedAmount = 0;
-          if (!payment.collected) {
-            uncollectedAmount = groupAmount - payment.userAmount;
+            let groupAmount = payment.groupAmount;
+            let uncollectedAmount = 0;
+            if (!payment.collected) {
+              uncollectedAmount = groupAmount - payment.userAmount;
+            }
+
+            accumulator[totalAmountKey]
+              ? (accumulator[totalAmountKey] += groupAmount)
+              : (accumulator[totalAmountKey] = groupAmount);
+
+            accumulator[uncollectedAmountKey]
+              ? (accumulator[uncollectedAmountKey] += uncollectedAmount)
+              : (accumulator[uncollectedAmountKey] = uncollectedAmount);
           }
-
-          accumulator[totalAmountKey]
-            ? (accumulator[totalAmountKey] += groupAmount)
-            : (accumulator[totalAmountKey] = groupAmount);
-
-          accumulator[uncollectedAmountKey]
-            ? (accumulator[uncollectedAmountKey] += uncollectedAmount)
-            : (accumulator[uncollectedAmountKey] = uncollectedAmount);
 
           return accumulator;
         },

@@ -15,6 +15,18 @@ const config = {
 
 firebase.initializeApp(config);
 
+export const fetchAllGroupData = async () => {
+  const groupCollectionRef = firestore.collection('groups');
+  const groupCollectionSnapshot = await groupCollectionRef.get();
+  return groupCollectionSnapshot.docs;
+};
+
+export const fetchAllUserData = async () => {
+  const userCollectionRef = firestore.collection('users');
+  const userCollectionSnapshot = await userCollectionRef.get();
+  return userCollectionSnapshot.docs;
+};
+
 export const createUserProfileDocument = async userAuth => {
   if (!userAuth) return;
 
@@ -76,70 +88,19 @@ export const loginUser = async (email, password) => {
   return userAuth;
 };
 
-export const fetchGroupDataByUser = async userAuth => {
-  if (!userAuth) return;
-
-  const userRef = firestore.doc(`users/${userAuth.uid}`);
-  const userSnapshot = await userRef.get();
-  const userInfo = userSnapshot.data();
-
+export const fetchGroupByUser = async userInfo => {
   if (!userInfo) return;
-  const { accountID, groupID } = userInfo;
-
-  if (!accountID || !groupID) return;
+  const { groupID } = userInfo;
+  if (!groupID) return;
 
   const groupRef = firestore.doc(`groups/${groupID}`);
   const groupSnapshot = await groupRef.get();
   const groupInfo = groupSnapshot.data();
 
-  console.log(`groupInfo: ${JSON.stringify(groupInfo, null, '  ')}`);
-
   return groupInfo;
 };
 
-export const fetchAllGroupData = async () => {
-  const groupCollectionRef = firestore.collection('groups');
-  const groupCollectionSnapshot = await groupCollectionRef.get();
-  return groupCollectionSnapshot.docs;
-};
-
-export const fetchAllUserData = async () => {
-  const userCollectionRef = firestore.collection('users');
-  const userCollectionSnapshot = await userCollectionRef.get();
-  return userCollectionSnapshot.docs;
-};
-
-export const fetchAllGroupUserDataByUser = async userAuth => {
-  if (!userAuth) return;
-
-  const userRef = firestore.doc(`users/${userAuth.uid}`);
-  const userSnapshot = await userRef.get();
-  const userInfo = userSnapshot.data();
-
-  if (!userInfo) return;
-  const { groupID } = userInfo;
-
-  if (!groupID) return;
-
-  const groupRef = firestore.doc(`groups/${groupID}`);
-  const groupSnapshot = await groupRef.get();
-  const userIDs = groupSnapshot.data();
-
-  let allUsers = await fetchAllUserData();
-  let userData = {};
-  allUsers.forEach(user => {
-    return (userData[user.id] = user.data().name);
-  });
-  return userData;
-};
-
-export const fetchPaymentsData = async userAuth => {
-  if (!userAuth) return;
-
-  const userRef = firestore.doc(`users/${userAuth.uid}`);
-  const userSnapshot = await userRef.get();
-  const userInfo = userSnapshot.data();
-
+export const fetchPaymentsByUser = async userInfo => {
   if (!userInfo) return;
   const { accountID, groupID } = userInfo;
 
@@ -150,6 +111,16 @@ export const fetchPaymentsData = async userAuth => {
   const accountInfo = accountSnapshot.data();
 
   return accountInfo.payments;
+};
+
+export const fetchUserByUserAuth = async userAuth => {
+  if (!userAuth) return;
+
+  const userRef = firestore.doc(`users/${userAuth.uid}`);
+  const userSnapshot = await userRef.get();
+  const userInfo = userSnapshot.data();
+
+  return userInfo;
 };
 
 interface PaymentProps {
