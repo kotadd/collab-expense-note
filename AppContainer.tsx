@@ -1,16 +1,16 @@
 import { createAppContainer, createSwitchNavigator } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 import AppReduxRoot from './AppReduxRoot';
-import HomeScreen from './src/screens/homescreen/homescreen';
+import PaymentListMonthlyScreen from './src/screens/payment-list-monthly-screen/payment-list-monthly-screen';
 import LoginScreen from './src/screens/loginscreen/loginscreen';
 import ModalScreen from './src/screens/modalscreen/modalscreen';
-import paymentListDailyScreen from './src/screens/payment-list-daily-screen/payment-list-daily-screen';
+import PaymentListDailyScreen from './src/screens/payment-list-daily-screen/payment-list-daily-screen';
 import SignupScreen from './src/screens/signupscreen/signupscreen';
 import AddInfoScreen from './src/screens/add-info-screen/add-info.screen';
 
 const MainStack = createStackNavigator({
   Home: {
-    screen: HomeScreen
+    screen: PaymentListMonthlyScreen
     // navigationOptions: {
     //   headerBackTitle: '戻る'
     // }
@@ -19,7 +19,7 @@ const MainStack = createStackNavigator({
   //   screen: AppReduxRoot
   // },
   Daily: {
-    screen: paymentListDailyScreen
+    screen: PaymentListDailyScreen
   }
 });
 

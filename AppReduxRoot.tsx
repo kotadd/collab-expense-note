@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { Action, Dispatch } from 'redux';
 import { auth, createUserProfileDocument } from './firebase/firebase.utils';
 import { setCurrentUser } from './src/redux/user/user.actions';
-import HomeScreen from './src/screens/homescreen/homescreen';
+import HomeScreen from './src/screens/homescreen/payment-list-monthlyscreen/homescreen';
 import LoginScreen from './src/screens/loginscreen/loginscreen';
 import { Props, IDispatchToProps, IStateToProps } from './src/screens/types';
 
@@ -17,13 +17,13 @@ class AppReduxRoot extends React.Component<Props> {
   //     if (userAuth) {
   //       const userRef = await createUserProfileDocument(userAuth);
   //       userRef.onSnapshot(snapShot => {
-  //         // console.log(`snapShotId: ${snapShot.id}`);
+  //         `snapShotId: ${snapShot.id}`);
   //         setCurrentUser({
   //           uid: snapShot.id,
   //           ...snapShot.data()
   //         });
   //       });
-  //       // console.log(`userRef: ${userRef}`);
+  //       `userRef: ${userRef}`);
   //     } else {
   //       setCurrentUser(userAuth);
   //     }

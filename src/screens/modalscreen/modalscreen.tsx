@@ -80,7 +80,7 @@ class ModalScreen extends Component<Props> {
         });
         // this.props.navigation.goBack();
         const { navigation } = this.props;
-        // console.log(
+        
         //   `navigation.state.from: ${JSON.stringify(
         //     navigation.state,
         //     null,

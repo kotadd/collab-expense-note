@@ -15,7 +15,7 @@ import {
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import {
-  fetchGroupData,
+  fetchAllGroupData,
   addUserProfileDocument
 } from '../../../firebase/firebase.utils';
 import { IStateToProps } from '../../screens/types';
@@ -27,13 +27,13 @@ const AddInfoForm = ({ navigation, currentUser }) => {
   const [selectedGroupId, setSelectedGroupId] = useState('');
 
   const onValueChange = (groupId: string) => {
-    // console.log(groupId);
+    
     setSelectedGroupId(groupId);
   };
 
   useEffect(() => {
     async function fetchData() {
-      const groupCollectionSnapshot = await fetchGroupData();
+      const groupCollectionSnapshot = await fetchAllGroupData();
       groupCollectionSnapshot.forEach(doc => {
         setGroups({ [doc.id]: doc.data().name });
       });
@@ -46,15 +46,15 @@ const AddInfoForm = ({ navigation, currentUser }) => {
     for (let key in groups) {
       pickerItemDom.push(<Picker.Item label={groups[key]} value={key} />);
     }
-    // console.log(`groups: ${JSON.stringify(groups, null, '  ')}`);
+    
     return pickerItemDom[0];
   }
 
   const addGroupInfo = async (name, selectedGroupId) => {
     try {
-      // console.log(`name: ${name}`);
-      // console.log(`selectedGroupId: ${selectedGroupId}`);
-      console.log(`currentUser: ${currentUser}`);
+      
+      
+      
       const result = await addUserProfileDocument(
         currentUser,
         selectedGroupId,

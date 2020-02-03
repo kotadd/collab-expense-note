@@ -5,7 +5,7 @@ const INITIAL_STATE = {
 };
 
 const accountReducer = (state = INITIAL_STATE, action) => {
-  // console.log('dispatched');
+  
   switch (action.type) {
     case AccountActionTypes.SET_CURRENT_PAYMENTS:
       return {

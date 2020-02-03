@@ -9,17 +9,17 @@ import { Action } from 'redux';
 import { setCurrentPayments } from '../../redux/account/account.actions';
 
 const PaymentListDailyScreen = ({ currentUser, navigation }: Props) => {
-  // console.log(navigation.state.params);
+  
   // navigation.isFocused();
 
   useEffect(() => {
-    // console.log('called again');
+    console.log('called again');
     async function fetchData() {
       const payments = await fetchPaymentsData(currentUser);
-      // console.log(`paymentsData: ${JSON.stringify(payments, null, '  ')}`);
+      
 
       setCurrentPayments(payments);
-      // console.log(`paymentsData: ${JSON.stringify(payments, null, '  ')}`);
+      
     }
     fetchData();
   }, []);

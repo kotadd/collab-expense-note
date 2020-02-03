@@ -27,7 +27,7 @@ const LoginForm = ({ navigation, setCurrentUser }) => {
 
   const validateLogin = async (email, password) => {
     const userAuth = await loginUser(email, password);
-    console.log(`ユーザーは：${JSON.stringify(userAuth.user, null, '  ')}`);
+    
     if (userAuth) {
       setCurrentUser(userAuth.user);
       navigation.navigate('App');

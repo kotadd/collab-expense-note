@@ -6,7 +6,10 @@ import {
   Left,
   Picker,
   Right,
-  Text
+  Text,
+  Title,
+  Header,
+  Button
 } from 'native-base';
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
@@ -23,17 +26,27 @@ let dateOption = {
   weeday: 'long'
 };
 
-const PaymentListMonthly = ({ currentPayments, navigation }) => {
-  // console.log('called PaymentListMonthly');
+const PaymentListMonthly = ({ currentPayments, navigation, userList }) => {
   const [selectedUser, setSelectedUser] = useState('');
 
-  const onValueChange = (user: string) => {
+  const onValueChange = async (user: string) => {
     setSelectedUser(user);
   };
 
+  let pickerItems = [
+    <Picker.Item label='全体' value='all-items' key='all-items' />
+  ];
+  for (let key in userList) {
+    let pickerItem = (
+      <Picker.Item label={userList[key]} value={key} key={key} />
+    );
+    pickerItems.push(pickerItem);
+  }
+
   let resultDom = [
-    <Item picker>
+    <Item picker key='picker-item'>
       <Picker
+        key='picker-dropdown'
         mode='dropdown'
         iosIcon={<Icon name='arrow-down' />}
         style={{ width: undefined }}
@@ -42,10 +55,21 @@ const PaymentListMonthly = ({ currentPayments, navigation }) => {
         placeholderIconColor='#007aff'
         selectedValue={selectedUser}
         onValueChange={onValueChange.bind(this)}
+        renderHeader={backAction => (
+          <Header style={{ backgroundColor: '#f44242' }}>
+            <Left>
+              <Button transparent onPress={backAction}>
+                <Icon name='arrow-back' style={{ color: '#fff' }} />
+              </Button>
+            </Left>
+            <Body style={{ flex: 3 }}>
+              <Title style={{ color: '#fff' }}>メンバーの一覧</Title>
+            </Body>
+            <Right />
+          </Header>
+        )}
       >
-        <Picker.Item label='あなた' value='key0' />
-        <Picker.Item label='ゆうや' value='key1' />
-        <Picker.Item label='母' value='key1' />
+        {pickerItems}
       </Picker>
     </Item>,
     <CardItem
@@ -67,7 +91,7 @@ const PaymentListMonthly = ({ currentPayments, navigation }) => {
   ];
 
   // const { currentPayments, navigation } = props;
-  // console.log(`props: ${JSON.stringify(props, null, '  ')}`);
+
   if (currentPayments) {
     let resultKey: string;
     let currentDom = <></>;
@@ -75,14 +99,10 @@ const PaymentListMonthly = ({ currentPayments, navigation }) => {
     let currentDate: string;
     let yearMonth: string;
 
-    // console.log(
     //   `currentPayments: ${JSON.stringify(currentPayments, null, '  ')}`
     // );
 
     const resultKeys = Object.keys(currentPayments);
-
-    // console.log(`resultKeys: ${resultKeys}`);
-    // console.log(`length: ${resultKeys.length}`);
 
     resultKeys.sort((a, b) => {
       let leftVal = a.match(/\d+/g);
@@ -92,9 +112,6 @@ const PaymentListMonthly = ({ currentPayments, navigation }) => {
       let rightVal = b.match(/\d+/g);
       let rightYear = parseInt(rightVal[0]);
       let rightMonth = parseInt(rightVal[1]);
-
-      // console.log(`a: ${a.match(/\d+/g)}`);
-      // console.log(`b: ${b.match(/\d+/g)}`);
 
       if (
         leftYear < rightYear ||
@@ -113,8 +130,6 @@ const PaymentListMonthly = ({ currentPayments, navigation }) => {
 
     for (let i = 0; i < resultKeys.length; i++) {
       resultKey = resultKeys[i];
-
-      // console.log(`resultKey: ${resultKey}`);
 
       let resultVals = currentPayments[resultKey];
 
@@ -148,17 +163,12 @@ const PaymentListMonthly = ({ currentPayments, navigation }) => {
         {}
       );
 
-      // console.log(`paymentsMap: ${JSON.stringify(paymentsMap, null, '  ')}`);
-
       let monthlyKeys = Object.keys(paymentsMap);
-      // console.log(`monthlyKeys: ${JSON.stringify(monthlyKeys, null, '  ')}`);
 
       for (let j = 0; j < monthlyKeys.length / 2; j++) {
         let totalAmount = paymentsMap[monthlyKeys[j]];
         let uncollectedAmount = paymentsMap[monthlyKeys[j + 1]];
 
-        // console.log(`totalAmount: ${JSON.stringify(totalAmount, null, '  ')}`);
-        // console.log(`resultKey: ${resultKey}`);
         const yearMonth = resultKey;
         currentDom = (
           <CardItem

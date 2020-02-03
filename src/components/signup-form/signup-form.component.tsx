@@ -58,7 +58,7 @@ const SignupForm = ({ navigation, setCurrentUser }) => {
     } catch (error) {
       console.error(error);
     }
-    // console.log(`ユーザーは：${JSON.stringify(userAuth.user, null, '  ')}`);
+    
   };
 
   return (

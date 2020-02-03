@@ -21,7 +21,7 @@ let dateOption = {
 };
 
 const PaymentListDaily = ({ currentPayments, navigation }) => {
-  // console.log('called PaymentListDaily');
+  
 
   const [selectedUser, setSelectedUser] = useState('');
 
@@ -70,7 +70,7 @@ const PaymentListDaily = ({ currentPayments, navigation }) => {
     </CardItem>
   ];
 
-  // console.log(`date: ${navigation.state.params.date}`);
+  
 
   if (currentPayments) {
     let resultKey: string;
@@ -80,7 +80,7 @@ const PaymentListDaily = ({ currentPayments, navigation }) => {
     let currentDate: string;
     let currentDay: string;
 
-    // console.log(`currentPayments: ${JSON.stringify(currentPayments, null, '  ')}`);
+    
 
     const targetPayments = currentPayments[navigation.state.params.date];
 
@@ -95,7 +95,7 @@ const PaymentListDaily = ({ currentPayments, navigation }) => {
 
         currentDay = currentDate.replace(/.*月/, '');
 
-        // console.log(`currentDay: ${currentDay}`);
+        
 
         const collectCheckDom = payment.collected ? (
           <Right>
@@ -141,7 +141,7 @@ const PaymentListDaily = ({ currentPayments, navigation }) => {
       }
     }
   }
-  // console.log(resultDom);
+  
   return resultDom;
 };
 

@@ -1,29 +1,37 @@
 import { Container, Toast } from 'native-base';
-import React, { Dispatch, useEffect } from 'react';
+import React, { Dispatch, useEffect, useState } from 'react';
 import { Button } from 'react-native';
 import { connect } from 'react-redux';
 import { Action } from 'redux';
-import { fetchPaymentsData } from '../../../firebase/firebase.utils';
+import {
+  fetchPaymentsData,
+  fetchAllGroupUserDataByUser
+} from '../../../firebase/firebase.utils';
 import PaymentListMonthly from '../../components/payment-list-monthly/payment-list-monthly.component';
 import { setCurrentPayments } from '../../redux/account/account.actions';
 import { IDispatchToAccountProps, IStateToProps, Props } from '../types';
 
-const HomeScreen = ({
+const PaymentListMonthlyScreen = ({
   currentUser,
   setCurrentPayments,
   navigation
 }: Props & IDispatchToAccountProps) => {
-  // console.log(`currentUserは: ${JSON.stringify(currentUser, null, '  ')}`);
-
-  // navigation.isFocused();
+  const [userList, setUserList] = useState({});
+  useEffect(() => {
+    async function fetchData() {
+      const payments = await fetchPaymentsData(currentUser);
+      setCurrentPayments(payments);
+    }
+    fetchData();
+  });
 
   useEffect(() => {
     async function fetchData() {
-      // console.log(`ユーザーは: ${JSON.stringify(currentUser, null, '  ')}`);
-      const payments = await fetchPaymentsData(currentUser);
-      setCurrentPayments(payments);
-      // console.log(`paymentsData: ${JSON.stringify(payments, null, '  ')}`);
+      const users = await fetchAllGroupUserDataByUser(currentUser);
+
+      setUserList(users);
     }
+    fetchData();
 
     if (currentUser) {
       Toast.show({
@@ -31,18 +39,17 @@ const HomeScreen = ({
         type: 'success'
       });
     }
-    fetchData();
   }, []);
 
   return (
     <Container>
-      <PaymentListMonthly navigation={navigation} />
+      <PaymentListMonthly navigation={navigation} userList={userList} />
       {/* <NativeFooter /> */}
     </Container>
   );
 };
 
-HomeScreen.navigationOptions = ({ navigation }) => ({
+PaymentListMonthlyScreen.navigationOptions = ({ navigation }) => ({
   title: '月ごとの支出',
   headerRight: () => (
     <Button
@@ -66,4 +73,7 @@ const mapDispatchToProps = (
   setCurrentPayments: payments => dispatch(setCurrentPayments(payments))
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(HomeScreen);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(PaymentListMonthlyScreen);

@@ -45,8 +45,6 @@ export const addUserProfileDocument = async (userAuth, groupID, name) => {
   const userRef = firestore.doc(`users/${userAuth.uid}`);
   const userSnapshot = await userRef.get();
 
-  // console.log(`userAuth.id: ${userAuth.uid}`);
-
   const groupRef = firestore.doc(`groups/${groupID}`);
   const groupSnapshot = await groupRef.get();
   const groupInfo = groupSnapshot.data();
@@ -78,15 +76,12 @@ export const loginUser = async (email, password) => {
   return userAuth;
 };
 
-export const fetchGroupUserData = async userAuth => {
-  // console.log(`userAuth: ${userAuth}`);
+export const fetchGroupDataByUser = async userAuth => {
   if (!userAuth) return;
 
   const userRef = firestore.doc(`users/${userAuth.uid}`);
   const userSnapshot = await userRef.get();
   const userInfo = userSnapshot.data();
-
-  // console.log(`userAuth.id: ${userAuth.uid}`);
 
   if (!userInfo) return;
   const { accountID, groupID } = userInfo;
@@ -102,21 +97,48 @@ export const fetchGroupUserData = async userAuth => {
   return groupInfo;
 };
 
-export const fetchGroupData = async () => {
+export const fetchAllGroupData = async () => {
   const groupCollectionRef = firestore.collection('groups');
   const groupCollectionSnapshot = await groupCollectionRef.get();
   return groupCollectionSnapshot.docs;
 };
 
-export const fetchPaymentsData = async userAuth => {
-  // console.log(`userAuth: ${userAuth}`);
+export const fetchAllUserData = async () => {
+  const userCollectionRef = firestore.collection('users');
+  const userCollectionSnapshot = await userCollectionRef.get();
+  return userCollectionSnapshot.docs;
+};
+
+export const fetchAllGroupUserDataByUser = async userAuth => {
   if (!userAuth) return;
 
   const userRef = firestore.doc(`users/${userAuth.uid}`);
   const userSnapshot = await userRef.get();
   const userInfo = userSnapshot.data();
 
-  // console.log(`userAuth.id: ${userAuth.uid}`);
+  if (!userInfo) return;
+  const { groupID } = userInfo;
+
+  if (!groupID) return;
+
+  const groupRef = firestore.doc(`groups/${groupID}`);
+  const groupSnapshot = await groupRef.get();
+  const userIDs = groupSnapshot.data();
+
+  let allUsers = await fetchAllUserData();
+  let userData = {};
+  allUsers.forEach(user => {
+    return (userData[user.id] = user.data().name);
+  });
+  return userData;
+};
+
+export const fetchPaymentsData = async userAuth => {
+  if (!userAuth) return;
+
+  const userRef = firestore.doc(`users/${userAuth.uid}`);
+  const userSnapshot = await userRef.get();
+  const userInfo = userSnapshot.data();
 
   if (!userInfo) return;
   const { accountID, groupID } = userInfo;
@@ -126,8 +148,6 @@ export const fetchPaymentsData = async userAuth => {
   const accountRef = firestore.doc(`accounts/${accountID}`);
   const accountSnapshot = await accountRef.get();
   const accountInfo = accountSnapshot.data();
-
-  // console.log(`accountInfo.payments: ${JSON.stringify(accountInfo.payments)}`);
 
   return accountInfo.payments;
 };
@@ -179,13 +199,10 @@ export const addUserToGroups = async (userAuth, groupID) => {
     try {
       let { userIDs } = groupInfo;
 
-      // console.log(`userIDs: ${userIDs}`);
-      // console.log(`userID: ${userID}`);
       if (userIDs.indexOf(userID) > 0)
         return console.log('このユーザーはすでにグループに含まれています');
       userIDs ? userIDs.push(userID) : (userIDs = userID);
-      // console.log(`userIDs: ${JSON.stringify(userIDs, null, '  ')}`);
-      // console.log(`typeof userIDs: ${userIDs}`);
+
       await groupRef.update({ _updatedAt, userIDs });
     } catch (error) {
       console.log('error add user to group', error.message);
@@ -203,9 +220,6 @@ export const createPaymentsData = async (userAuth, props: PaymentProps) => {
     userAmount,
     purchaseMemo
   } = props;
-
-  // console.log(userAuth);
-  // console.log(props);
 
   let dateOption = {
     year: 'numeric',
@@ -256,14 +270,11 @@ export const createPaymentsData = async (userAuth, props: PaymentProps) => {
     };
     try {
       if (payments) {
-        // console.log('here');
-        // console.log(yearMonthPayment);
         payments[yearMonth]
           ? payments[yearMonth].push(currentPayment)
           : (payments[yearMonth] = [currentPayment]);
         await accountRef.update({ payments });
       } else {
-        // console.log(`yearMonthPayment: ${yearMonthPayment}`);
         await accountRef.update({ payments: yearMonthPayment });
       }
       return payments;
