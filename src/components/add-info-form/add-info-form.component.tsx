@@ -22,7 +22,7 @@ import { IStateToProps } from '../../screens/types';
 
 const AddInfoForm = ({ navigation, currentUser }) => {
   const [name, setName] = useState('');
-  const [groups, setGroups] = useState({});
+  const [pickerItemDom, setPickerItemDom] = useState([]);
 
   const [selectedGroupId, setSelectedGroupId] = useState('');
 
@@ -31,23 +31,26 @@ const AddInfoForm = ({ navigation, currentUser }) => {
   };
 
   useEffect(() => {
-    async function fetchData() {
+    const fetchGroups = async () => {
       const groupCollectionSnapshot = await fetchAllGroupData();
+      if (!groupCollectionSnapshot) return;
+      let groups = {};
       groupCollectionSnapshot.forEach(doc => {
-        setGroups({ [doc.id]: doc.data().name });
+        groups[doc.id] = doc.data().name;
       });
-    }
-    fetchData();
+
+      if (!groups) return;
+
+      let tempDom = [];
+
+      for (let key in await groups) {
+        tempDom.push(<Picker.Item label={groups[key]} value={key} key={key} />);
+      }
+      return setPickerItemDom(tempDom);
+    };
+
+    fetchGroups();
   }, []);
-
-  function pickerItems(groups) {
-    let pickerItemDom = [];
-    for (let key in groups) {
-      pickerItemDom.push(<Picker.Item label={groups[key]} value={key} />);
-    }
-
-    return pickerItemDom[0];
-  }
 
   const addGroupInfo = async (name, selectedGroupId) => {
     try {
@@ -65,7 +68,10 @@ const AddInfoForm = ({ navigation, currentUser }) => {
       }
       navigation.navigate('App');
     } catch (error) {
-      console.error(error);
+      return Toast.show({
+        text: 'ユーザーの情報を追加するのに失敗しました。',
+        type: 'danger'
+      });
     }
   };
 
@@ -97,7 +103,7 @@ const AddInfoForm = ({ navigation, currentUser }) => {
             selectedValue={selectedGroupId}
             onValueChange={onValueChange.bind(this)}
           >
-            {pickerItems(groups)}
+            {pickerItemDom}
           </Picker>
         </Item>
         <Grid>

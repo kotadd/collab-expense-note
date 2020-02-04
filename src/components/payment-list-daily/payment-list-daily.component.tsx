@@ -105,10 +105,10 @@ const PaymentListDaily = ({ currentPayments, navigation, userList }) => {
 
     if (targetPayments) {
       for (let i = 0; i < targetPayments.length; i++) {
+        payment = targetPayments[i];
         if (selectedUser !== 'all-items' && selectedUser !== payment.userID)
           return;
 
-        payment = targetPayments[i];
         resultKey = `result-${i}`;
 
         currentDate = payment.date

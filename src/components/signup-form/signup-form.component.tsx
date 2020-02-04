@@ -56,9 +56,20 @@ const SignupForm = ({ navigation, setCurrentUser }) => {
         });
       }
     } catch (error) {
-      console.error(error);
+      console.log(error);
+      if (error.message.match(/The email address is badly formatted./)) {
+        return Toast.show({
+          text: 'メールアドレスの形式が正しくありません',
+          type: 'danger'
+        });
+      }
+      if (error.message.match(/Password should be at least 6 characters/)) {
+        return Toast.show({
+          text: 'パスワードは6桁以上で入力して下さい',
+          type: 'danger'
+        });
+      }
     }
-    
   };
 
   return (
