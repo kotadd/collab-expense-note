@@ -27,7 +27,6 @@ const AddInfoForm = ({ navigation, currentUser }) => {
   const [selectedGroupId, setSelectedGroupId] = useState('');
 
   const onValueChange = (groupId: string) => {
-    
     setSelectedGroupId(groupId);
   };
 
@@ -46,15 +45,12 @@ const AddInfoForm = ({ navigation, currentUser }) => {
     for (let key in groups) {
       pickerItemDom.push(<Picker.Item label={groups[key]} value={key} />);
     }
-    
+
     return pickerItemDom[0];
   }
 
   const addGroupInfo = async (name, selectedGroupId) => {
     try {
-      
-      
-      
       const result = await addUserProfileDocument(
         currentUser,
         selectedGroupId,

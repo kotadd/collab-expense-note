@@ -7,6 +7,7 @@ import ModalScreen from './src/screens/modalscreen/modalscreen';
 import PaymentListDailyScreen from './src/screens/payment-list-daily-screen/payment-list-daily-screen';
 import SignupScreen from './src/screens/signupscreen/signupscreen';
 import AddInfoScreen from './src/screens/add-info-screen/add-info.screen';
+import CreateGroupScreen from './src/screens/create-group-screen/create-group.screen';
 
 const MainStack = createStackNavigator({
   Home: {
@@ -20,18 +21,6 @@ const MainStack = createStackNavigator({
   // },
   Daily: {
     screen: PaymentListDailyScreen
-  }
-});
-
-const AuthStack = createStackNavigator({
-  Login: {
-    screen: LoginScreen
-  },
-  AddInfo: {
-    screen: AddInfoScreen
-  },
-  Signup: {
-    screen: SignupScreen
   }
 });
 
@@ -50,11 +39,30 @@ const RootStack = createStackNavigator(
   }
 );
 
+const AuthStack = createStackNavigator({
+  Login: {
+    screen: LoginScreen
+  },
+  AddInfo: {
+    screen: AddInfoScreen
+  },
+  Signup: {
+    screen: SignupScreen
+  }
+});
+
+const CreateGroupStack = createStackNavigator({
+  Group: {
+    screen: CreateGroupScreen
+  }
+});
+
 const AppContainer = createAppContainer(
   createSwitchNavigator(
     {
       App: RootStack,
-      Auth: AuthStack
+      Auth: AuthStack,
+      Group: CreateGroupStack
     },
     {
       initialRouteName: 'Auth'

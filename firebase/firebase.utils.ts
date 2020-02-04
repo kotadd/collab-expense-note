@@ -1,6 +1,7 @@
 import firebase from 'firebase/app';
 import 'firebase/firestore';
 import 'firebase/auth';
+import { PaymentProps } from '../src/screens/types';
 
 const config = {
   apiKey: 'AIzaSyDxYGmo8Y9WQIBJ-oemrLr8MrnYUHGZa8Y',
@@ -123,29 +124,6 @@ export const fetchUserByUserAuth = async userAuth => {
   return userInfo;
 };
 
-interface PaymentProps {
-  checked: boolean;
-  date: Date;
-  groupAmount: string;
-  purchaseMemo: string;
-  shopName: string;
-  usage: string;
-  userAmount: string;
-}
-
-interface GroupProps {
-  accountID: string;
-  groupName: string;
-  userIDs: [string];
-}
-
-interface UserProps {
-  accountID: string;
-  email: string;
-  groupID: string;
-  name: string;
-}
-
 export const addUserToGroups = async (userAuth, groupID) => {
   if (!userAuth || !groupID) return;
 
@@ -207,6 +185,8 @@ export const createPaymentsData = async (userAuth, props: PaymentProps) => {
   const userSnapshot = await userRef.get();
   const userInfo = userSnapshot.data();
 
+  console.log(`userInfo: ${JSON.stringify(userInfo, null, '  ')}`);
+
   if (!userInfo) return;
   const { accountID, groupID } = userInfo;
 
@@ -252,6 +232,23 @@ export const createPaymentsData = async (userAuth, props: PaymentProps) => {
     } catch (error) {
       console.log('error creating user', error.message);
     }
+  }
+
+  return null;
+};
+
+export const createAccountAndGroup = async (name: string) => {
+  const accountsRef = firestore.collection('accounts').doc();
+  const groupsRef = firestore.collection('groups').doc();
+  try {
+    const _updatedAt = new Date();
+    const _createdAt = _updatedAt;
+    // console.log(`accountsRef.id: ${accountsRef.id}`);
+    accountsRef.set({});
+    groupsRef.set({ name, accountID: accountsRef.id });
+    return;
+  } catch (error) {
+    console.log('error creating user', error.message);
   }
 
   return null;

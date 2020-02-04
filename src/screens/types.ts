@@ -32,3 +32,26 @@ export type paymentType = {
   userAmount: number;
   userID: string;
 };
+
+export interface PaymentProps {
+  checked: boolean;
+  date: Date;
+  groupAmount: string;
+  purchaseMemo: string;
+  shopName: string;
+  usage: string;
+  userAmount: string;
+}
+
+export interface GroupProps {
+  accountID: string;
+  groupName: string;
+  userIDs: [string];
+}
+
+export interface UserProps {
+  accountID: string;
+  email: string;
+  groupID: string;
+  name: string;
+}

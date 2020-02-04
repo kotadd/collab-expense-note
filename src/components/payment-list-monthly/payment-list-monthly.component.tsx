@@ -27,7 +27,6 @@ let dateOption = {
 };
 
 const PaymentListMonthly = ({ currentPayments, navigation, userList }) => {
-  // console.log(`userList: ${Object.keys(userList)}`);
   const [selectedUser, setSelectedUser] = useState('all-items');
 
   const onValueChange = async (user: string) => {
@@ -137,7 +136,6 @@ const PaymentListMonthly = ({ currentPayments, navigation, userList }) => {
 
       const paymentsMap = resultVals.reduce(
         (accumulator, payment: paymentType) => {
-          console.log(`selectedUser: ${selectedUser}`);
           if (selectedUser === 'all-items' || selectedUser === payment.userID) {
             currentDate = payment.date
               .toDate()
