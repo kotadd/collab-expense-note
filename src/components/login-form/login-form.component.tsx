@@ -19,6 +19,7 @@ import { setCurrentUser } from '../../redux/user/user.actions';
 const LoginForm = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [togglePassword, setTogglePassword] = useState(false);
   const dispatch = useDispatch();
 
   const validateLogin = async (email, password) => {
@@ -47,16 +48,41 @@ const LoginForm = ({ navigation }) => {
             value={email}
           />
         </Item>
-        <Item floatingLabel last>
-          <Icon active name='lock' />
-          <Label>パスワード</Label>
-          <Input
-            secureTextEntry={true}
-            defaultValue=''
-            onChangeText={text => setPassword(text)}
-            value={password}
-          />
-        </Item>
+        {togglePassword ? (
+          <Item floatingLabel last>
+            <Icon active name='lock' />
+            <Label>パスワード</Label>
+            <Input
+              secureTextEntry={false}
+              defaultValue=''
+              onChangeText={text => setPassword(text)}
+              value={password}
+            />
+            <Icon
+              type='FontAwesome'
+              active
+              name='eye'
+              onPress={() => setTogglePassword(false)}
+            />
+          </Item>
+        ) : (
+          <Item floatingLabel last>
+            <Icon active name='lock' />
+            <Label>パスワード</Label>
+            <Input
+              secureTextEntry={true}
+              defaultValue=''
+              onChangeText={text => setPassword(text)}
+              value={password}
+            />
+            <Icon
+              type='FontAwesome'
+              active
+              name='eye-slash'
+              onPress={() => setTogglePassword(true)}
+            />
+          </Item>
+        )}
         <Grid>
           <Col style={{ height: 40 }}></Col>
         </Grid>
