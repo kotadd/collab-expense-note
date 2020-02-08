@@ -1,28 +1,28 @@
-import { Card, Content, Toast } from 'native-base';
-import React, { useEffect, useState, Dispatch } from 'react';
+import { Content } from 'native-base';
+import React, { useEffect, useState } from 'react';
 import { Button } from 'react-native';
-import { connect } from 'react-redux';
+import { connect, useDispatch } from 'react-redux';
 import {
-  fetchPaymentsByUser,
+  fetchAllUserData,
   fetchGroupByUser,
-  fetchUserByUserAuth,
-  fetchAllUserData
+  fetchPaymentsByUser,
+  fetchUserByUserAuth
 } from '../../../firebase/firebase.utils';
 import PaymentListDaily from '../../components/payment-list-daily/payment-list-daily.component';
-import { IStateToProps, Props, IDispatchToAccountProps } from '../types';
-import { Action } from 'redux';
 import { setCurrentPayments } from '../../redux/account/account.actions';
+import { IStateToProps, Props } from '../types';
 import { findGroupUsers } from '../utils';
 
 const PaymentListDailyScreen = ({ currentUser, navigation }: Props) => {
   const [userList, setUserList] = useState({});
+  const dispatch = useDispatch();
 
   useEffect(() => {
     async function fetchData() {
       const userInfo = await fetchUserByUserAuth(currentUser);
       const payments = await fetchPaymentsByUser(userInfo);
 
-      setCurrentPayments(payments);
+      dispatch(setCurrentPayments(payments));
     }
     fetchData();
   }, []);
@@ -66,13 +66,4 @@ const mapStateToProps = ({ user }: IStateToProps) => ({
   currentUser: user.currentUser
 });
 
-const mapDispatchToProps = (
-  dispatch: Dispatch<Action>
-): IDispatchToAccountProps => ({
-  setCurrentPayments: payments => dispatch(setCurrentPayments(payments))
-});
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(PaymentListDailyScreen);
+export default connect(mapStateToProps)(PaymentListDailyScreen);

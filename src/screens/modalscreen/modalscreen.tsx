@@ -14,32 +14,18 @@ import {
   Textarea,
   Toast
 } from 'native-base';
-import React, { Dispatch, useState } from 'react';
+import React, { useState } from 'react';
 import { Platform, Text } from 'react-native';
-import { connect } from 'react-redux';
-import { Action } from 'redux';
+import { connect, useDispatch } from 'react-redux';
 import { createPaymentsData } from '../../../firebase/firebase.utils';
 import DatePicker from '../../components/datepicker/datepicker-component';
 import NativeHeader from '../../components/native-header/native-header.component';
 import PickerInput from '../../components/picker-input/picker-input.component';
 import OPTIONS from '../../components/picker-input/picker-options';
-import {
-  setCurrentPayments,
-  updateIsPaymentsUpdated
-} from '../../redux/account/account.actions';
-import {
-  IDispatchToAccountProps,
-  IStateToProps,
-  Props,
-  PaymentType
-} from '../types';
+import { updateIsPaymentsUpdated } from '../../redux/account/account.actions';
+import { IStateToProps, PaymentType } from '../types';
 
-type StateType = {
-  date: Date;
-  show: boolean;
-};
-
-const ModalScreen = ({ navigation, currentUser, updateIsPaymentsUpdated }) => {
+const ModalScreen = ({ navigation, currentUser }) => {
   let dateOption = {
     year: 'numeric',
     month: 'short',
@@ -82,6 +68,8 @@ const ModalScreen = ({ navigation, currentUser, updateIsPaymentsUpdated }) => {
       userAmount
     };
 
+    const dispatch = useDispatch();
+
     try {
       let paymentData = await createPaymentsData(currentUser, state);
       if (paymentData) {
@@ -90,7 +78,7 @@ const ModalScreen = ({ navigation, currentUser, updateIsPaymentsUpdated }) => {
           type: 'success'
         });
 
-        updateIsPaymentsUpdated();
+        dispatch(updateIsPaymentsUpdated());
         navigation.navigate('Home');
       }
     } catch (e) {
@@ -205,11 +193,4 @@ const mapStateToProps = ({ user }: IStateToProps) => ({
   currentUser: user.currentUser
 });
 
-const mapDispatchToProps = (
-  dispatch: Dispatch<Action>
-): IDispatchToAccountProps => ({
-  setCurrentPayments: payments => dispatch(setCurrentPayments(payments)),
-  updateIsPaymentsUpdated: () => dispatch(updateIsPaymentsUpdated())
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(ModalScreen);
+export default connect(mapStateToProps)(ModalScreen);

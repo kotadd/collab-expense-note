@@ -1,5 +1,4 @@
 import { AccountActionTypes } from './account.types';
-import { updateIsPaymentsUpdated } from './account.actions';
 
 const INITIAL_STATE = {
   currentPayments: null,

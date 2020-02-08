@@ -1,20 +1,17 @@
 import {
   Body,
   CardItem,
-  Left,
-  Right,
-  Text,
-  CheckBox,
   Icon,
   Item,
+  Left,
   Picker,
-  Header,
-  Button,
-  Title
+  Right,
+  Text
 } from 'native-base';
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { PaymentType } from '../../screens/types';
+import GroupListHeader from '../group-list-header/group-list-header.component';
 
 let dateOption = {
   year: 'numeric',
@@ -52,19 +49,7 @@ const PaymentListDaily = ({ currentPayments, navigation, userList }) => {
         placeholderIconColor='#007aff'
         selectedValue={selectedUser}
         onValueChange={onValueChange.bind(this)}
-        renderHeader={backAction => (
-          <Header style={{ backgroundColor: '#f44242' }}>
-            <Left>
-              <Button transparent onPress={backAction}>
-                <Icon name='arrow-back' style={{ color: '#fff' }} />
-              </Button>
-            </Left>
-            <Body style={{ flex: 3 }}>
-              <Title style={{ color: '#fff' }}>同じグループのメンバー</Title>
-            </Body>
-            <Right />
-          </Header>
-        )}
+        renderHeader={backAction => GroupListHeader(backAction)}
       >
         {pickerItems}
       </Picker>

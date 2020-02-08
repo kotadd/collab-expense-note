@@ -12,26 +12,22 @@ import {
   Toast
 } from 'native-base';
 import React, { useState } from 'react';
-import { connect } from 'react-redux';
-import { Action, Dispatch } from 'redux';
+import { useDispatch } from 'react-redux';
 import { loginUser } from '../../../firebase/firebase.utils';
 import { setCurrentUser } from '../../redux/user/user.actions';
 
-interface IDispatchToProps {
-  setCurrentUser: (user: {}) => void;
-}
-
-const LoginForm = ({ navigation, setCurrentUser }) => {
+const LoginForm = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const dispatch = useDispatch();
 
   const validateLogin = async (email, password) => {
     const userAuth = await loginUser(email, password);
     if (userAuth) {
-      setCurrentUser(userAuth.user);
+      dispatch(setCurrentUser(userAuth.user));
       navigation.navigate('App');
     } else {
-      setCurrentUser(userAuth);
+      dispatch(setCurrentUser(userAuth));
       return Toast.show({
         text: 'ログイン情報が正しくありません',
         type: 'danger'
@@ -76,8 +72,4 @@ const LoginForm = ({ navigation, setCurrentUser }) => {
   );
 };
 
-const mapDispatchToProps = (dispatch: Dispatch<Action>): IDispatchToProps => ({
-  setCurrentUser: user => dispatch(setCurrentUser(user))
-});
-
-export default connect(null, mapDispatchToProps)(LoginForm);
+export default LoginForm;

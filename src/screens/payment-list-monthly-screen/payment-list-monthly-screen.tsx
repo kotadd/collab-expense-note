@@ -1,36 +1,33 @@
 import { Container, Toast } from 'native-base';
-import React, { Dispatch, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button } from 'react-native';
-import { connect } from 'react-redux';
-import { Action } from 'redux';
+import { connect, useDispatch } from 'react-redux';
 import {
+  auth,
   fetchAllUserData,
   fetchGroupByUser,
   fetchPaymentsByUser,
-  fetchUserByUserAuth,
-  auth
+  fetchUserByUserAuth
 } from '../../../firebase/firebase.utils';
 import PaymentListMonthly from '../../components/payment-list-monthly/payment-list-monthly.component';
-import {
-  setCurrentPayments,
-  updateIsPaymentsUpdated
-} from '../../redux/account/account.actions';
+import { setCurrentPayments } from '../../redux/account/account.actions';
+import { setCurrentUser } from '../../redux/user/user.actions';
 import { IDispatchToAccountProps, IStateToProps, Props } from '../types';
 import { findGroupUsers } from '../utils';
-import { setCurrentUser } from '../../redux/user/user.actions';
 
 const PaymentListMonthlyScreen = ({
+  navigation,
   currentUser,
-  isPaymentsUpdated,
-  setCurrentPayments,
-  navigation
+  isPaymentsUpdated
 }: Props & IDispatchToAccountProps) => {
   const [userList, setUserList] = useState({});
+  const dispatch = useDispatch();
+
   useEffect(() => {
     async function fetchPaymentsData() {
       const userInfo = await fetchUserByUserAuth(currentUser);
       const payments = await fetchPaymentsByUser(userInfo);
-      setCurrentPayments(payments);
+      dispatch(setCurrentPayments(payments));
     }
     fetchPaymentsData();
   }, [isPaymentsUpdated]);
@@ -50,12 +47,15 @@ const PaymentListMonthlyScreen = ({
   }, []);
 
   useEffect(() => {
-    if (currentUser) {
-      Toast.show({
-        text: 'ログインしました',
-        type: 'success'
-      });
+    function showToast() {
+      if (currentUser) {
+        Toast.show({
+          text: 'ログインしました',
+          type: 'success'
+        });
+      }
     }
+    showToast();
   }, []);
 
   return (
@@ -66,7 +66,7 @@ const PaymentListMonthlyScreen = ({
   );
 };
 
-const signOut = async navigation => {
+const logOut = async navigation => {
   try {
     await auth.signOut();
     setCurrentUser(null);
@@ -93,24 +93,13 @@ PaymentListMonthlyScreen.navigationOptions = ({ navigation }) => ({
     />
   ),
   headerLeft: () => (
-    <Button title='logout' onPress={() => signOut(navigation)} />
+    <Button title='ログアウト' onPress={() => logOut(navigation)} />
   )
 });
 
 const mapStateToProps = ({ user, account }: IStateToProps) => ({
   currentUser: user.currentUser,
-  currentPayments: account.currentPayments,
   isPaymentsUpdated: account.isPaymentsUpdated
 });
 
-const mapDispatchToProps = (
-  dispatch: Dispatch<Action>
-): IDispatchToAccountProps => ({
-  setCurrentPayments: payments => dispatch(setCurrentPayments(payments)),
-  updateIsPaymentsUpdated: () => dispatch(updateIsPaymentsUpdated())
-});
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(PaymentListMonthlyScreen);
+export default connect(mapStateToProps)(PaymentListMonthlyScreen);

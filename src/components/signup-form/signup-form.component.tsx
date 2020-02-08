@@ -12,7 +12,7 @@ import {
   Toast
 } from 'native-base';
 import React, { useState } from 'react';
-import { connect } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { Action, Dispatch } from 'redux';
 import {
   auth,
@@ -20,14 +20,12 @@ import {
 } from '../../../firebase/firebase.utils';
 import { setCurrentUser } from '../../redux/user/user.actions';
 
-interface IDispatchToProps {
-  setCurrentUser: (user: {}) => void;
-}
-
-const SignupForm = ({ navigation, setCurrentUser }) => {
+const SignupForm = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+
+  const dispatch = useDispatch();
 
   const validateSignup = async (email, password, confirmPassword) => {
     if (password != confirmPassword) {
@@ -46,10 +44,10 @@ const SignupForm = ({ navigation, setCurrentUser }) => {
       await createUserProfileDocument(user);
 
       if (user) {
-        setCurrentUser(user);
+        dispatch(setCurrentUser(user));
         navigation.navigate('AddInfo');
       } else {
-        setCurrentUser(user);
+        dispatch(setCurrentUser(user));
         return Toast.show({
           text: '正しく登録できませんでした',
           type: 'danger'
@@ -122,8 +120,4 @@ const SignupForm = ({ navigation, setCurrentUser }) => {
   );
 };
 
-const mapDispatchToProps = (dispatch: Dispatch<Action>): IDispatchToProps => ({
-  setCurrentUser: user => dispatch(setCurrentUser(user))
-});
-
-export default connect(null, mapDispatchToProps)(SignupForm);
+export default SignupForm;

@@ -6,14 +6,12 @@ import {
   Left,
   Picker,
   Right,
-  Text,
-  Title,
-  Header,
-  Button
+  Text
 } from 'native-base';
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { PaymentType } from '../../screens/types';
+import GroupListHeader from '../group-list-header/group-list-header.component';
 
 export type IDispatchToProps = {
   setCurrentPayments: (account: {}) => void;
@@ -56,19 +54,7 @@ const PaymentListMonthly = ({ currentPayments, navigation, userList }) => {
         placeholderIconColor='#007aff'
         selectedValue={selectedUser}
         onValueChange={onValueChange.bind(this)}
-        renderHeader={backAction => (
-          <Header style={{ backgroundColor: '#f44242' }}>
-            <Left>
-              <Button transparent onPress={backAction}>
-                <Icon name='arrow-back' style={{ color: '#fff' }} />
-              </Button>
-            </Left>
-            <Body style={{ flex: 3 }}>
-              <Title style={{ color: '#fff' }}>同じグループのメンバー</Title>
-            </Body>
-            <Right />
-          </Header>
-        )}
+        renderHeader={backAction => GroupListHeader(backAction)}
       >
         {pickerItems}
       </Picker>
