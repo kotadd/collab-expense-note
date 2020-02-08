@@ -28,6 +28,11 @@ export const fetchAllUserData = async () => {
   return userCollectionSnapshot.docs;
 };
 
+export const loginUserAutomatically = async userAuth => {
+  if (!userAuth) return;
+  return firestore.doc(`users/${userAuth.uid}`);
+};
+
 export const createUserProfileDocument = async userAuth => {
   if (!userAuth) return;
 

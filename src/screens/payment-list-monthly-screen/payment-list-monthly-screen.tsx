@@ -7,7 +7,8 @@ import {
   fetchAllUserData,
   fetchGroupByUser,
   fetchPaymentsByUser,
-  fetchUserByUserAuth
+  fetchUserByUserAuth,
+  auth
 } from '../../../firebase/firebase.utils';
 import PaymentListMonthly from '../../components/payment-list-monthly/payment-list-monthly.component';
 import {
@@ -16,6 +17,7 @@ import {
 } from '../../redux/account/account.actions';
 import { IDispatchToAccountProps, IStateToProps, Props } from '../types';
 import { findGroupUsers } from '../utils';
+import { setCurrentUser } from '../../redux/user/user.actions';
 
 const PaymentListMonthlyScreen = ({
   currentUser,
@@ -25,16 +27,16 @@ const PaymentListMonthlyScreen = ({
 }: Props & IDispatchToAccountProps) => {
   const [userList, setUserList] = useState({});
   useEffect(() => {
-    async function fetchData() {
+    async function fetchPaymentsData() {
       const userInfo = await fetchUserByUserAuth(currentUser);
       const payments = await fetchPaymentsByUser(userInfo);
       setCurrentPayments(payments);
     }
-    fetchData();
+    fetchPaymentsData();
   }, [isPaymentsUpdated]);
 
   useEffect(() => {
-    async function fetchData() {
+    async function fetchGroupUserList() {
       const userInfo = await fetchUserByUserAuth(currentUser);
       const group = await fetchGroupByUser(userInfo);
       const userIDs = group.userIDs;
@@ -44,7 +46,7 @@ const PaymentListMonthlyScreen = ({
       setUserList(userList);
     }
 
-    fetchData();
+    fetchGroupUserList();
   }, []);
 
   useEffect(() => {
@@ -64,6 +66,20 @@ const PaymentListMonthlyScreen = ({
   );
 };
 
+const signOut = async navigation => {
+  try {
+    await auth.signOut();
+    setCurrentUser(null);
+    navigation.navigate('Auth');
+    Toast.show({
+      text: 'ログアウトしました',
+      type: 'success'
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 PaymentListMonthlyScreen.navigationOptions = ({ navigation }) => ({
   title: '月ごとの支出',
   headerRight: () => (
@@ -75,6 +91,9 @@ PaymentListMonthlyScreen.navigationOptions = ({ navigation }) => ({
         })
       }
     />
+  ),
+  headerLeft: () => (
+    <Button title='logout' onPress={() => signOut(navigation)} />
   )
 });
 

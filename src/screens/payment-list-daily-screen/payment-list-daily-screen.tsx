@@ -17,8 +17,6 @@ import { findGroupUsers } from '../utils';
 const PaymentListDailyScreen = ({ currentUser, navigation }: Props) => {
   const [userList, setUserList] = useState({});
 
-  // navigation.isFocused();
-
   useEffect(() => {
     async function fetchData() {
       const userInfo = await fetchUserByUserAuth(currentUser);
