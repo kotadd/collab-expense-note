@@ -13,10 +13,6 @@ import { connect } from 'react-redux';
 import { PaymentType } from '../../screens/types';
 import GroupListHeader from '../group-list-header/group-list-header.component';
 
-export type IDispatchToProps = {
-  setCurrentPayments: (account: {}) => void;
-};
-
 let dateOption = {
   year: 'numeric',
   month: 'short',

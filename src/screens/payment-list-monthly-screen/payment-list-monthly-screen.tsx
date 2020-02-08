@@ -24,16 +24,16 @@ const PaymentListMonthlyScreen = ({
   const dispatch = useDispatch();
 
   useEffect(() => {
-    async function fetchPaymentsData() {
+    const fetchPaymentsData = async () => {
       const userInfo = await fetchUserByUserAuth(currentUser);
       const payments = await fetchPaymentsByUser(userInfo);
       dispatch(setCurrentPayments(payments));
-    }
+    };
     fetchPaymentsData();
   }, [isPaymentsUpdated]);
 
   useEffect(() => {
-    async function fetchGroupUserList() {
+    const fetchGroupUserList = async () => {
       const userInfo = await fetchUserByUserAuth(currentUser);
       const group = await fetchGroupByUser(userInfo);
       const userIDs = group.userIDs;
@@ -41,20 +41,20 @@ const PaymentListMonthlyScreen = ({
       const users = await fetchAllUserData();
       const userList = findGroupUsers(userIDs, users);
       setUserList(userList);
-    }
+    };
 
     fetchGroupUserList();
   }, []);
 
   useEffect(() => {
-    function showToast() {
+    const showToast = () => {
       if (currentUser) {
         Toast.show({
           text: 'ログインしました',
           type: 'success'
         });
       }
-    }
+    };
     showToast();
   }, []);
 
