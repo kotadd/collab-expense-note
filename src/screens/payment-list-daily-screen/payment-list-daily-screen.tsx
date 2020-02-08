@@ -27,7 +27,7 @@ const PaymentListDailyScreen = ({ currentUser, navigation }: Props) => {
       setCurrentPayments(payments);
     }
     fetchData();
-  });
+  }, []);
 
   useEffect(() => {
     async function fetchData() {
@@ -41,13 +41,6 @@ const PaymentListDailyScreen = ({ currentUser, navigation }: Props) => {
       setUserList(userList);
     }
     fetchData();
-
-    if (currentUser) {
-      Toast.show({
-        text: 'ログインしました',
-        type: 'success'
-      });
-    }
   }, []);
   return (
     <Content>

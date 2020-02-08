@@ -4,18 +4,22 @@ import { Button } from 'react-native';
 import { connect } from 'react-redux';
 import { Action } from 'redux';
 import {
+  fetchAllUserData,
   fetchGroupByUser,
-  fetchUserByUserAuth,
   fetchPaymentsByUser,
-  fetchAllUserData
+  fetchUserByUserAuth
 } from '../../../firebase/firebase.utils';
 import PaymentListMonthly from '../../components/payment-list-monthly/payment-list-monthly.component';
-import { setCurrentPayments } from '../../redux/account/account.actions';
+import {
+  setCurrentPayments,
+  updateIsPaymentsUpdated
+} from '../../redux/account/account.actions';
 import { IDispatchToAccountProps, IStateToProps, Props } from '../types';
 import { findGroupUsers } from '../utils';
 
 const PaymentListMonthlyScreen = ({
   currentUser,
+  isPaymentsUpdated,
   setCurrentPayments,
   navigation
 }: Props & IDispatchToAccountProps) => {
@@ -27,7 +31,7 @@ const PaymentListMonthlyScreen = ({
       setCurrentPayments(payments);
     }
     fetchData();
-  });
+  }, [isPaymentsUpdated]);
 
   useEffect(() => {
     async function fetchData() {
@@ -41,7 +45,9 @@ const PaymentListMonthlyScreen = ({
     }
 
     fetchData();
+  }, []);
 
+  useEffect(() => {
     if (currentUser) {
       Toast.show({
         text: 'ログインしました',
@@ -72,14 +78,17 @@ PaymentListMonthlyScreen.navigationOptions = ({ navigation }) => ({
   )
 });
 
-const mapStateToProps = ({ user }: IStateToProps) => ({
-  currentUser: user.currentUser
+const mapStateToProps = ({ user, account }: IStateToProps) => ({
+  currentUser: user.currentUser,
+  currentPayments: account.currentPayments,
+  isPaymentsUpdated: account.isPaymentsUpdated
 });
 
 const mapDispatchToProps = (
   dispatch: Dispatch<Action>
 ): IDispatchToAccountProps => ({
-  setCurrentPayments: payments => dispatch(setCurrentPayments(payments))
+  setCurrentPayments: payments => dispatch(setCurrentPayments(payments)),
+  updateIsPaymentsUpdated: () => dispatch(updateIsPaymentsUpdated())
 });
 
 export default connect(

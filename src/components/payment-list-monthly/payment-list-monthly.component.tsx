@@ -13,7 +13,7 @@ import {
 } from 'native-base';
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
-import { paymentType } from '../../screens/types';
+import { PaymentType } from '../../screens/types';
 
 export type IDispatchToProps = {
   setCurrentPayments: (account: {}) => void;
@@ -91,8 +91,6 @@ const PaymentListMonthly = ({ currentPayments, navigation, userList }) => {
     </CardItem>
   ];
 
-  // const { currentPayments, navigation } = props;
-
   if (currentPayments) {
     let resultKey: string;
     let currentDom = <></>;
@@ -135,7 +133,7 @@ const PaymentListMonthly = ({ currentPayments, navigation, userList }) => {
       let resultVals = currentPayments[resultKey];
 
       const paymentsMap = resultVals.reduce(
-        (accumulator, payment: paymentType) => {
+        (accumulator, payment: PaymentType) => {
           if (selectedUser === 'all-items' || selectedUser === payment.userID) {
             currentDate = payment.date
               .toDate()

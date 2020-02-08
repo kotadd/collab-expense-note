@@ -4,7 +4,13 @@ export interface IStateToProps {
   user: {
     currentUser: {};
   };
+  account: {
+    currentPayments: {};
+    isPaymentsUpdated: boolean;
+  };
+  currentPayments: {};
   currentUser: {};
+  isPaymentsUpdated: boolean;
 }
 
 export interface INavProps {
@@ -17,11 +23,14 @@ export type IDispatchToProps = {
 
 export type IDispatchToAccountProps = {
   setCurrentPayments: (payments: {}) => void;
+  updateIsPaymentsUpdated: () => void;
 };
 
 export type Props = IStateToProps & INavProps;
 
-export type paymentType = {
+export type PaymentType = {
+  _createdAt: firebase.firestore.Timestamp;
+  _updatedAt: firebase.firestore.Timestamp;
   collected: boolean;
   date: firebase.firestore.Timestamp;
   groupAmount: number;
@@ -32,16 +41,6 @@ export type paymentType = {
   userAmount: number;
   userID: string;
 };
-
-export interface PaymentProps {
-  checked: boolean;
-  date: Date;
-  groupAmount: string;
-  purchaseMemo: string;
-  shopName: string;
-  usage: string;
-  userAmount: string;
-}
 
 export interface GroupProps {
   accountID: string;

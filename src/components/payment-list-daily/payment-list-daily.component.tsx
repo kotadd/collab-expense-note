@@ -14,7 +14,7 @@ import {
 } from 'native-base';
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
-import { paymentType } from '../../screens/types';
+import { PaymentType } from '../../screens/types';
 
 let dateOption = {
   year: 'numeric',
@@ -96,7 +96,7 @@ const PaymentListDaily = ({ currentPayments, navigation, userList }) => {
   if (currentPayments) {
     let resultKey: string;
     let currentDom = <></>;
-    let payment: paymentType;
+    let payment: PaymentType;
 
     let currentDate: string;
     let currentDay: string;

@@ -1,7 +1,7 @@
 import firebase from 'firebase/app';
-import 'firebase/firestore';
 import 'firebase/auth';
-import { PaymentProps } from '../src/screens/types';
+import 'firebase/firestore';
+import { PaymentType } from '../src/screens/types';
 
 const config = {
   apiKey: 'AIzaSyDxYGmo8Y9WQIBJ-oemrLr8MrnYUHGZa8Y',
@@ -148,7 +148,7 @@ export const addUserToGroups = async (userAuth, groupID) => {
     try {
       let { userIDs } = groupInfo;
 
-      if (userIDs.indexOf(userID) > 0)
+      if (userIDs.indexOf(userID) != -1)
         return console.log('このユーザーはすでにグループに含まれています');
       userIDs ? userIDs.push(userID) : (userIDs = userID);
 
@@ -159,15 +159,15 @@ export const addUserToGroups = async (userAuth, groupID) => {
   }
 };
 
-export const createPaymentsData = async (userAuth, props: PaymentProps) => {
+export const createPaymentsData = async (userAuth, props: PaymentType) => {
   const {
-    checked,
+    collected,
     date,
     groupAmount,
+    purchaseMemo,
     shopName,
     usage,
-    userAmount,
-    purchaseMemo
+    userAmount
   } = props;
 
   let dateOption = {
@@ -184,8 +184,6 @@ export const createPaymentsData = async (userAuth, props: PaymentProps) => {
   const userRef = firestore.doc(`users/${userID}`);
   const userSnapshot = await userRef.get();
   const userInfo = userSnapshot.data();
-
-  console.log(`userInfo: ${JSON.stringify(userInfo, null, '  ')}`);
 
   if (!userInfo) return;
   const { accountID, groupID } = userInfo;
@@ -206,7 +204,7 @@ export const createPaymentsData = async (userAuth, props: PaymentProps) => {
     const currentPayment = {
       _createdAt,
       _updatedAt,
-      collected: checked,
+      collected,
       date,
       groupID,
       groupAmount,
@@ -230,7 +228,7 @@ export const createPaymentsData = async (userAuth, props: PaymentProps) => {
       }
       return payments;
     } catch (error) {
-      console.log('error creating user', error.message);
+      console.log('error creating payments', error.message);
     }
   }
 
@@ -243,9 +241,8 @@ export const createAccountAndGroup = async (name: string) => {
   try {
     const _updatedAt = new Date();
     const _createdAt = _updatedAt;
-    // console.log(`accountsRef.id: ${accountsRef.id}`);
     accountsRef.set({});
-    groupsRef.set({ name, accountID: accountsRef.id });
+    groupsRef.set({ name, accountID: accountsRef.id, userIDs: [] });
     return;
   } catch (error) {
     console.log('error creating user', error.message);
