@@ -1,9 +1,9 @@
 import { Container } from 'native-base'
 import React from 'react'
 import SignupForm from '../../components/signup-form/signup-form.component'
-import { INavProps } from '../types'
+import { NavigationProps } from '../types'
 
-const SignupScreen = ({ navigation }: INavProps) => {
+const SignupScreen: NavigationProps = ({ navigation }: NavigationProps) => {
   return (
     <Container>
       <SignupForm navigation={navigation} />

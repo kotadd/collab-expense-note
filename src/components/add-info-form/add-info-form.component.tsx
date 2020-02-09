@@ -18,12 +18,12 @@ import {
   fetchAllGroupData,
   addUserProfileDocument
 } from '../../../firebase/firebase.utils'
-import { INavProps, UserReduxTypes } from '../../screens/types'
+import { NavigationProps, UserReduxTypes } from '../../screens/types'
 
 const AddInfoForm = ({
   navigation,
   currentUser
-}: INavProps & UserReduxTypes) => {
+}: NavigationProps & UserReduxTypes) => {
   const [name, setName] = useState('')
   const [pickerItemDom, setPickerItemDom] = useState([] as JSX.Element[])
 

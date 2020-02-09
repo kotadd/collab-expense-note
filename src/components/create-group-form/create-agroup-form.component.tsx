@@ -16,9 +16,9 @@ import {
   createAccountAndGroup,
   fetchAllGroupData
 } from '../../../firebase/firebase.utils'
-import { INavProps } from '../../screens/types'
+import { NavigationProps } from '../../screens/types'
 
-const CreateGroupForm = ({ navigation }: INavProps) => {
+const CreateGroupForm = ({ navigation }: NavigationProps) => {
   const [name, setName] = useState('')
   const [isNewGroup, setIsNewGroup] = useState(true)
 

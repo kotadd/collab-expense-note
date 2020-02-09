@@ -1,12 +1,13 @@
 module.exports = {
   env: {
     es6: true,
-    node: true
+    browser: true
   },
   extends: [
     'eslint:recommended',
     'plugin:@typescript-eslint/eslint-recommended',
     'plugin:@typescript-eslint/recommended',
+    'plugin:react/recommended',
     'prettier',
     'plugin:prettier/recommended',
     'prettier/@typescript-eslint'
@@ -17,11 +18,14 @@ module.exports = {
   },
   parser: '@typescript-eslint/parser',
   parserOptions: {
+    ecmaFeatures: {
+      jsx: true
+    },
     ecmaVersion: 2018,
     sourceType: 'module',
     project: './tsconfig.lint.json'
   },
-  plugins: ['@typescript-eslint'],
+  plugins: ['@typescript-eslint', 'react'],
   rules: {
     'prettier/prettier': 'error'
   }

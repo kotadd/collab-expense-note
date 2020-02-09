@@ -1,6 +1,6 @@
 import { UserListType } from './screens/types'
 
-export const findGroupUsers = (
+export const findGroupUsers: {} = (
   userIDs: [string],
   users: firebase.firestore.QueryDocumentSnapshot<
     firebase.firestore.DocumentData

@@ -18,9 +18,9 @@ import {
   createUserProfileDocument
 } from '../../../firebase/firebase.utils'
 import { setCurrentUser } from '../../redux/user/user.actions'
-import { INavProps } from '../../screens/types'
+import { NavigationProps } from '../../screens/types'
 
-const SignupForm = ({ navigation }: INavProps) => {
+const SignupForm = ({ navigation }: NavigationProps) => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')

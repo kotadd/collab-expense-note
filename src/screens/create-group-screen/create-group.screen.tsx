@@ -1,9 +1,9 @@
 import { Container } from 'native-base'
 import React from 'react'
 import CreateGroupForm from '../../components/create-group-form/create-agroup-form.component'
-import { INavProps } from '../types'
+import { NavigationProps } from '../types'
 
-const CreateGroupScreen = ({ navigation }: INavProps) => {
+const CreateGroupScreen = ({ navigation }: NavigationProps) => {
   return (
     <Container>
       <CreateGroupForm navigation={navigation} />

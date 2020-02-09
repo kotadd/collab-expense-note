@@ -14,13 +14,13 @@ import { setCurrentPayments } from '../../redux/account/account.actions'
 import { setCurrentUser } from '../../redux/user/user.actions'
 import { findGroupUsers } from '../../utils'
 import {
-  INavProps,
+  NavigationProps,
   UserReduxTypes,
   AccountReduxTypes,
-  NavigationProp
+  NavigationType
 } from '../types'
 
-type Props = INavProps & UserReduxTypes & AccountReduxTypes
+type Props = NavigationProps & UserReduxTypes & AccountReduxTypes
 
 const PaymentListMonthlyScreen = ({
   navigation,
@@ -74,7 +74,7 @@ const PaymentListMonthlyScreen = ({
   )
 }
 
-const logOut = async (navigation: NavigationProp) => {
+const logOut = async (navigation: NavigationType) => {
   try {
     await auth.signOut()
     setCurrentUser({})
@@ -88,7 +88,9 @@ const logOut = async (navigation: NavigationProp) => {
   }
 }
 
-PaymentListMonthlyScreen.navigationOptions = ({ navigation }: INavProps) => ({
+PaymentListMonthlyScreen.navigationOptions = ({
+  navigation
+}: NavigationProps) => ({
   title: '月ごとの支出',
   headerRight: () => (
     <Button

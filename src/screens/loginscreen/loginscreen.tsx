@@ -4,9 +4,9 @@ import { useDispatch } from 'react-redux'
 import { auth, fetchGroupByUser } from '../../../firebase/firebase.utils'
 import LoginForm from '../../components/login-form/login-form.component'
 import { setCurrentUser } from '../../redux/user/user.actions'
-import { INavProps } from '../types'
+import { NavigationProps } from '../types'
 
-const LoginScreen = ({ navigation }: INavProps) => {
+const LoginScreen = ({ navigation }: NavigationProps) => {
   const dispatch = useDispatch()
   auth.onAuthStateChanged(async userAuth => {
     if (!userAuth) return

@@ -13,7 +13,7 @@ import { connect } from 'react-redux'
 import { timestampToLocaleDate } from '../../../firebase/firebase.utils'
 import {
   AccountReduxTypes,
-  INavProps,
+  NavigationProps,
   PaymentType,
   UserListProps
 } from '../../screens/types'
@@ -23,7 +23,7 @@ const PaymentListDaily = ({
   currentPayments,
   navigation,
   userList
-}: AccountReduxTypes & INavProps & UserListProps) => {
+}: AccountReduxTypes & NavigationProps & UserListProps) => {
   const [selectedUser, setSelectedUser] = useState('all-items')
 
   const onValueChange = (user: string) => {

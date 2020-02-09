@@ -11,12 +11,17 @@ import {
 import PaymentListDaily from '../../components/payment-list-daily/payment-list-daily.component'
 import { setCurrentPayments } from '../../redux/account/account.actions'
 import { findGroupUsers } from '../../utils'
-import { INavProps, UserProps, UserAuthType, UserReduxTypes } from '../types'
+import {
+  NavigationProps,
+  UserProps,
+  UserAuthType,
+  UserReduxTypes
+} from '../types'
 
 const PaymentListDailyScreen = ({
   currentUser,
   navigation
-}: UserReduxTypes & INavProps) => {
+}: UserReduxTypes & NavigationProps) => {
   const [userList, setUserList] = useState({})
   const dispatch = useDispatch()
 
@@ -52,7 +57,9 @@ const PaymentListDailyScreen = ({
   )
 }
 
-PaymentListDailyScreen.navigationOptions = ({ navigation }: INavProps) => {
+PaymentListDailyScreen.navigationOptions = ({
+  navigation
+}: NavigationProps) => {
   const date = navigation.state.params ? navigation.state.params.date : null
   let title = '日付ごとの支出'
   if (date) title = `${date}の支出`

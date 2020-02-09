@@ -15,9 +15,9 @@ import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { loginUser } from '../../../firebase/firebase.utils'
 import { setCurrentUser } from '../../redux/user/user.actions'
-import { INavProps } from '../../screens/types'
+import { NavigationProps } from '../../screens/types'
 
-const LoginForm = ({ navigation }: INavProps) => {
+const LoginForm = ({ navigation }: NavigationProps) => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [togglePassword, setTogglePassword] = useState(false)

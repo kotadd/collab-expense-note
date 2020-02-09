@@ -14,14 +14,14 @@ import { timestampToLocaleDate } from '../../../firebase/firebase.utils'
 import {
   PaymentType,
   AccountReduxTypes,
-  INavProps,
+  NavigationProps,
   UserListType,
   UserListProps
 } from '../../screens/types'
 import GroupListHeader from '../group-list-header/group-list-header.component'
 
 const ALL_ITEMS = 'all-items'
-type Props = AccountReduxTypes & INavProps & UserListProps
+type Props = AccountReduxTypes & NavigationProps & UserListProps
 
 const PaymentListMonthly = ({
   currentPayments,

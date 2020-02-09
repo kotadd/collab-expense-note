@@ -1,5 +1,5 @@
-import { NavigationScreenProp } from 'react-navigation'
 import { User } from 'firebase'
+import { NavigationScreenProp } from 'react-navigation'
 
 export interface UserListProps {
   userList: UserListType
@@ -10,10 +10,11 @@ export type UserListType = {
 }
 
 // -------------React Navigation Definitions-------------
-export interface INavProps {
-  navigation: NavigationScreenProp<{}>
+export interface NavigationProps {
+  navigation?: NavigationScreenProp<{}>
+  navigationOptions?: {}
 }
-export type NavigationProp = NavigationScreenProp<{}>
+export type NavigationType = NavigationScreenProp<{}>
 
 // -------------Redux Definitions-------------
 export type UserReduxTypes = {

@@ -23,12 +23,12 @@ import NativeHeader from '../../components/native-header/native-header.component
 import PickerInput from '../../components/picker-input/picker-input.component'
 import OPTIONS from '../../components/picker-input/picker-options'
 import { updateIsPaymentsUpdated } from '../../redux/account/account.actions'
-import { CreatePaymentType, INavProps, UserReduxTypes } from '../types'
+import { CreatePaymentType, NavigationProps, UserReduxTypes } from '../types'
 
 const ModalScreen = ({
   navigation,
   currentUser
-}: INavProps & UserReduxTypes) => {
+}: NavigationProps & UserReduxTypes) => {
   const dateOption = {
     year: 'numeric',
     month: 'short',
