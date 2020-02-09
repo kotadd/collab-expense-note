@@ -4,8 +4,9 @@ import { useDispatch } from 'react-redux';
 import { auth } from '../../../firebase/firebase.utils';
 import LoginForm from '../../components/login-form/login-form.component';
 import { setCurrentUser } from '../../redux/user/user.actions';
+import { INavProps } from '../types';
 
-const LoginScreen = ({ navigation }) => {
+const LoginScreen = ({ navigation }: INavProps) => {
   const dispatch = useDispatch();
   auth.onAuthStateChanged(async userAuth => {
     if (userAuth) {

@@ -23,14 +23,16 @@ import NativeHeader from '../../components/native-header/native-header.component
 import PickerInput from '../../components/picker-input/picker-input.component';
 import OPTIONS from '../../components/picker-input/picker-options';
 import { updateIsPaymentsUpdated } from '../../redux/account/account.actions';
-import { IStateToProps, PaymentType } from '../types';
+import { CreatePaymentType, INavProps, UserReduxTypes } from '../types';
 
-const ModalScreen = ({ navigation, currentUser }) => {
+const ModalScreen = ({
+  navigation,
+  currentUser
+}: INavProps & UserReduxTypes) => {
   let dateOption = {
     year: 'numeric',
     month: 'short',
-    day: 'numeric',
-    weeday: 'long'
+    day: 'numeric'
   };
 
   const [collected, setCollected] = useState(false);
@@ -42,7 +44,9 @@ const ModalScreen = ({ navigation, currentUser }) => {
   const [userAmount, setUserAmount] = useState(0);
   const [usage, setUsage] = useState('');
 
-  const setPurchaseDate = (event, selectedDate) => {
+  const dispatch = useDispatch();
+
+  const setPurchaseDate = (event: Event, selectedDate: Date) => {
     setShow(Platform.OS === 'ios' ? true : false);
     setDate(selectedDate || date);
   };
@@ -52,13 +56,13 @@ const ModalScreen = ({ navigation, currentUser }) => {
     setShow(false);
   };
 
-  const changeUsage = value => {
+  const changeUsage = (value: string) => {
     setUsage(value);
     setShow(false);
   };
 
   const handleSubmit = async () => {
-    let state: PaymentType = {
+    let state: CreatePaymentType = {
       collected,
       date,
       groupAmount,
@@ -67,8 +71,6 @@ const ModalScreen = ({ navigation, currentUser }) => {
       usage,
       userAmount
     };
-
-    const dispatch = useDispatch();
 
     try {
       let paymentData = await createPaymentsData(currentUser, state);
@@ -189,7 +191,7 @@ const ModalScreen = ({ navigation, currentUser }) => {
   );
 };
 
-const mapStateToProps = ({ user }: IStateToProps) => ({
+const mapStateToProps = ({ user }: UserReduxTypes) => ({
   currentUser: user.currentUser
 });
 

@@ -18,9 +18,9 @@ import {
   fetchAllGroupData,
   addUserProfileDocument
 } from '../../../firebase/firebase.utils';
-import { IStateToProps } from '../../screens/types';
+import { INavProps } from '../../screens/types';
 
-const AddInfoForm = ({ navigation, currentUser }) => {
+const AddInfoForm = ({ navigation, currentUser }: INavProps) => {
   const [name, setName] = useState('');
   const [pickerItemDom, setPickerItemDom] = useState([]);
 
@@ -52,7 +52,7 @@ const AddInfoForm = ({ navigation, currentUser }) => {
     fetchGroups();
   }, []);
 
-  const addGroupInfo = async (name, selectedGroupId) => {
+  const addGroupInfo = async (name: string, selectedGroupId) => {
     try {
       const result = await addUserProfileDocument(
         currentUser,

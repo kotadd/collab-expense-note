@@ -10,17 +10,20 @@ import {
 } from 'native-base';
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
-import { PaymentType } from '../../screens/types';
+import { timestampToLocaleDate } from '../../../firebase/firebase.utils';
+import {
+  AccountReduxTypes,
+  INavProps,
+  PaymentType,
+  UserListProps
+} from '../../screens/types';
 import GroupListHeader from '../group-list-header/group-list-header.component';
 
-let dateOption = {
-  year: 'numeric',
-  month: 'short',
-  day: 'numeric',
-  weeday: 'long'
-};
-
-const PaymentListDaily = ({ currentPayments, navigation, userList }) => {
+const PaymentListDaily = ({
+  currentPayments,
+  navigation,
+  userList
+}: AccountReduxTypes & INavProps & UserListProps) => {
   const [selectedUser, setSelectedUser] = useState('all-items');
 
   const onValueChange = (user: string) => {
@@ -86,7 +89,10 @@ const PaymentListDaily = ({ currentPayments, navigation, userList }) => {
     let currentDate: string;
     let currentDay: string;
 
-    const targetPayments = currentPayments[navigation.state.params.date];
+    let targetDate = navigation.state.params
+      ? (navigation.state.params.date as string)
+      : '';
+    const targetPayments = currentPayments[targetDate];
 
     if (targetPayments) {
       for (let i = 0; i < targetPayments.length; i++) {
@@ -96,9 +102,7 @@ const PaymentListDaily = ({ currentPayments, navigation, userList }) => {
 
         resultKey = `result-${i}`;
 
-        currentDate = payment.date
-          .toDate()
-          .toLocaleDateString('ja-JP', dateOption);
+        currentDate = timestampToLocaleDate(payment.date, 'ja-JP');
 
         currentDay = currentDate.replace(/.*月/, '');
 
@@ -150,7 +154,7 @@ const PaymentListDaily = ({ currentPayments, navigation, userList }) => {
   return resultDom;
 };
 
-const mapStateToProps = ({ account }) => ({
+const mapStateToProps = ({ account }: AccountReduxTypes) => ({
   currentPayments: account.currentPayments
 });
 

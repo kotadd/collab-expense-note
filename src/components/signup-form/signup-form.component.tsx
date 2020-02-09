@@ -13,21 +13,25 @@ import {
 } from 'native-base';
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { Action, Dispatch } from 'redux';
 import {
   auth,
   createUserProfileDocument
 } from '../../../firebase/firebase.utils';
 import { setCurrentUser } from '../../redux/user/user.actions';
+import { INavProps } from '../../screens/types';
 
-const SignupForm = ({ navigation }) => {
+const SignupForm = ({ navigation }: INavProps) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
 
   const dispatch = useDispatch();
 
-  const validateSignup = async (email, password, confirmPassword) => {
+  const validateSignup = async (
+    email: string,
+    password: string,
+    confirmPassword: string
+  ) => {
     if (password != confirmPassword) {
       return Toast.show({
         text: 'パスワードと確認用パスワードが一致していません',
@@ -47,7 +51,7 @@ const SignupForm = ({ navigation }) => {
         dispatch(setCurrentUser(user));
         navigation.navigate('AddInfo');
       } else {
-        dispatch(setCurrentUser(user));
+        dispatch(setCurrentUser({}));
         return Toast.show({
           text: '正しく登録できませんでした',
           type: 'danger'

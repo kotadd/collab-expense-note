@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Header, Left, Icon, Button, Title, Right, Body } from 'native-base';
 
-const GroupListHeader = backAction => (
+const GroupListHeader = (backAction: any) => (
   <Header style={{ backgroundColor: '#f44242' }}>
     <Left>
       <Button transparent onPress={backAction}>

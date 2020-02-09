@@ -10,25 +10,32 @@ import {
 } from 'native-base';
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
-import { PaymentType } from '../../screens/types';
+import { timestampToLocaleDate } from '../../../firebase/firebase.utils';
+import {
+  PaymentType,
+  AccountReduxTypes,
+  INavProps,
+  UserListType,
+  UserListProps
+} from '../../screens/types';
 import GroupListHeader from '../group-list-header/group-list-header.component';
 
-let dateOption = {
-  year: 'numeric',
-  month: 'short',
-  day: 'numeric',
-  weeday: 'long'
-};
+const ALL_ITEMS = 'all-items';
+type Props = AccountReduxTypes & INavProps & UserListProps;
 
-const PaymentListMonthly = ({ currentPayments, navigation, userList }) => {
-  const [selectedUser, setSelectedUser] = useState('all-items');
+const PaymentListMonthly = ({
+  currentPayments,
+  navigation,
+  userList
+}: Props) => {
+  const [selectedUser, setSelectedUser] = useState(ALL_ITEMS);
 
   const onValueChange = async (user: string) => {
     setSelectedUser(user);
   };
 
   let pickerItems = [
-    <Picker.Item label='全体' value='all-items' key='all-items' />
+    <Picker.Item label='全体' value={ALL_ITEMS} key={ALL_ITEMS} />
   ];
 
   for (let key in userList) {
@@ -80,17 +87,16 @@ const PaymentListMonthly = ({ currentPayments, navigation, userList }) => {
     let currentDate: string;
     let yearMonth: string;
 
-    //   `currentPayments: ${JSON.stringify(currentPayments, null, '  ')}`
-    // );
-
     const resultKeys = Object.keys(currentPayments);
 
     resultKeys.sort((a, b) => {
       let leftVal = a.match(/\d+/g);
+      let rightVal = b.match(/\d+/g);
+
+      if (!leftVal || !rightVal) return 0;
+
       let leftYear = parseInt(leftVal[0]);
       let leftMonth = parseInt(leftVal[1]);
-
-      let rightVal = b.match(/\d+/g);
       let rightYear = parseInt(rightVal[0]);
       let rightMonth = parseInt(rightVal[1]);
 
@@ -116,12 +122,10 @@ const PaymentListMonthly = ({ currentPayments, navigation, userList }) => {
 
       const paymentsMap = resultVals.reduce(
         (accumulator, payment: PaymentType) => {
-          if (selectedUser === 'all-items' || selectedUser === payment.userID) {
-            currentDate = payment.date
-              .toDate()
-              .toLocaleDateString('ja-JP', dateOption);
+          if (selectedUser === ALL_ITEMS || selectedUser === payment.userID) {
+            currentDate = timestampToLocaleDate(payment.date, 'ja-JP');
 
-            yearMonth = currentDate.replace(/(\d\d|\d)日/, '');
+            yearMonth = currentDate.replace(/(\d\d|\d)日.*/, '');
 
             let totalAmountKey = `${yearMonth}_total`;
             let uncollectedAmountKey = `${yearMonth}_uncollected`;
@@ -182,7 +186,7 @@ const PaymentListMonthly = ({ currentPayments, navigation, userList }) => {
   return resultDom;
 };
 
-const mapStateToProps = ({ account }) => ({
+const mapStateToProps = ({ account }: AccountReduxTypes) => ({
   currentPayments: account.currentPayments
 });
 

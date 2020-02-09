@@ -15,20 +15,21 @@ import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { loginUser } from '../../../firebase/firebase.utils';
 import { setCurrentUser } from '../../redux/user/user.actions';
+import { INavProps } from '../../screens/types';
 
-const LoginForm = ({ navigation }) => {
+const LoginForm = ({ navigation }: INavProps) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [togglePassword, setTogglePassword] = useState(false);
   const dispatch = useDispatch();
 
-  const validateLogin = async (email, password) => {
+  const validateLogin = async (email: string, password: string) => {
     const userAuth = await loginUser(email, password);
-    if (userAuth) {
+    if (userAuth && userAuth.user) {
       dispatch(setCurrentUser(userAuth.user));
       navigation.navigate('App');
     } else {
-      dispatch(setCurrentUser(userAuth));
+      dispatch(setCurrentUser({}));
       return Toast.show({
         text: 'ログイン情報が正しくありません',
         type: 'danger'

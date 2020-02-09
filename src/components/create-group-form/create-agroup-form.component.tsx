@@ -16,12 +16,13 @@ import {
   createAccountAndGroup,
   fetchAllGroupData
 } from '../../../firebase/firebase.utils';
+import { INavProps } from '../../screens/types';
 
-const CreateGroupForm = ({ navigation }) => {
+const CreateGroupForm = ({ navigation }: INavProps) => {
   const [name, setName] = useState('');
   const [isNewGroup, setIsNewGroup] = useState(true);
 
-  const createNewGroup = async name => {
+  const createNewGroup = async (name: string) => {
     try {
       const groups = await fetchAllGroupData();
       groups.forEach(group => {

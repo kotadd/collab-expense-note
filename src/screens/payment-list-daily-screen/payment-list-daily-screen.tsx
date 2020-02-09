@@ -10,10 +10,13 @@ import {
 } from '../../../firebase/firebase.utils';
 import PaymentListDaily from '../../components/payment-list-daily/payment-list-daily.component';
 import { setCurrentPayments } from '../../redux/account/account.actions';
-import { IStateToProps, Props } from '../types';
-import { findGroupUsers } from '../utils';
+import { findGroupUsers } from '../../utils';
+import { INavProps, UserProps, UserAuthType, UserReduxTypes } from '../types';
 
-const PaymentListDailyScreen = ({ currentUser, navigation }: Props) => {
+const PaymentListDailyScreen = ({
+  currentUser,
+  navigation
+}: UserReduxTypes & INavProps) => {
   const [userList, setUserList] = useState({});
   const dispatch = useDispatch();
 
@@ -31,6 +34,7 @@ const PaymentListDailyScreen = ({ currentUser, navigation }: Props) => {
     async function fetchData() {
       const userInfo = await fetchUserByUserAuth(currentUser);
       const group = await fetchGroupByUser(userInfo);
+      if (!group) return;
       const userIDs = group.userIDs;
 
       const users = await fetchAllUserData();
@@ -48,21 +52,27 @@ const PaymentListDailyScreen = ({ currentUser, navigation }: Props) => {
   );
 };
 
-PaymentListDailyScreen.navigationOptions = ({ navigation }) => ({
-  title: `${navigation.state.params.date}の支出` || '日付ごとの支出',
-  headerRight: () => (
-    <Button
-      title='＋'
-      onPress={() =>
-        navigation.navigate('CreateNew', {
-          from: 'daily'
-        })
-      }
-    />
-  )
-});
+PaymentListDailyScreen.navigationOptions = ({ navigation }: INavProps) => {
+  const date = navigation.state.params ? navigation.state.params.date : null;
+  let title = '日付ごとの支出';
+  if (date) title = `${date}の支出`;
 
-const mapStateToProps = ({ user }: IStateToProps) => ({
+  return {
+    title,
+    headerRight: () => (
+      <Button
+        title='＋'
+        onPress={() =>
+          navigation.navigate('CreateNew', {
+            from: 'daily'
+          })
+        }
+      />
+    )
+  };
+};
+
+const mapStateToProps = ({ user }: UserProps) => ({
   currentUser: user.currentUser
 });
 

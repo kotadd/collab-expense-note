@@ -12,14 +12,21 @@ import {
 import PaymentListMonthly from '../../components/payment-list-monthly/payment-list-monthly.component';
 import { setCurrentPayments } from '../../redux/account/account.actions';
 import { setCurrentUser } from '../../redux/user/user.actions';
-import { IDispatchToAccountProps, IStateToProps, Props } from '../types';
-import { findGroupUsers } from '../utils';
+import { findGroupUsers } from '../../utils';
+import {
+  INavProps,
+  UserReduxTypes,
+  AccountReduxTypes,
+  NavigationProp
+} from '../types';
+
+type Props = INavProps & UserReduxTypes & AccountReduxTypes;
 
 const PaymentListMonthlyScreen = ({
   navigation,
   currentUser,
   isPaymentsUpdated
-}: Props & IDispatchToAccountProps) => {
+}: Props) => {
   const [userList, setUserList] = useState({});
   const dispatch = useDispatch();
 
@@ -36,6 +43,7 @@ const PaymentListMonthlyScreen = ({
     const fetchGroupUserList = async () => {
       const userInfo = await fetchUserByUserAuth(currentUser);
       const group = await fetchGroupByUser(userInfo);
+      if (!group) return;
       const userIDs = group.userIDs;
 
       const users = await fetchAllUserData();
@@ -66,10 +74,10 @@ const PaymentListMonthlyScreen = ({
   );
 };
 
-const logOut = async navigation => {
+const logOut = async (navigation: NavigationProp) => {
   try {
     await auth.signOut();
-    setCurrentUser(null);
+    setCurrentUser({});
     navigation.navigate('Auth');
     Toast.show({
       text: 'ログアウトしました',
@@ -80,7 +88,7 @@ const logOut = async navigation => {
   }
 };
 
-PaymentListMonthlyScreen.navigationOptions = ({ navigation }) => ({
+PaymentListMonthlyScreen.navigationOptions = ({ navigation }: INavProps) => ({
   title: '月ごとの支出',
   headerRight: () => (
     <Button
@@ -97,7 +105,10 @@ PaymentListMonthlyScreen.navigationOptions = ({ navigation }) => ({
   )
 });
 
-const mapStateToProps = ({ user, account }: IStateToProps) => ({
+const mapStateToProps = ({
+  user,
+  account
+}: UserReduxTypes & AccountReduxTypes) => ({
   currentUser: user.currentUser,
   isPaymentsUpdated: account.isPaymentsUpdated
 });

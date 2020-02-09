@@ -1,32 +1,39 @@
-import { NavigationStackProp } from 'react-navigation-stack';
+import { NavigationScreenProp } from 'react-navigation';
+import { User } from 'firebase';
 
-export interface IStateToProps {
+export interface UserListProps {
+  userList: UserListType;
+}
+
+export type UserListType = {
+  [key: string]: string;
+};
+
+// -------------React Navigation Definitions-------------
+export interface INavProps {
+  navigation: NavigationScreenProp<{}>;
+}
+export type NavigationProp = NavigationScreenProp<{}>;
+
+// -------------Redux Definitions-------------
+export type UserReduxTypes = {
+  currentUser: User;
   user: {
-    currentUser: {};
+    currentUser: UserType;
   };
+};
+
+export type AccountReduxTypes = {
+  currentPayments: [MonthlyPayments];
+  isPaymentsUpdated: boolean;
   account: {
-    currentPayments: {};
+    currentPayments: [MonthlyPayments];
     isPaymentsUpdated: boolean;
   };
-  currentPayments: {};
-  currentUser: {};
-  isPaymentsUpdated: boolean;
-}
-
-export interface INavProps {
-  navigation: NavigationStackProp;
-}
-
-export type IDispatchToProps = {
-  setCurrentUser: (user: {}) => void;
 };
 
-export type IDispatchToAccountProps = {
-  setCurrentPayments: (payments: {}) => void;
-  updateIsPaymentsUpdated: () => void;
-};
-
-export type Props = IStateToProps & INavProps;
+// -------------Firebase Definitions-------------
+export type UserAuthType = firebase.User | null;
 
 export type PaymentType = {
   _createdAt: firebase.firestore.Timestamp;
@@ -42,15 +49,49 @@ export type PaymentType = {
   userID: string;
 };
 
-export interface GroupProps {
-  accountID: string;
-  groupName: string;
-  userIDs: [string];
+export type CreatePaymentType = {
+  _createdAt?: firebase.firestore.Timestamp;
+  _updatedAt?: firebase.firestore.Timestamp;
+  collected: boolean;
+  date: Date;
+  groupAmount: number;
+  groupID?: string;
+  purchaseMemo: string;
+  shopName: string;
+  usage: string;
+  userAmount: number;
+  userID?: string;
+};
+
+export type MonthlyPayments = {
+  (date: string): [PaymentType];
+};
+
+export interface PaymentProps {
+  payments: [MonthlyPayments];
 }
 
-export interface UserProps {
+export type UserType = {
+  _createdAt: firebase.firestore.Timestamp;
+  _updatedAt: firebase.firestore.Timestamp;
   accountID: string;
   email: string;
   groupID: string;
   name: string;
+};
+export interface UserProps {
+  user: {
+    currentUser: UserType;
+  };
+}
+
+export type GroupType = {
+  _createdAt: firebase.firestore.Timestamp;
+  _updatedAt: firebase.firestore.Timestamp;
+  accountID: string;
+  groupName: string;
+  userIDs: [string];
+};
+export interface GroupProps {
+  group: GroupType;
 }

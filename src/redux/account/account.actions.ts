@@ -1,6 +1,7 @@
+import { MonthlyPayments } from '../../screens/types';
 import { AccountActionTypes } from './account.types';
 
-export const setCurrentPayments = account => ({
+export const setCurrentPayments = (account: [MonthlyPayments] | undefined) => ({
   type: AccountActionTypes.SET_CURRENT_PAYMENTS,
   payload: account
 });

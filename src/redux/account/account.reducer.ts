@@ -1,3 +1,4 @@
+import { setCurrentPayments, updateIsPaymentsUpdated } from './account.actions';
 import { AccountActionTypes } from './account.types';
 
 const INITIAL_STATE = {
@@ -5,7 +6,11 @@ const INITIAL_STATE = {
   isPaymentsUpdated: false
 };
 
-const accountReducer = (state = INITIAL_STATE, action) => {
+type Actions =
+  | ReturnType<typeof setCurrentPayments>
+  | ReturnType<typeof updateIsPaymentsUpdated>;
+
+const accountReducer = (state = INITIAL_STATE, action: Actions) => {
   switch (action.type) {
     case AccountActionTypes.SET_CURRENT_PAYMENTS:
       return {
