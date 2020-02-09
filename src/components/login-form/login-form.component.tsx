@@ -10,76 +10,76 @@ import {
   Label,
   Text,
   Toast
-} from 'native-base';
-import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { loginUser } from '../../../firebase/firebase.utils';
-import { setCurrentUser } from '../../redux/user/user.actions';
-import { INavProps } from '../../screens/types';
+} from 'native-base'
+import React, { useState } from 'react'
+import { useDispatch } from 'react-redux'
+import { loginUser } from '../../../firebase/firebase.utils'
+import { setCurrentUser } from '../../redux/user/user.actions'
+import { INavProps } from '../../screens/types'
 
 const LoginForm = ({ navigation }: INavProps) => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [togglePassword, setTogglePassword] = useState(false);
-  const dispatch = useDispatch();
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [togglePassword, setTogglePassword] = useState(false)
+  const dispatch = useDispatch()
 
   const validateLogin = async (email: string, password: string) => {
-    const userAuth = await loginUser(email, password);
+    const userAuth = await loginUser(email, password)
     if (userAuth && userAuth.user) {
-      dispatch(setCurrentUser(userAuth.user));
-      navigation.navigate('App');
+      dispatch(setCurrentUser(userAuth.user))
+      navigation.navigate('App')
     } else {
-      dispatch(setCurrentUser({}));
+      dispatch(setCurrentUser({}))
       return Toast.show({
         text: 'ログイン情報が正しくありません',
         type: 'danger'
-      });
+      })
     }
-  };
+  }
 
   return (
     <Content>
       <Form>
         <Item floatingLabel>
-          <Icon active name='mail' />
+          <Icon active name="mail" />
           <Label>メールアドレス</Label>
           <Input
-            defaultValue=''
+            defaultValue=""
             onChangeText={text => setEmail(text)}
             value={email}
           />
         </Item>
         {togglePassword ? (
           <Item floatingLabel last>
-            <Icon active name='lock' />
+            <Icon active name="lock" />
             <Label>パスワード</Label>
             <Input
               secureTextEntry={false}
-              defaultValue=''
+              defaultValue=""
               onChangeText={text => setPassword(text)}
               value={password}
             />
             <Icon
-              type='FontAwesome'
+              type="FontAwesome"
               active
-              name='eye'
+              name="eye"
               onPress={() => setTogglePassword(false)}
             />
           </Item>
         ) : (
           <Item floatingLabel last>
-            <Icon active name='lock' />
+            <Icon active name="lock" />
             <Label>パスワード</Label>
             <Input
               secureTextEntry={true}
-              defaultValue=''
+              defaultValue=""
               onChangeText={text => setPassword(text)}
               value={password}
             />
             <Icon
-              type='FontAwesome'
+              type="FontAwesome"
               active
-              name='eye-slash'
+              name="eye-slash"
               onPress={() => setTogglePassword(true)}
             />
           </Item>
@@ -96,7 +96,7 @@ const LoginForm = ({ navigation }: INavProps) => {
         </Button>
       </Form>
     </Content>
-  );
-};
+  )
+}
 
-export default LoginForm;
+export default LoginForm

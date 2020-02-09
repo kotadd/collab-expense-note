@@ -1,58 +1,58 @@
-import { Container, Toast } from 'native-base';
-import React, { useEffect, useState } from 'react';
-import { Button } from 'react-native';
-import { connect, useDispatch } from 'react-redux';
+import { Container, Toast } from 'native-base'
+import React, { useEffect, useState } from 'react'
+import { Button } from 'react-native'
+import { connect, useDispatch } from 'react-redux'
 import {
   auth,
   fetchAllUserData,
   fetchGroupByUser,
   fetchPaymentsByUser,
   fetchUserByUserAuth
-} from '../../../firebase/firebase.utils';
-import PaymentListMonthly from '../../components/payment-list-monthly/payment-list-monthly.component';
-import { setCurrentPayments } from '../../redux/account/account.actions';
-import { setCurrentUser } from '../../redux/user/user.actions';
-import { findGroupUsers } from '../../utils';
+} from '../../../firebase/firebase.utils'
+import PaymentListMonthly from '../../components/payment-list-monthly/payment-list-monthly.component'
+import { setCurrentPayments } from '../../redux/account/account.actions'
+import { setCurrentUser } from '../../redux/user/user.actions'
+import { findGroupUsers } from '../../utils'
 import {
   INavProps,
   UserReduxTypes,
   AccountReduxTypes,
   NavigationProp
-} from '../types';
+} from '../types'
 
-type Props = INavProps & UserReduxTypes & AccountReduxTypes;
+type Props = INavProps & UserReduxTypes & AccountReduxTypes
 
 const PaymentListMonthlyScreen = ({
   navigation,
   currentUser,
   isPaymentsUpdated
 }: Props) => {
-  const [userList, setUserList] = useState({});
-  const dispatch = useDispatch();
+  const [userList, setUserList] = useState({})
+  const dispatch = useDispatch()
 
   useEffect(() => {
     const fetchPaymentsData = async () => {
-      const userInfo = await fetchUserByUserAuth(currentUser);
-      const payments = await fetchPaymentsByUser(userInfo);
-      dispatch(setCurrentPayments(payments));
-    };
-    fetchPaymentsData();
-  }, [isPaymentsUpdated]);
+      const userInfo = await fetchUserByUserAuth(currentUser)
+      const payments = await fetchPaymentsByUser(userInfo)
+      dispatch(setCurrentPayments(payments))
+    }
+    fetchPaymentsData()
+  }, [isPaymentsUpdated])
 
   useEffect(() => {
     const fetchGroupUserList = async () => {
-      const userInfo = await fetchUserByUserAuth(currentUser);
-      const group = await fetchGroupByUser(userInfo);
-      if (!group) return;
-      const userIDs = group.userIDs;
+      const userInfo = await fetchUserByUserAuth(currentUser)
+      const group = await fetchGroupByUser(userInfo)
+      if (!group) return
+      const userIDs = group.userIDs
 
-      const users = await fetchAllUserData();
-      const userList = findGroupUsers(userIDs, users);
-      setUserList(userList);
-    };
+      const users = await fetchAllUserData()
+      const userList = findGroupUsers(userIDs, users)
+      setUserList(userList)
+    }
 
-    fetchGroupUserList();
-  }, []);
+    fetchGroupUserList()
+  }, [])
 
   useEffect(() => {
     const showToast = () => {
@@ -60,39 +60,39 @@ const PaymentListMonthlyScreen = ({
         Toast.show({
           text: 'ログインしました',
           type: 'success'
-        });
+        })
       }
-    };
-    showToast();
-  }, []);
+    }
+    showToast()
+  }, [])
 
   return (
     <Container>
       <PaymentListMonthly navigation={navigation} userList={userList} />
       {/* <NativeFooter /> */}
     </Container>
-  );
-};
+  )
+}
 
 const logOut = async (navigation: NavigationProp) => {
   try {
-    await auth.signOut();
-    setCurrentUser({});
-    navigation.navigate('Auth');
+    await auth.signOut()
+    setCurrentUser({})
+    navigation.navigate('Auth')
     Toast.show({
       text: 'ログアウトしました',
       type: 'success'
-    });
+    })
   } catch (error) {
-    console.log(error);
+    console.log(error)
   }
-};
+}
 
 PaymentListMonthlyScreen.navigationOptions = ({ navigation }: INavProps) => ({
   title: '月ごとの支出',
   headerRight: () => (
     <Button
-      title='＋'
+      title="＋"
       onPress={() =>
         navigation.navigate('CreateNew', {
           from: 'monthly'
@@ -101,9 +101,9 @@ PaymentListMonthlyScreen.navigationOptions = ({ navigation }: INavProps) => ({
     />
   ),
   headerLeft: () => (
-    <Button title='ログアウト' onPress={() => logOut(navigation)} />
+    <Button title="ログアウト" onPress={() => logOut(navigation)} />
   )
-});
+})
 
 const mapStateToProps = ({
   user,
@@ -111,6 +111,6 @@ const mapStateToProps = ({
 }: UserReduxTypes & AccountReduxTypes) => ({
   currentUser: user.currentUser,
   isPaymentsUpdated: account.isPaymentsUpdated
-});
+})
 
-export default connect(mapStateToProps)(PaymentListMonthlyScreen);
+export default connect(mapStateToProps)(PaymentListMonthlyScreen)

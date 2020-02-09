@@ -1,4 +1,4 @@
-import React from 'react';
+import React from 'react'
 
 import {
   Body,
@@ -9,12 +9,12 @@ import {
   Left,
   Right,
   Text
-} from 'native-base';
-import { NavigationStackProp } from 'react-navigation-stack';
+} from 'native-base'
+import { NavigationStackProp } from 'react-navigation-stack'
 
 type Props = {
-  navigation: NavigationStackProp;
-};
+  navigation: NavigationStackProp
+}
 
 class PaymentDetail extends React.Component<Props> {
   render() {
@@ -34,7 +34,7 @@ class PaymentDetail extends React.Component<Props> {
             bordered
             button
             onPress={() => {
-              this.props.navigation.navigate('Details');
+              this.props.navigation.navigate('Details')
             }}
           >
             <Left>
@@ -44,14 +44,14 @@ class PaymentDetail extends React.Component<Props> {
               <Text>¥127,721</Text>
             </Body>
             <Right>
-              <Icon name='arrow-forward' />
+              <Icon name="arrow-forward" />
             </Right>
           </CardItem>
           <CardItem
             bordered
             button
             onPress={() => {
-              alert('2019年12月の支出額');
+              alert('2019年12月の支出額')
             }}
           >
             <Left>
@@ -61,13 +61,13 @@ class PaymentDetail extends React.Component<Props> {
               <Text>¥467,269</Text>
             </Body>
             <Right>
-              <Icon name='arrow-forward' />
+              <Icon name="arrow-forward" />
             </Right>
           </CardItem>
         </Card>
       </Content>
-    );
+    )
   }
 }
 
-export default PaymentDetail;
+export default PaymentDetail

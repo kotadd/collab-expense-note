@@ -1,4 +1,4 @@
-import { UserListType } from './screens/types';
+import { UserListType } from './screens/types'
 
 export const findGroupUsers = (
   userIDs: [string],
@@ -6,11 +6,11 @@ export const findGroupUsers = (
     firebase.firestore.DocumentData
   >[]
 ) => {
-  let userList = {} as UserListType;
+  const userList = {} as UserListType
 
   users.forEach(user => {
-    if (userIDs.indexOf(user.id) == -1) return;
-    return (userList[user.id] = user.data().name);
-  });
-  return userList;
-};
+    if (userIDs.indexOf(user.id) == -1) return
+    return (userList[user.id] = user.data().name)
+  })
+  return userList
+}

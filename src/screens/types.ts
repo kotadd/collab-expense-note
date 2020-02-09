@@ -1,106 +1,106 @@
-import { NavigationScreenProp } from 'react-navigation';
-import { User } from 'firebase';
+import { NavigationScreenProp } from 'react-navigation'
+import { User } from 'firebase'
 
 export interface UserListProps {
-  userList: UserListType;
+  userList: UserListType
 }
 
 export type UserListType = {
-  [key: string]: string;
-};
+  [key: string]: string
+}
 
 // -------------React Navigation Definitions-------------
 export interface INavProps {
-  navigation: NavigationScreenProp<{}>;
+  navigation: NavigationScreenProp<{}>
 }
-export type NavigationProp = NavigationScreenProp<{}>;
+export type NavigationProp = NavigationScreenProp<{}>
 
 // -------------Redux Definitions-------------
 export type UserReduxTypes = {
-  currentUser: User;
+  currentUser: User
   user: {
-    currentUser: UserType;
-  };
-};
+    currentUser: UserType
+  }
+}
 
 export type AccountReduxTypes = {
   currentPayments: {
-    [date: string]: [PaymentType];
-  };
-  isPaymentsUpdated: boolean;
+    [date: string]: [PaymentType]
+  }
+  isPaymentsUpdated: boolean
   account: {
     currentPayments: {
-      [date: string]: [PaymentType];
-    };
-    isPaymentsUpdated: boolean;
-  };
-};
+      [date: string]: [PaymentType]
+    }
+    isPaymentsUpdated: boolean
+  }
+}
 
 // -------------Firebase Definitions-------------
 export interface PaymentProps {
   payments: {
-    [date: string]: [PaymentType];
-  };
+    [date: string]: [PaymentType]
+  }
 }
 
-export type UserAuthType = firebase.User | null;
+export type UserAuthType = firebase.User | null
 
 export type DocType = {
-  id: string;
+  id: string
   data(): {
-    name: string;
-  };
-};
+    name: string
+  }
+}
 
 export type PaymentType = {
-  _createdAt: firebase.firestore.Timestamp;
-  _updatedAt: firebase.firestore.Timestamp;
-  collected: boolean;
-  date: firebase.firestore.Timestamp;
-  groupAmount: number;
-  groupID: string;
-  purchaseMemo: string;
-  shopName: string;
-  usage: string;
-  userAmount: number;
-  userID: string;
-};
+  _createdAt: firebase.firestore.Timestamp
+  _updatedAt: firebase.firestore.Timestamp
+  collected: boolean
+  date: firebase.firestore.Timestamp
+  groupAmount: number
+  groupID: string
+  purchaseMemo: string
+  shopName: string
+  usage: string
+  userAmount: number
+  userID: string
+}
 
 export type CreatePaymentType = {
-  _createdAt?: firebase.firestore.Timestamp;
-  _updatedAt?: firebase.firestore.Timestamp;
-  collected: boolean;
-  date: Date;
-  groupAmount: number;
-  groupID?: string;
-  purchaseMemo: string;
-  shopName: string;
-  usage: string;
-  userAmount: number;
-  userID?: string;
-};
+  _createdAt?: firebase.firestore.Timestamp
+  _updatedAt?: firebase.firestore.Timestamp
+  collected: boolean
+  date: Date
+  groupAmount: number
+  groupID?: string
+  purchaseMemo: string
+  shopName: string
+  usage: string
+  userAmount: number
+  userID?: string
+}
 
 export type UserType = {
-  _createdAt: firebase.firestore.Timestamp;
-  _updatedAt: firebase.firestore.Timestamp;
-  accountID: string;
-  email: string;
-  groupID: string;
-  name: string;
-};
+  _createdAt: firebase.firestore.Timestamp
+  _updatedAt: firebase.firestore.Timestamp
+  accountID: string
+  email: string
+  groupID: string
+  name: string
+}
 export interface UserProps {
   user: {
-    currentUser: UserType;
-  };
+    currentUser: UserType
+  }
 }
 
 export type GroupType = {
-  _createdAt: firebase.firestore.Timestamp;
-  _updatedAt: firebase.firestore.Timestamp;
-  accountID: string;
-  groupName: string;
-  userIDs: [string];
-};
+  _createdAt: firebase.firestore.Timestamp
+  _updatedAt: firebase.firestore.Timestamp
+  accountID: string
+  groupName: string
+  userIDs: [string]
+}
 export interface GroupProps {
-  group: GroupType;
+  group: GroupType
 }

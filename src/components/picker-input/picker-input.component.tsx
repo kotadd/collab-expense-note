@@ -1,16 +1,16 @@
-import { Form, Icon, Item, Label, Picker } from 'native-base';
-import React, { useState } from 'react';
+import { Form, Icon, Item, Label, Picker } from 'native-base'
+import React, { useState } from 'react'
 
 type PickerInputType = {
-  title: string;
-  placeholder: string;
+  title: string
+  placeholder: string
   items: {
-    key: string;
-    type: string;
-    label: string;
-  }[];
-  onChange: (value: string) => void;
-};
+    key: string
+    type: string
+    label: string
+  }[]
+  onChange: (value: string) => void
+}
 
 const PickerInput = ({
   title,
@@ -18,15 +18,15 @@ const PickerInput = ({
   items,
   onChange
 }: PickerInputType) => {
-  const [selected, setSelected] = useState('');
+  const [selected, setSelected] = useState('')
 
   const onValueChange = (value: string) => {
-    setSelected(value);
-    onChange(value);
-    return;
-  };
+    setSelected(value)
+    onChange(value)
+    return
+  }
 
-  let doms = [];
+  const doms = []
 
   for (let i = 0; i < items.length; i++) {
     doms.push(
@@ -35,7 +35,7 @@ const PickerInput = ({
         label={items[i].label}
         value={items[i].label}
       />
-    );
+    )
   }
 
   return (
@@ -43,12 +43,12 @@ const PickerInput = ({
       <Item picker fixedLabel>
         <Label>{title}：</Label>
         <Picker
-          mode='dropdown'
-          iosIcon={<Icon name='arrow-down' />}
+          mode="dropdown"
+          iosIcon={<Icon name="arrow-down" />}
           style={{ width: undefined }}
           placeholder={placeholder}
           placeholderStyle={{ color: '#bfc6ea' }}
-          placeholderIconColor='#007aff'
+          placeholderIconColor="#007aff"
           selectedValue={selected}
           onValueChange={onValueChange.bind(this)}
         >
@@ -56,7 +56,7 @@ const PickerInput = ({
         </Picker>
       </Item>
     </Form>
-  );
-};
+  )
+}
 
-export default PickerInput;
+export default PickerInput

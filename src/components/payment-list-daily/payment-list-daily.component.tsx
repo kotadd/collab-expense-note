@@ -7,49 +7,49 @@ import {
   Picker,
   Right,
   Text
-} from 'native-base';
-import React, { useState } from 'react';
-import { connect } from 'react-redux';
-import { timestampToLocaleDate } from '../../../firebase/firebase.utils';
+} from 'native-base'
+import React, { useState } from 'react'
+import { connect } from 'react-redux'
+import { timestampToLocaleDate } from '../../../firebase/firebase.utils'
 import {
   AccountReduxTypes,
   INavProps,
   PaymentType,
   UserListProps
-} from '../../screens/types';
-import GroupListHeader from '../group-list-header/group-list-header.component';
+} from '../../screens/types'
+import GroupListHeader from '../group-list-header/group-list-header.component'
 
 const PaymentListDaily = ({
   currentPayments,
   navigation,
   userList
 }: AccountReduxTypes & INavProps & UserListProps) => {
-  const [selectedUser, setSelectedUser] = useState('all-items');
+  const [selectedUser, setSelectedUser] = useState('all-items')
 
   const onValueChange = (user: string) => {
-    setSelectedUser(user);
-  };
-
-  let pickerItems = [
-    <Picker.Item label='全体' value='all-items' key='all-items' />
-  ];
-  for (let key in userList) {
-    let pickerItem = (
-      <Picker.Item label={userList[key]} value={key} key={key} />
-    );
-    pickerItems.push(pickerItem);
+    setSelectedUser(user)
   }
 
-  let resultDom = [
-    <Item picker key='picker-item'>
+  const pickerItems = [
+    <Picker.Item label="全体" value="all-items" key="all-items" />
+  ]
+  for (const key in userList) {
+    const pickerItem = (
+      <Picker.Item label={userList[key]} value={key} key={key} />
+    )
+    pickerItems.push(pickerItem)
+  }
+
+  const resultDom = [
+    <Item picker key="picker-item">
       <Picker
-        key='picker-dropdown'
-        mode='dropdown'
-        iosIcon={<Icon name='arrow-down' />}
+        key="picker-dropdown"
+        mode="dropdown"
+        iosIcon={<Icon name="arrow-down" />}
         style={{ width: undefined }}
-        placeholder='全体'
+        placeholder="全体"
         placeholderStyle={{ color: '#bfc6ea' }}
-        placeholderIconColor='#007aff'
+        placeholderIconColor="#007aff"
         selectedValue={selectedUser}
         onValueChange={onValueChange.bind(this)}
         renderHeader={backAction => GroupListHeader(backAction)}
@@ -60,7 +60,7 @@ const PaymentListDaily = ({
     <CardItem
       header
       bordered
-      key='headerTop'
+      key="headerTop"
       style={{ backgroundColor: '#dce3ea' }}
     >
       <Left>
@@ -79,46 +79,46 @@ const PaymentListDaily = ({
         <Text>精算済</Text>
       </Right>
     </CardItem>
-  ];
+  ]
 
   if (currentPayments) {
-    let resultKey: string;
-    let currentDom = <></>;
-    let payment: PaymentType;
+    let resultKey: string
+    let currentDom = <></>
+    let payment: PaymentType
 
-    let currentDate: string;
-    let currentDay: string;
+    let currentDate: string
+    let currentDay: string
 
-    let targetDate = navigation.state.params
+    const targetDate = navigation.state.params
       ? (navigation.state.params.date as string)
-      : '';
-    const targetPayments = currentPayments[targetDate];
+      : ''
+    const targetPayments = currentPayments[targetDate]
 
     if (targetPayments) {
       for (let i = 0; i < targetPayments.length; i++) {
-        payment = targetPayments[i];
+        payment = targetPayments[i]
         if (selectedUser !== 'all-items' && selectedUser !== payment.userID)
-          return;
+          return
 
-        resultKey = `result-${i}`;
+        resultKey = `result-${i}`
 
-        currentDate = timestampToLocaleDate(payment.date, 'ja-JP');
+        currentDate = timestampToLocaleDate(payment.date, 'ja-JP')
 
-        currentDay = currentDate.replace(/.*月/, '');
+        currentDay = currentDate.replace(/.*月/, '')
 
         const collectCheckDom = payment.collected ? (
           <Right>
             <Icon
-              type='FontAwesome'
-              name='check'
+              type="FontAwesome"
+              name="check"
               style={{ color: 'green', marginRight: 8 }}
             />
           </Right>
         ) : (
           <Right>
-            <Icon type='FontAwesome' name='minus' style={{ marginRight: 10 }} />
+            <Icon type="FontAwesome" name="minus" style={{ marginRight: 10 }} />
           </Right>
-        );
+        )
 
         currentDom = (
           <CardItem
@@ -127,7 +127,7 @@ const PaymentListDaily = ({
             key={resultKey}
             onPress={() => {
               // navigation.navigate('Details');
-              alert('fetched from firestore');
+              alert('fetched from firestore')
             }}
           >
             <Left>
@@ -144,18 +144,18 @@ const PaymentListDaily = ({
             </Right>
             {collectCheckDom}
           </CardItem>
-        );
+        )
 
-        resultDom.push(currentDom);
+        resultDom.push(currentDom)
       }
     }
   }
 
-  return resultDom;
-};
+  return resultDom
+}
 
 const mapStateToProps = ({ account }: AccountReduxTypes) => ({
   currentPayments: account.currentPayments
-});
+})
 
-export default connect(mapStateToProps, null)(PaymentListDaily);
+export default connect(mapStateToProps, null)(PaymentListDaily)

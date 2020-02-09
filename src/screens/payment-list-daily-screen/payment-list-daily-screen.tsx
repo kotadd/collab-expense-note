@@ -1,67 +1,67 @@
-import { Content } from 'native-base';
-import React, { useEffect, useState } from 'react';
-import { Button } from 'react-native';
-import { connect, useDispatch } from 'react-redux';
+import { Content } from 'native-base'
+import React, { useEffect, useState } from 'react'
+import { Button } from 'react-native'
+import { connect, useDispatch } from 'react-redux'
 import {
   fetchAllUserData,
   fetchGroupByUser,
   fetchPaymentsByUser,
   fetchUserByUserAuth
-} from '../../../firebase/firebase.utils';
-import PaymentListDaily from '../../components/payment-list-daily/payment-list-daily.component';
-import { setCurrentPayments } from '../../redux/account/account.actions';
-import { findGroupUsers } from '../../utils';
-import { INavProps, UserProps, UserAuthType, UserReduxTypes } from '../types';
+} from '../../../firebase/firebase.utils'
+import PaymentListDaily from '../../components/payment-list-daily/payment-list-daily.component'
+import { setCurrentPayments } from '../../redux/account/account.actions'
+import { findGroupUsers } from '../../utils'
+import { INavProps, UserProps, UserAuthType, UserReduxTypes } from '../types'
 
 const PaymentListDailyScreen = ({
   currentUser,
   navigation
 }: UserReduxTypes & INavProps) => {
-  const [userList, setUserList] = useState({});
-  const dispatch = useDispatch();
+  const [userList, setUserList] = useState({})
+  const dispatch = useDispatch()
 
   useEffect(() => {
     async function fetchData() {
-      const userInfo = await fetchUserByUserAuth(currentUser);
-      const payments = await fetchPaymentsByUser(userInfo);
+      const userInfo = await fetchUserByUserAuth(currentUser)
+      const payments = await fetchPaymentsByUser(userInfo)
 
-      dispatch(setCurrentPayments(payments));
+      dispatch(setCurrentPayments(payments))
     }
-    fetchData();
-  }, []);
+    fetchData()
+  }, [])
 
   useEffect(() => {
     async function fetchData() {
-      const userInfo = await fetchUserByUserAuth(currentUser);
-      const group = await fetchGroupByUser(userInfo);
-      if (!group) return;
-      const userIDs = group.userIDs;
+      const userInfo = await fetchUserByUserAuth(currentUser)
+      const group = await fetchGroupByUser(userInfo)
+      if (!group) return
+      const userIDs = group.userIDs
 
-      const users = await fetchAllUserData();
-      const userList = findGroupUsers(userIDs, users);
+      const users = await fetchAllUserData()
+      const userList = findGroupUsers(userIDs, users)
 
-      setUserList(userList);
+      setUserList(userList)
     }
-    fetchData();
-  }, []);
+    fetchData()
+  }, [])
   return (
     <Content>
       <PaymentListDaily navigation={navigation} userList={userList} />
       {/* <NativeFooter /> */}
     </Content>
-  );
-};
+  )
+}
 
 PaymentListDailyScreen.navigationOptions = ({ navigation }: INavProps) => {
-  const date = navigation.state.params ? navigation.state.params.date : null;
-  let title = '日付ごとの支出';
-  if (date) title = `${date}の支出`;
+  const date = navigation.state.params ? navigation.state.params.date : null
+  let title = '日付ごとの支出'
+  if (date) title = `${date}の支出`
 
   return {
     title,
     headerRight: () => (
       <Button
-        title='＋'
+        title="＋"
         onPress={() =>
           navigation.navigate('CreateNew', {
             from: 'daily'
@@ -69,11 +69,11 @@ PaymentListDailyScreen.navigationOptions = ({ navigation }: INavProps) => {
         }
       />
     )
-  };
-};
+  }
+}
 
 const mapStateToProps = ({ user }: UserProps) => ({
   currentUser: user.currentUser
-});
+})
 
-export default connect(mapStateToProps)(PaymentListDailyScreen);
+export default connect(mapStateToProps)(PaymentListDailyScreen)

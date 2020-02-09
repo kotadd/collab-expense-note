@@ -10,48 +10,48 @@ import {
   Label,
   Text,
   Toast
-} from 'native-base';
-import React, { useState } from 'react';
+} from 'native-base'
+import React, { useState } from 'react'
 import {
   createAccountAndGroup,
   fetchAllGroupData
-} from '../../../firebase/firebase.utils';
-import { INavProps } from '../../screens/types';
+} from '../../../firebase/firebase.utils'
+import { INavProps } from '../../screens/types'
 
 const CreateGroupForm = ({ navigation }: INavProps) => {
-  const [name, setName] = useState('');
-  const [isNewGroup, setIsNewGroup] = useState(true);
+  const [name, setName] = useState('')
+  const [isNewGroup, setIsNewGroup] = useState(true)
 
   const createNewGroup = async (name: string) => {
     try {
-      const groups = await fetchAllGroupData();
+      const groups = await fetchAllGroupData()
       groups.forEach(group => {
         if (name === group.data().name) {
-          return setIsNewGroup(false);
+          return setIsNewGroup(false)
         }
-      });
+      })
 
       if (!isNewGroup) {
         return Toast.show({
           text: 'このグループ名はすでに登録されています',
           type: 'danger'
-        });
+        })
       }
 
-      return await createAccountAndGroup(name);
+      return await createAccountAndGroup(name)
     } catch (error) {
-      console.error(error);
+      console.error(error)
     }
-  };
+  }
 
   return (
     <Content>
       <Form>
         <Item floatingLabel>
-          <Icon type='FontAwesome' active name='users' />
+          <Icon type="FontAwesome" active name="users" />
           <Label>グループ名</Label>
           <Input
-            defaultValue=''
+            defaultValue=""
             onChangeText={text => setName(text)}
             value={name}
           />
@@ -64,7 +64,7 @@ const CreateGroupForm = ({ navigation }: INavProps) => {
         </Button>
       </Form>
     </Content>
-  );
-};
+  )
+}
 
-export default CreateGroupForm;
+export default CreateGroupForm

@@ -1,12 +1,12 @@
-import { createAppContainer, createSwitchNavigator } from 'react-navigation';
-import { createStackNavigator } from 'react-navigation-stack';
-import AddInfoScreen from './src/screens/add-info-screen/add-info.screen';
-import CreateGroupScreen from './src/screens/create-group-screen/create-group.screen';
-import LoginScreen from './src/screens/loginscreen/loginscreen';
-import ModalScreen from './src/screens/modalscreen/modalscreen';
-import PaymentListDailyScreen from './src/screens/payment-list-daily-screen/payment-list-daily-screen';
-import PaymentListMonthlyScreen from './src/screens/payment-list-monthly-screen/payment-list-monthly-screen';
-import SignupScreen from './src/screens/signupscreen/signupscreen';
+import { createAppContainer, createSwitchNavigator } from 'react-navigation'
+import { createStackNavigator } from 'react-navigation-stack'
+import AddInfoScreen from './src/screens/add-info-screen/add-info.screen'
+import CreateGroupScreen from './src/screens/create-group-screen/create-group.screen'
+import LoginScreen from './src/screens/loginscreen/loginscreen'
+import ModalScreen from './src/screens/modalscreen/modalscreen'
+import PaymentListDailyScreen from './src/screens/payment-list-daily-screen/payment-list-daily-screen'
+import PaymentListMonthlyScreen from './src/screens/payment-list-monthly-screen/payment-list-monthly-screen'
+import SignupScreen from './src/screens/signupscreen/signupscreen'
 
 const MainStack = createStackNavigator({
   Home: {
@@ -18,7 +18,7 @@ const MainStack = createStackNavigator({
   Daily: {
     screen: PaymentListDailyScreen
   }
-});
+})
 
 const RootStack = createStackNavigator(
   {
@@ -33,7 +33,7 @@ const RootStack = createStackNavigator(
     mode: 'modal',
     headerMode: 'none'
   }
-);
+)
 
 const AuthStack = createStackNavigator({
   Login: {
@@ -45,13 +45,13 @@ const AuthStack = createStackNavigator({
   Signup: {
     screen: SignupScreen
   }
-});
+})
 
 const CreateGroupStack = createStackNavigator({
   Group: {
     screen: CreateGroupScreen
   }
-});
+})
 
 const AppContainer = createAppContainer(
   createSwitchNavigator(
@@ -64,6 +64,6 @@ const AppContainer = createAppContainer(
       initialRouteName: 'Auth'
     }
   )
-);
+)
 
-export default AppContainer;
+export default AppContainer

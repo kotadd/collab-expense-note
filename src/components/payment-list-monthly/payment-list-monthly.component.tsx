@@ -7,54 +7,54 @@ import {
   Picker,
   Right,
   Text
-} from 'native-base';
-import React, { useState } from 'react';
-import { connect } from 'react-redux';
-import { timestampToLocaleDate } from '../../../firebase/firebase.utils';
+} from 'native-base'
+import React, { useState } from 'react'
+import { connect } from 'react-redux'
+import { timestampToLocaleDate } from '../../../firebase/firebase.utils'
 import {
   PaymentType,
   AccountReduxTypes,
   INavProps,
   UserListType,
   UserListProps
-} from '../../screens/types';
-import GroupListHeader from '../group-list-header/group-list-header.component';
+} from '../../screens/types'
+import GroupListHeader from '../group-list-header/group-list-header.component'
 
-const ALL_ITEMS = 'all-items';
-type Props = AccountReduxTypes & INavProps & UserListProps;
+const ALL_ITEMS = 'all-items'
+type Props = AccountReduxTypes & INavProps & UserListProps
 
 const PaymentListMonthly = ({
   currentPayments,
   navigation,
   userList
 }: Props) => {
-  const [selectedUser, setSelectedUser] = useState(ALL_ITEMS);
+  const [selectedUser, setSelectedUser] = useState(ALL_ITEMS)
 
   const onValueChange = async (user: string) => {
-    setSelectedUser(user);
-  };
-
-  let pickerItems = [
-    <Picker.Item label='全体' value={ALL_ITEMS} key={ALL_ITEMS} />
-  ];
-
-  for (let key in userList) {
-    let pickerItem = (
-      <Picker.Item label={userList[key]} value={key} key={key} />
-    );
-    pickerItems.push(pickerItem);
+    setSelectedUser(user)
   }
 
-  let resultDom = [
-    <Item picker key='picker-item'>
+  const pickerItems = [
+    <Picker.Item label="全体" value={ALL_ITEMS} key={ALL_ITEMS} />
+  ]
+
+  for (const key in userList) {
+    const pickerItem = (
+      <Picker.Item label={userList[key]} value={key} key={key} />
+    )
+    pickerItems.push(pickerItem)
+  }
+
+  const resultDom = [
+    <Item picker key="picker-item">
       <Picker
-        key='picker-dropdown'
-        mode='dropdown'
-        iosIcon={<Icon name='arrow-down' />}
+        key="picker-dropdown"
+        mode="dropdown"
+        iosIcon={<Icon name="arrow-down" />}
         style={{ width: undefined }}
-        placeholder='全体'
+        placeholder="全体"
         placeholderStyle={{ color: '#bfc6ea' }}
-        placeholderIconColor='#007aff'
+        placeholderIconColor="#007aff"
         selectedValue={selectedUser}
         onValueChange={onValueChange.bind(this)}
         renderHeader={backAction => GroupListHeader(backAction)}
@@ -65,7 +65,7 @@ const PaymentListMonthly = ({
     <CardItem
       header
       bordered
-      key='headerTop'
+      key="headerTop"
       style={{ backgroundColor: '#dce3ea' }}
     >
       <Left>
@@ -78,85 +78,85 @@ const PaymentListMonthly = ({
         <Text>未精算額</Text>
       </Right>
     </CardItem>
-  ];
+  ]
 
   if (currentPayments) {
-    let resultKey: string;
-    let currentDom = <></>;
+    let resultKey: string
+    let currentDom = <></>
 
-    let currentDate: string;
-    let yearMonth: string;
+    let currentDate: string
+    let yearMonth: string
 
-    const resultKeys = Object.keys(currentPayments);
+    const resultKeys = Object.keys(currentPayments)
 
     resultKeys.sort((a, b) => {
-      let leftVal = a.match(/\d+/g);
-      let rightVal = b.match(/\d+/g);
+      const leftVal = a.match(/\d+/g)
+      const rightVal = b.match(/\d+/g)
 
-      if (!leftVal || !rightVal) return 0;
+      if (!leftVal || !rightVal) return 0
 
-      let leftYear = parseInt(leftVal[0]);
-      let leftMonth = parseInt(leftVal[1]);
-      let rightYear = parseInt(rightVal[0]);
-      let rightMonth = parseInt(rightVal[1]);
+      const leftYear = parseInt(leftVal[0])
+      const leftMonth = parseInt(leftVal[1])
+      const rightYear = parseInt(rightVal[0])
+      const rightMonth = parseInt(rightVal[1])
 
       if (
         leftYear < rightYear ||
         (leftYear == rightYear && leftMonth < rightMonth)
       ) {
-        return 1;
+        return 1
       }
       if (
         leftYear > rightYear ||
         (leftYear == rightYear && leftMonth > rightMonth)
       ) {
-        return -1;
+        return -1
       }
-      return 0;
-    });
+      return 0
+    })
 
     for (let i = 0; i < resultKeys.length; i++) {
-      resultKey = resultKeys[i];
+      resultKey = resultKeys[i]
 
-      let resultVals = currentPayments[resultKey];
+      const resultVals = currentPayments[resultKey]
 
       const paymentsMap = resultVals.reduce(
         (accumulator, payment: PaymentType) => {
           if (selectedUser === ALL_ITEMS || selectedUser === payment.userID) {
-            currentDate = timestampToLocaleDate(payment.date, 'ja-JP');
+            currentDate = timestampToLocaleDate(payment.date, 'ja-JP')
 
-            yearMonth = currentDate.replace(/(\d\d|\d)日.*/, '');
+            yearMonth = currentDate.replace(/(\d\d|\d)日.*/, '')
 
-            let totalAmountKey = `${yearMonth}_total`;
-            let uncollectedAmountKey = `${yearMonth}_uncollected`;
+            const totalAmountKey = `${yearMonth}_total`
+            const uncollectedAmountKey = `${yearMonth}_uncollected`
 
-            let groupAmount = payment.groupAmount;
-            let uncollectedAmount = 0;
+            const groupAmount = payment.groupAmount
+            let uncollectedAmount = 0
             if (!payment.collected) {
-              uncollectedAmount = groupAmount - payment.userAmount;
+              uncollectedAmount = groupAmount - payment.userAmount
             }
 
             accumulator[totalAmountKey]
               ? (accumulator[totalAmountKey] += groupAmount)
-              : (accumulator[totalAmountKey] = groupAmount);
+              : (accumulator[totalAmountKey] = groupAmount)
 
             accumulator[uncollectedAmountKey]
               ? (accumulator[uncollectedAmountKey] += uncollectedAmount)
-              : (accumulator[uncollectedAmountKey] = uncollectedAmount);
+              : (accumulator[uncollectedAmountKey] = uncollectedAmount)
           }
 
-          return accumulator;
+          return accumulator
         },
         {}
-      );
+      )
 
-      let monthlyKeys = Object.keys(paymentsMap);
+      const monthlyKeys = Object.keys(paymentsMap)
 
       for (let j = 0; j < monthlyKeys.length / 2; j++) {
-        let totalAmount = paymentsMap[monthlyKeys[j]];
-        let uncollectedAmount = paymentsMap[monthlyKeys[j + 1]];
+        const totalAmount = paymentsMap[monthlyKeys[j]]
+        const uncollectedAmount = paymentsMap[monthlyKeys[j + 1]]
 
-        const yearMonth = resultKey;
+        const yearMonth = resultKey
         currentDom = (
           <CardItem
             bordered
@@ -165,7 +165,7 @@ const PaymentListMonthly = ({
             onPress={() => {
               navigation.navigate('Daily', {
                 date: yearMonth
-              });
+              })
             }}
           >
             <Left>
@@ -178,16 +178,16 @@ const PaymentListMonthly = ({
               <Text>{uncollectedAmount.toLocaleString()} 円</Text>
             </Right>
           </CardItem>
-        );
-        resultDom.push(currentDom);
+        )
+        resultDom.push(currentDom)
       }
     }
   }
-  return resultDom;
-};
+  return resultDom
+}
 
 const mapStateToProps = ({ account }: AccountReduxTypes) => ({
   currentPayments: account.currentPayments
-});
+})
 
-export default connect(mapStateToProps, null)(PaymentListMonthly);
+export default connect(mapStateToProps, null)(PaymentListMonthly)

@@ -10,24 +10,24 @@ import {
   Label,
   Text,
   Toast
-} from 'native-base';
-import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
+} from 'native-base'
+import React, { useState } from 'react'
+import { useDispatch } from 'react-redux'
 import {
   auth,
   createUserProfileDocument
-} from '../../../firebase/firebase.utils';
-import { setCurrentUser } from '../../redux/user/user.actions';
-import { INavProps } from '../../screens/types';
+} from '../../../firebase/firebase.utils'
+import { setCurrentUser } from '../../redux/user/user.actions'
+import { INavProps } from '../../screens/types'
 
 const SignupForm = ({ navigation }: INavProps) => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [togglePassword, setTogglePassword] = useState(false);
-  const [toggleConfirmPassword, setToggleConfirmPassword] = useState(false);
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [confirmPassword, setConfirmPassword] = useState('')
+  const [togglePassword, setTogglePassword] = useState(false)
+  const [toggleConfirmPassword, setToggleConfirmPassword] = useState(false)
 
-  const dispatch = useDispatch();
+  const dispatch = useDispatch()
 
   const validateSignup = async (
     email: string,
@@ -38,87 +38,87 @@ const SignupForm = ({ navigation }: INavProps) => {
       return Toast.show({
         text: 'パスワードと確認用パスワードが一致していません',
         type: 'danger'
-      });
+      })
     }
 
     try {
       const { user } = await auth.createUserWithEmailAndPassword(
         email,
         password
-      );
+      )
 
-      await createUserProfileDocument(user);
+      await createUserProfileDocument(user)
 
       if (user) {
-        dispatch(setCurrentUser(user));
-        navigation.navigate('AddInfo');
+        dispatch(setCurrentUser(user))
+        navigation.navigate('AddInfo')
       } else {
-        dispatch(setCurrentUser({}));
+        dispatch(setCurrentUser({}))
         return Toast.show({
           text: '正しく登録できませんでした',
           type: 'danger'
-        });
+        })
       }
     } catch (error) {
-      console.log(error);
+      console.log(error)
       if (error.message.match(/The email address is badly formatted./)) {
         return Toast.show({
           text: 'メールアドレスの形式が正しくありません',
           type: 'danger'
-        });
+        })
       }
       if (error.message.match(/Password should be at least 6 characters/)) {
         return Toast.show({
           text: 'パスワードは6桁以上で入力して下さい',
           type: 'danger'
-        });
+        })
       }
     }
-  };
+  }
 
   return (
     <Content>
       <Form>
         <Item floatingLabel>
-          <Icon active name='mail' />
+          <Icon active name="mail" />
           <Label>メールアドレス</Label>
           <Input
-            defaultValue=''
+            defaultValue=""
             onChangeText={text => setEmail(text)}
             value={email}
           />
         </Item>
         {togglePassword ? (
           <Item floatingLabel last>
-            <Icon active name='lock' />
+            <Icon active name="lock" />
             <Label>パスワード</Label>
             <Input
               secureTextEntry={false}
-              defaultValue=''
+              defaultValue=""
               onChangeText={text => setPassword(text)}
               value={password}
             />
             <Icon
-              type='FontAwesome'
+              type="FontAwesome"
               active
-              name='eye'
+              name="eye"
               onPress={() => setTogglePassword(false)}
             />
           </Item>
         ) : (
           <Item floatingLabel last>
-            <Icon active name='lock' />
+            <Icon active name="lock" />
             <Label>パスワード</Label>
             <Input
               secureTextEntry={true}
-              defaultValue=''
+              defaultValue=""
               onChangeText={text => setPassword(text)}
               value={password}
             />
             <Icon
-              type='FontAwesome'
+              type="FontAwesome"
               active
-              name='eye-slash'
+              name="eye-slash"
               onPress={() => setTogglePassword(true)}
             />
           </Item>
@@ -126,35 +126,35 @@ const SignupForm = ({ navigation }: INavProps) => {
 
         {togglePassword ? (
           <Item floatingLabel last>
-            <Icon active name='lock' />
+            <Icon active name="lock" />
             <Label>パスワード</Label>
             <Input
               secureTextEntry={false}
-              defaultValue=''
+              defaultValue=""
               onChangeText={text => setConfirmPassword(text)}
               value={confirmPassword}
             />
             <Icon
-              type='FontAwesome'
+              type="FontAwesome"
               active
-              name='eye'
+              name="eye"
               onPress={() => setTogglePassword(false)}
             />
           </Item>
         ) : (
           <Item floatingLabel last>
-            <Icon active name='lock' />
+            <Icon active name="lock" />
             <Label>パスワードの再確認</Label>
             <Input
               secureTextEntry={true}
-              defaultValue=''
+              defaultValue=""
               onChangeText={text => setConfirmPassword(text)}
               value={confirmPassword}
             />
             <Icon
-              type='FontAwesome'
+              type="FontAwesome"
               active
-              name='eye-slash'
+              name="eye-slash"
               onPress={() => setTogglePassword(true)}
             />
           </Item>
@@ -175,7 +175,7 @@ const SignupForm = ({ navigation }: INavProps) => {
         </Button>
       </Form>
     </Content>
-  );
-};
+  )
+}
 
-export default SignupForm;
+export default SignupForm
