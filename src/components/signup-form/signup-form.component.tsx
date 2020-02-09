@@ -24,6 +24,8 @@ const SignupForm = ({ navigation }: INavProps) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [togglePassword, setTogglePassword] = useState(false);
+  const [toggleConfirmPassword, setToggleConfirmPassword] = useState(false);
 
   const dispatch = useDispatch();
 
@@ -86,26 +88,78 @@ const SignupForm = ({ navigation }: INavProps) => {
             value={email}
           />
         </Item>
-        <Item floatingLabel last>
-          <Icon active name='lock' />
-          <Label>パスワード</Label>
-          <Input
-            secureTextEntry={true}
-            defaultValue=''
-            onChangeText={text => setPassword(text)}
-            value={password}
-          />
-        </Item>
-        <Item floatingLabel last>
-          <Icon active name='lock' />
-          <Label>パスワードの再確認</Label>
-          <Input
-            secureTextEntry={true}
-            defaultValue=''
-            onChangeText={text => setConfirmPassword(text)}
-            value={confirmPassword}
-          />
-        </Item>
+        {togglePassword ? (
+          <Item floatingLabel last>
+            <Icon active name='lock' />
+            <Label>パスワード</Label>
+            <Input
+              secureTextEntry={false}
+              defaultValue=''
+              onChangeText={text => setPassword(text)}
+              value={password}
+            />
+            <Icon
+              type='FontAwesome'
+              active
+              name='eye'
+              onPress={() => setTogglePassword(false)}
+            />
+          </Item>
+        ) : (
+          <Item floatingLabel last>
+            <Icon active name='lock' />
+            <Label>パスワード</Label>
+            <Input
+              secureTextEntry={true}
+              defaultValue=''
+              onChangeText={text => setPassword(text)}
+              value={password}
+            />
+            <Icon
+              type='FontAwesome'
+              active
+              name='eye-slash'
+              onPress={() => setTogglePassword(true)}
+            />
+          </Item>
+        )}
+
+        {togglePassword ? (
+          <Item floatingLabel last>
+            <Icon active name='lock' />
+            <Label>パスワード</Label>
+            <Input
+              secureTextEntry={false}
+              defaultValue=''
+              onChangeText={text => setConfirmPassword(text)}
+              value={confirmPassword}
+            />
+            <Icon
+              type='FontAwesome'
+              active
+              name='eye'
+              onPress={() => setTogglePassword(false)}
+            />
+          </Item>
+        ) : (
+          <Item floatingLabel last>
+            <Icon active name='lock' />
+            <Label>パスワードの再確認</Label>
+            <Input
+              secureTextEntry={true}
+              defaultValue=''
+              onChangeText={text => setConfirmPassword(text)}
+              value={confirmPassword}
+            />
+            <Icon
+              type='FontAwesome'
+              active
+              name='eye-slash'
+              onPress={() => setTogglePassword(true)}
+            />
+          </Item>
+        )}
+
         <Grid>
           <Col style={{ height: 40 }}></Col>
         </Grid>

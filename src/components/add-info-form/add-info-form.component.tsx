@@ -18,11 +18,14 @@ import {
   fetchAllGroupData,
   addUserProfileDocument
 } from '../../../firebase/firebase.utils';
-import { INavProps } from '../../screens/types';
+import { INavProps, UserReduxTypes } from '../../screens/types';
 
-const AddInfoForm = ({ navigation, currentUser }: INavProps) => {
+const AddInfoForm = ({
+  navigation,
+  currentUser
+}: INavProps & UserReduxTypes) => {
   const [name, setName] = useState('');
-  const [pickerItemDom, setPickerItemDom] = useState([]);
+  const [pickerItemDom, setPickerItemDom] = useState([] as JSX.Element[]);
 
   const [selectedGroupId, setSelectedGroupId] = useState('');
 
@@ -31,10 +34,15 @@ const AddInfoForm = ({ navigation, currentUser }: INavProps) => {
   };
 
   useEffect(() => {
+    type GroupsType = {
+      [key: string]: string;
+    };
+
     const fetchGroups = async () => {
       const groupCollectionSnapshot = await fetchAllGroupData();
       if (!groupCollectionSnapshot) return;
-      let groups = {};
+      let groups = {} as GroupsType;
+
       groupCollectionSnapshot.forEach(doc => {
         groups[doc.id] = doc.data().name;
       });
@@ -46,13 +54,16 @@ const AddInfoForm = ({ navigation, currentUser }: INavProps) => {
       for (let key in await groups) {
         tempDom.push(<Picker.Item label={groups[key]} value={key} key={key} />);
       }
-      return setPickerItemDom(tempDom);
+
+      setPickerItemDom(tempDom);
+
+      return;
     };
 
     fetchGroups();
   }, []);
 
-  const addGroupInfo = async (name: string, selectedGroupId) => {
+  const addGroupInfo = async (name: string, selectedGroupId: string) => {
     try {
       const result = await addUserProfileDocument(
         currentUser,
@@ -80,7 +91,7 @@ const AddInfoForm = ({ navigation, currentUser }: INavProps) => {
       <Form>
         <Item floatingLabel>
           <Icon type='FontAwesome' active name='user' />
-          <Label>表示名</Label>
+          <Label>グループで表示するあなたの名前を入力してください</Label>
           <Input
             defaultValue=''
             onChangeText={text => setName(text)}
@@ -97,11 +108,11 @@ const AddInfoForm = ({ navigation, currentUser }: INavProps) => {
           <Picker
             mode='dropdown'
             style={{ width: undefined }}
-            placeholder='グループ名'
+            placeholder='参加するグループを選択してください'
             placeholderStyle={{ color: '#bfc6ea' }}
             placeholderIconColor='#007aff'
             selectedValue={selectedGroupId}
-            onValueChange={onValueChange.bind(this)}
+            onValueChange={value => onValueChange(value)}
           >
             {pickerItemDom}
           </Picker>
@@ -117,7 +128,7 @@ const AddInfoForm = ({ navigation, currentUser }: INavProps) => {
   );
 };
 
-const mapStateToProps = ({ user }: IStateToProps) => ({
+const mapStateToProps = ({ user }: UserReduxTypes) => ({
   currentUser: user.currentUser
 });
 

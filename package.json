@@ -2,6 +2,9 @@
   "main": "node_modules/expo/AppEntry.js",
   "scripts": {
     "start": "expo start",
+    "build": "tsc --build",
+    "lint": "eslint --ext .ts,.tsx ./",
+    "lint:fix": "eslint --ext .ts,.tsx --fix ./",
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
@@ -34,7 +37,13 @@
     "@types/react": "~16.9.0",
     "@types/react-native": "~0.60.23",
     "@types/react-redux": "^7.1.7",
+    "@typescript-eslint/eslint-plugin": "^2.19.0",
+    "@typescript-eslint/parser": "^2.19.0",
     "babel-preset-expo": "~8.0.0",
+    "eslint": "^6.8.0",
+    "eslint-config-prettier": "^6.10.0",
+    "eslint-plugin-prettier": "^3.1.2",
+    "prettier": "^1.19.1",
     "redux-devtools-extension": "^2.13.8",
     "typescript": "~3.6.3"
   },

@@ -1,7 +1,7 @@
 import { Container } from 'native-base';
 import React from 'react';
 import { useDispatch } from 'react-redux';
-import { auth } from '../../../firebase/firebase.utils';
+import { auth, fetchGroupByUser } from '../../../firebase/firebase.utils';
 import LoginForm from '../../components/login-form/login-form.component';
 import { setCurrentUser } from '../../redux/user/user.actions';
 import { INavProps } from '../types';
@@ -9,7 +9,9 @@ import { INavProps } from '../types';
 const LoginScreen = ({ navigation }: INavProps) => {
   const dispatch = useDispatch();
   auth.onAuthStateChanged(async userAuth => {
-    if (userAuth) {
+    if (!userAuth) return;
+    const groupInfo = await fetchGroupByUser(userAuth);
+    if (groupInfo) {
       dispatch(setCurrentUser(userAuth));
       navigation.navigate('App');
     }

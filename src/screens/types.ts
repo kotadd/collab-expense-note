@@ -24,16 +24,33 @@ export type UserReduxTypes = {
 };
 
 export type AccountReduxTypes = {
-  currentPayments: [MonthlyPayments];
+  currentPayments: {
+    [date: string]: [PaymentType];
+  };
   isPaymentsUpdated: boolean;
   account: {
-    currentPayments: [MonthlyPayments];
+    currentPayments: {
+      [date: string]: [PaymentType];
+    };
     isPaymentsUpdated: boolean;
   };
 };
 
 // -------------Firebase Definitions-------------
+export interface PaymentProps {
+  payments: {
+    [date: string]: [PaymentType];
+  };
+}
+
 export type UserAuthType = firebase.User | null;
+
+export type DocType = {
+  id: string;
+  data(): {
+    name: string;
+  };
+};
 
 export type PaymentType = {
   _createdAt: firebase.firestore.Timestamp;
@@ -62,14 +79,6 @@ export type CreatePaymentType = {
   userAmount: number;
   userID?: string;
 };
-
-export type MonthlyPayments = {
-  (date: string): [PaymentType];
-};
-
-export interface PaymentProps {
-  payments: [MonthlyPayments];
-}
 
 export type UserType = {
   _createdAt: firebase.firestore.Timestamp;
