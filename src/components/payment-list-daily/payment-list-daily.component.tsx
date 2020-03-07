@@ -10,7 +10,7 @@ import {
 } from 'native-base'
 import React, { useState } from 'react'
 import { connect } from 'react-redux'
-import { timestampToLocaleDate } from '../../../firebase/firebase.utils'
+import { timestampToLocaleDate } from '../../../repository/firebase/firebase.utils'
 import {
   AccountReduxTypes,
   NavigationProps,

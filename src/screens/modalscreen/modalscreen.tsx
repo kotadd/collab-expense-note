@@ -1,3 +1,5 @@
+import { useNavigation } from 'react-navigation-hooks'
+
 import {
   Body,
   Button,
@@ -17,18 +19,15 @@ import {
 import React, { useState } from 'react'
 import { Platform, Text } from 'react-native'
 import { connect, useDispatch } from 'react-redux'
-import { createPaymentsData } from '../../../firebase/firebase.utils'
+import { createPaymentsData } from '../../../repository/firebase/firebase.utils'
 import DatePicker from '../../components/datepicker/datepicker-component'
 import NativeHeader from '../../components/native-header/native-header.component'
 import PickerInput from '../../components/picker-input/picker-input.component'
 import OPTIONS from '../../components/picker-input/picker-options'
 import { updateIsPaymentsUpdated } from '../../redux/account/account.actions'
-import { CreatePaymentType, NavigationProps, UserReduxTypes } from '../types'
+import { CreatePaymentType, UserReduxTypes } from '../types'
 
-const ModalScreen = ({
-  navigation,
-  currentUser
-}: NavigationProps & UserReduxTypes) => {
+const ModalScreen = ({ currentUser }: UserReduxTypes) => {
   const dateOption = {
     year: 'numeric',
     month: 'short',
@@ -81,7 +80,7 @@ const ModalScreen = ({
         })
 
         dispatch(updateIsPaymentsUpdated())
-        navigation.navigate('Home')
+        useNavigation().navigate('Home')
       }
     } catch (e) {
       console.log(`failed to create data: ${e}`)
@@ -90,7 +89,7 @@ const ModalScreen = ({
 
   return (
     <Container>
-      <NativeHeader navigation={navigation} />
+      <NativeHeader navigation={useNavigation()} />
       <Content>
         <Form style={{ marginRight: 16 }}>
           <Item fixedLabel>

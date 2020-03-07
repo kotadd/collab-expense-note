@@ -15,7 +15,7 @@ import React, { useState } from 'react'
 import {
   createAccountAndGroup,
   fetchAllGroupData
-} from '../../../firebase/firebase.utils'
+} from '../../../repository/firebase/firebase.utils'
 import { NavigationProps } from '../../screens/types'
 
 const CreateGroupForm = ({ navigation }: NavigationProps) => {

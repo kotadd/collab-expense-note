@@ -12,12 +12,13 @@ import {
   Toast
 } from 'native-base'
 import React, { useState } from 'react'
+import { useNavigation } from 'react-navigation-hooks'
 import { useDispatch } from 'react-redux'
-import { loginUser } from '../../../firebase/firebase.utils'
+import { loginUser } from '../../../repository/firebase/firebase.utils'
 import { setCurrentUser } from '../../redux/user/user.actions'
-import { NavigationProps } from '../../screens/types'
 
-const LoginForm = ({ navigation }: NavigationProps) => {
+const LoginForm = () => {
+  const { navigate } = useNavigation()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [togglePassword, setTogglePassword] = useState(false)
@@ -27,7 +28,7 @@ const LoginForm = ({ navigation }: NavigationProps) => {
     const userAuth = await loginUser(email, password)
     if (userAuth && userAuth.user) {
       dispatch(setCurrentUser(userAuth.user))
-      navigation.navigate('App')
+      navigate('App')
     } else {
       dispatch(setCurrentUser({}))
       return Toast.show({
@@ -91,7 +92,7 @@ const LoginForm = ({ navigation }: NavigationProps) => {
           <Text> ログイン </Text>
         </Button>
 
-        <Button transparent onPress={() => navigation.navigate('Signup')}>
+        <Button transparent onPress={() => navigate('Signup')}>
           <Text>まだ登録していませんか？</Text>
         </Button>
       </Form>

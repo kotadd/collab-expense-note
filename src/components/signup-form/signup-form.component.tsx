@@ -16,7 +16,7 @@ import { useDispatch } from 'react-redux'
 import {
   auth,
   createUserProfileDocument
-} from '../../../firebase/firebase.utils'
+} from '../../../repository/firebase/firebase.utils'
 import { setCurrentUser } from '../../redux/user/user.actions'
 import { NavigationProps } from '../../screens/types'
 

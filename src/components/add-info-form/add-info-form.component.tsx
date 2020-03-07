@@ -17,7 +17,7 @@ import { connect } from 'react-redux'
 import {
   fetchAllGroupData,
   addUserProfileDocument
-} from '../../../firebase/firebase.utils'
+} from '../../../repository/firebase/firebase.utils'
 import { NavigationProps, UserReduxTypes } from '../../screens/types'
 
 const AddInfoForm = ({

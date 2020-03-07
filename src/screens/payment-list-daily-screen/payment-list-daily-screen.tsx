@@ -7,7 +7,7 @@ import {
   fetchGroupByUser,
   fetchPaymentsByUser,
   fetchUserByUserAuth
-} from '../../../firebase/firebase.utils'
+} from '../../../repository/firebase/firebase.utils'
 import PaymentListDaily from '../../components/payment-list-daily/payment-list-daily.component'
 import { setCurrentPayments } from '../../redux/account/account.actions'
 import { findGroupUsers } from '../../utils'

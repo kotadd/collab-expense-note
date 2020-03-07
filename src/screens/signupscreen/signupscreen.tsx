@@ -11,8 +11,8 @@ const SignupScreen: NavigationProps = ({ navigation }: NavigationProps) => {
   )
 }
 
-SignupScreen.navigationOptions = () => ({
+SignupScreen.navigationOptions = {
   title: '登録する'
-})
+}
 
 export default SignupScreen

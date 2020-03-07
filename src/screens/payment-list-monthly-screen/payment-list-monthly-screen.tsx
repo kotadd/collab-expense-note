@@ -1,34 +1,25 @@
 import { Container, Toast } from 'native-base'
 import React, { useEffect, useState } from 'react'
 import { Button } from 'react-native'
+import { useNavigation } from 'react-navigation-hooks'
 import { connect, useDispatch } from 'react-redux'
 import {
   auth,
-  fetchAllUserData,
   fetchGroupByUser,
   fetchPaymentsByUser,
   fetchUserByUserAuth
-} from '../../../firebase/firebase.utils'
+} from '../../../repository/firebase/firebase.utils'
 import PaymentListMonthly from '../../components/payment-list-monthly/payment-list-monthly.component'
 import { setCurrentPayments } from '../../redux/account/account.actions'
 import { setCurrentUser } from '../../redux/user/user.actions'
 import { findGroupUsers } from '../../utils'
-import {
-  NavigationProps,
-  UserReduxTypes,
-  AccountReduxTypes,
-  NavigationType
-} from '../types'
+import { AccountReduxTypes, NavigationType, UserReduxTypes } from '../types'
+import { fetchAllUserData } from '../../../repository/firebase/users/user-repository'
 
-type Props = NavigationProps & UserReduxTypes & AccountReduxTypes
-
-const PaymentListMonthlyScreen = ({
-  navigation,
-  currentUser,
-  isPaymentsUpdated
-}: Props) => {
+const PaymentListMonthlyScreen = ({ currentUser, isPaymentsUpdated }) => {
   const [userList, setUserList] = useState({})
   const dispatch = useDispatch()
+  const navigation = useNavigation()
 
   useEffect(() => {
     const fetchPaymentsData = async () => {
@@ -85,27 +76,38 @@ const logOut = async (navigation: NavigationType) => {
     })
   } catch (error) {
     console.log(error)
+    Toast.show({
+      text: 'ログアウトに失敗しました',
+      type: 'danger'
+    })
   }
 }
 
-PaymentListMonthlyScreen.navigationOptions = ({
-  navigation
-}: NavigationProps) => ({
-  title: '月ごとの支出',
-  headerRight: () => (
+const RightButton = () => {
+  // const navigation = useNavigation()
+  return (
     <Button
       title="＋"
       onPress={() =>
-        navigation.navigate('CreateNew', {
-          from: 'monthly'
-        })
+        // navigation.navigate('CreateNew', {
+        //   from: 'monthly'
+        // })
+        console.log('------')
       }
     />
-  ),
-  headerLeft: () => (
-    <Button title="ログアウト" onPress={() => logOut(navigation)} />
   )
-})
+}
+
+const LeftButton = () => {
+  const navigation = useNavigation()
+  return <Button title="ログアウト" onPress={() => logOut(navigation)} />
+}
+
+PaymentListMonthlyScreen.navigationOptions = {
+  title: '月ごとの支出',
+  headerRight: RightButton,
+  headerLeft: LeftButton
+}
 
 const mapStateToProps = ({
   user,

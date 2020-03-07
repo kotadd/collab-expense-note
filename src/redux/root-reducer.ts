@@ -5,7 +5,7 @@ import accountReducer from './account/account.reducer'
 import { PaymentType } from '../screens/types'
 
 export interface UserState {
-  currentUser: any
+  currentUser: {}
 }
 
 export interface AccountState {

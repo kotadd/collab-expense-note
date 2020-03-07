@@ -10,41 +10,44 @@ export type UserListType = {
 }
 
 // -------------React Navigation Definitions-------------
+export interface NavigationOptions {
+  headerLeft?: () => React.ReactNode
+  headerRight?: () => React.ReactNode
+  title?: string
+}
+
 export interface NavigationProps {
   navigation?: NavigationScreenProp<{}>
-  navigationOptions?: {}
+  navigationOptions?: NavigationOptions
 }
+
 export type NavigationType = NavigationScreenProp<{}>
 
+export interface MonthlyPayments {
+  [date: string]: [PaymentType]
+}
+
 // -------------Redux Definitions-------------
-export type UserReduxTypes = {
+export interface UserReduxTypes {
   currentUser: User
   user: {
     currentUser: UserType
   }
 }
 
-export type AccountReduxTypes = {
-  currentPayments: {
-    [date: string]: [PaymentType]
-  }
+export interface AccountReduxTypes {
+  currentPayments: MonthlyPayments
   isPaymentsUpdated: boolean
   account: {
-    currentPayments: {
-      [date: string]: [PaymentType]
-    }
+    currentPayments: MonthlyPayments
     isPaymentsUpdated: boolean
   }
 }
 
 // -------------Firebase Definitions-------------
 export interface PaymentProps {
-  payments: {
-    [date: string]: [PaymentType]
-  }
+  payments: MonthlyPayments
 }
-
-export type UserAuthType = firebase.User | null
 
 export type DocType = {
   id: string
@@ -79,20 +82,6 @@ export type CreatePaymentType = {
   usage: string
   userAmount: number
   userID?: string
-}
-
-export type UserType = {
-  _createdAt: firebase.firestore.Timestamp
-  _updatedAt: firebase.firestore.Timestamp
-  accountID: string
-  email: string
-  groupID: string
-  name: string
-}
-export interface UserProps {
-  user: {
-    currentUser: UserType
-  }
 }
 
 export type GroupType = {
