@@ -51,6 +51,28 @@ export const loginUser = async (email: string, password: string) => {
   return userAuth
 }
 
+export const fetchGroupUsers = async userInfo => {
+  if (!userInfo) return
+  const { groupID } = userInfo
+  if (!groupID) return
+
+  const usersCollection = firestore.collection('users')
+
+  const querySnapshot = await usersCollection
+    .where('groupID', '==', groupID)
+    .get()
+
+  const userList = []
+  querySnapshot.forEach(doc => {
+    const object = doc.data()
+    object.uid = doc.id
+    userList.push(object)
+  })
+  // console.log(`userList: ${JSON.stringify(userList, null, ' ')}`)
+
+  return userList
+}
+
 export const fetchGroupByUser = async (
   userInfo: firebase.firestore.DocumentData | undefined
 ) => {

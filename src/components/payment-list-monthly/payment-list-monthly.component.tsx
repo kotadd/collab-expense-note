@@ -39,9 +39,8 @@ const PaymentListMonthly = ({
   ]
 
   for (const key in userList) {
-    const pickerItem = (
-      <Picker.Item label={userList[key]} value={key} key={key} />
-    )
+    const { name, uid } = userList[key]
+    const pickerItem = <Picker.Item label={name} value={uid} key={uid} />
     pickerItems.push(pickerItem)
   }
 

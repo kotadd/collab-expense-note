@@ -5,16 +5,14 @@ import { useNavigation } from 'react-navigation-hooks'
 import { connect, useDispatch } from 'react-redux'
 import {
   auth,
-  fetchGroupByUser,
   fetchPaymentsByUser,
-  fetchUserByUserAuth
+  fetchUserByUserAuth,
+  fetchGroupUsers
 } from '../../../repository/firebase/firebase.utils'
 import PaymentListMonthly from '../../components/payment-list-monthly/payment-list-monthly.component'
 import { setCurrentPayments } from '../../redux/account/account.actions'
 import { setCurrentUser } from '../../redux/user/user.actions'
-import { findGroupUsers } from '../../utils'
 import { AccountReduxTypes, NavigationType, UserReduxTypes } from '../types'
-import { fetchAllUserData } from '../../../repository/firebase/users/user-repository'
 
 const PaymentListMonthlyScreen = ({ currentUser, isPaymentsUpdated }) => {
   const [userList, setUserList] = useState({})
@@ -33,12 +31,10 @@ const PaymentListMonthlyScreen = ({ currentUser, isPaymentsUpdated }) => {
   useEffect(() => {
     const fetchGroupUserList = async () => {
       const userInfo = await fetchUserByUserAuth(currentUser)
-      const group = await fetchGroupByUser(userInfo)
-      if (!group) return
-      const userIDs = group.userIDs
+      if (!userInfo) return
 
-      const users = await fetchAllUserData()
-      const userList = findGroupUsers(userIDs, users)
+      const userList = await fetchGroupUsers(userInfo)
+      if (!userList) return
       setUserList(userList)
     }
 
