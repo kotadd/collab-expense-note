@@ -1,4 +1,5 @@
 export type UserAuthType = firebase.User | null
+
 export type UserType = {
   _createdAt: firebase.firestore.Timestamp
   _updatedAt: firebase.firestore.Timestamp
@@ -7,7 +8,8 @@ export type UserType = {
   groupID: string
   name: string
 }
-export interface UserProps {
+
+export type UserProps = {
   user: {
     currentUser: UserType
   }

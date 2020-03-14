@@ -1,12 +1,23 @@
-import { MonthlyPayments } from '../../screens/types'
-import { AccountActionTypes } from './account.types'
+import { MonthlyPayments } from '../../../repository/firebase/accounts/account-types'
 
-export const setCurrentPayments = (account: [MonthlyPayments] | undefined) => ({
-  type: AccountActionTypes.SET_CURRENT_PAYMENTS,
+type SetCurrentPaymentsAction = {
+  type: 'SET_CURRENT_PAYMENTS'
+  payload: [MonthlyPayments] | undefined
+}
+
+type UpdateIsPaymentsUpdatedAction = {
+  type: 'UPDATE_IS_PAYMENTS_UPDATED'
+  payload: boolean
+}
+
+export const setCurrentPayments = (
+  account: [MonthlyPayments]
+): SetCurrentPaymentsAction => ({
+  type: 'SET_CURRENT_PAYMENTS',
   payload: account
 })
 
-export const updateIsPaymentsUpdated = () => ({
-  type: AccountActionTypes.UPDATE_IS_PAYMENTS_UPDATED,
+export const updateIsPaymentsUpdated = (): UpdateIsPaymentsUpdatedAction => ({
+  type: 'UPDATE_IS_PAYMENTS_UPDATED',
   payload: true
 })

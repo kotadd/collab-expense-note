@@ -2,7 +2,6 @@ import firebase from 'firebase/app'
 import 'firebase/auth'
 import 'firebase/firestore'
 import { UserAuthType } from './user-types'
-import { GroupType } from '../../../src/screens/types'
 import { addUserToGroups } from '../firebase.utils'
 
 const firestore = firebase.firestore()

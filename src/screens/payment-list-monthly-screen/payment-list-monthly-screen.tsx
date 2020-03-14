@@ -2,22 +2,29 @@ import { Container, Toast } from 'native-base'
 import React, { useEffect, useState } from 'react'
 import { Button } from 'react-native'
 import { useNavigation } from 'react-navigation-hooks'
-import { connect, useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import {
   auth,
+  fetchGroupUsers,
   fetchPaymentsByUser,
-  fetchUserByUserAuth,
-  fetchGroupUsers
+  fetchUserByUserAuth
 } from '../../../repository/firebase/firebase.utils'
+import { UserProps } from '../../../repository/firebase/users/user-types'
 import PaymentListMonthly from '../../components/payment-list-monthly/payment-list-monthly.component'
 import { setCurrentPayments } from '../../redux/account/account.actions'
 import { setCurrentUser } from '../../redux/user/user.actions'
-import { AccountReduxTypes, NavigationType, UserReduxTypes } from '../types'
+import { NavigationProps, NavigationType } from '../types'
+import { AccountProps } from '../../../repository/firebase/accounts/account-types'
 
-const PaymentListMonthlyScreen = ({ currentUser, isPaymentsUpdated }) => {
+const userSelector = (state: UserProps) => state.user.currentUser
+const accountSelector = (state: AccountProps) => state.account.payments
+
+const PaymentListMonthlyScreen = () => {
   const [userList, setUserList] = useState({})
   const dispatch = useDispatch()
-  const navigation = useNavigation()
+
+  const currentUser = useSelector(userSelector)
+  const isPaymentsUpdated = useSelector(accountSelector)
 
   useEffect(() => {
     const fetchPaymentsData = async () => {
@@ -55,7 +62,7 @@ const PaymentListMonthlyScreen = ({ currentUser, isPaymentsUpdated }) => {
 
   return (
     <Container>
-      <PaymentListMonthly navigation={navigation} userList={userList} />
+      <PaymentListMonthly userList={userList} />
       {/* <NativeFooter /> */}
     </Container>
   )
@@ -80,7 +87,7 @@ const logOut = async (navigation: NavigationType) => {
 }
 
 const RightButton = () => {
-  // const navigation = useNavigation()
+  // const navigation = useNavigation<NavigationProps>()
   return (
     <Button
       title="＋"
@@ -95,7 +102,7 @@ const RightButton = () => {
 }
 
 const LeftButton = () => {
-  const navigation = useNavigation()
+  const navigation = useNavigation<NavigationProps>()
   return <Button title="ログアウト" onPress={() => logOut(navigation)} />
 }
 
@@ -105,12 +112,10 @@ PaymentListMonthlyScreen.navigationOptions = {
   headerLeft: LeftButton
 }
 
-const mapStateToProps = ({
-  user,
-  account
-}: UserReduxTypes & AccountReduxTypes) => ({
-  currentUser: user.currentUser,
-  isPaymentsUpdated: account.isPaymentsUpdated
-})
+// const mapStateToProps = (state: ReduxAppState) => ({
+//   currentUser: state.user.currentUser,
+//   isPaymentsUpdated: state.account.isPaymentsUpdated
+// })
 
-export default connect(mapStateToProps)(PaymentListMonthlyScreen)
+// export default connect(mapStateToProps)(PaymentListMonthlyScreen)
+export default PaymentListMonthlyScreen

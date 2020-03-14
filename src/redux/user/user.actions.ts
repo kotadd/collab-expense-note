@@ -1,7 +1,12 @@
 import { UserActionTypes } from './user.types'
 import { User } from 'firebase'
 
-export const setCurrentUser = (user: User | {}) => ({
+type Action = {
+  type: string
+  payload: User | {}
+}
+
+export const setCurrentUser = (user: User): Action => ({
   type: UserActionTypes.SET_CURRENT_USER,
   payload: user
 })

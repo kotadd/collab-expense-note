@@ -8,29 +8,37 @@ import {
   Right,
   Text
 } from 'native-base'
-import React, { useState } from 'react'
+import React, { ReactElement, useState } from 'react'
 import { connect } from 'react-redux'
+import { PaymentType } from '../../../repository/firebase/accounts/account-types'
 import { timestampToLocaleDate } from '../../../repository/firebase/firebase.utils'
-import {
-  PaymentType,
-  AccountReduxTypes,
-  NavigationProps,
-  UserListType,
-  UserListProps
-} from '../../screens/types'
+import { AccountReduxTypes, NavigationProps } from '../../screens/types'
 import GroupListHeader from '../group-list-header/group-list-header.component'
+import { UserType } from '../../../repository/firebase/users/user-types'
+import { useNavigation } from 'react-navigation-hooks'
 
 const ALL_ITEMS = 'all-items'
-type Props = AccountReduxTypes & NavigationProps & UserListProps
 
-const PaymentListMonthly = ({
-  currentPayments,
-  navigation,
-  userList
-}: Props) => {
+type UidType = {
+  uid: string
+}
+
+type UserListProps = {
+  [userList: string]: UserType & UidType
+}
+
+type AccumulatorType = {
+  [key: string]: number
+}
+
+const PaymentListMonthly: React.FC<{
+  currentPayments: AccountReduxTypes
+  userList: UserListProps
+}> = ({ currentPayments, userList }): ReactElement => {
   const [selectedUser, setSelectedUser] = useState(ALL_ITEMS)
+  const navigation = useNavigation<NavigationProps>()
 
-  const onValueChange = async (user: string) => {
+  const onValueChange: (user: string) => void = user => {
     setSelectedUser(user)
   }
 
@@ -120,7 +128,7 @@ const PaymentListMonthly = ({
       const resultVals = currentPayments[resultKey]
 
       const paymentsMap = resultVals.reduce(
-        (accumulator, payment: PaymentType) => {
+        (accumulator: AccumulatorType, payment: PaymentType) => {
           if (selectedUser === ALL_ITEMS || selectedUser === payment.userID) {
             currentDate = timestampToLocaleDate(payment.date, 'ja-JP')
 
@@ -156,6 +164,7 @@ const PaymentListMonthly = ({
         const uncollectedAmount = paymentsMap[monthlyKeys[j + 1]]
 
         const yearMonth = resultKey
+
         currentDom = (
           <CardItem
             bordered

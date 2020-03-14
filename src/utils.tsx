@@ -1,4 +1,6 @@
-import { UserListType } from './screens/types'
+type UserListType = {
+  [key: string]: string
+}
 
 export const findGroupUsers: {} = (
   userIDs: [string],

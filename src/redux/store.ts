@@ -12,3 +12,5 @@ const store = createStore(
 )
 
 export default store
+
+export type ReduxAppState = ReturnType<typeof store.getState>

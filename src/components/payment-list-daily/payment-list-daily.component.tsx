@@ -8,22 +8,23 @@ import {
   Right,
   Text
 } from 'native-base'
-import React, { useState } from 'react'
+import React, { useState, ReactElement } from 'react'
 import { connect } from 'react-redux'
 import { timestampToLocaleDate } from '../../../repository/firebase/firebase.utils'
-import {
-  AccountReduxTypes,
-  NavigationProps,
-  PaymentType,
-  UserListProps
-} from '../../screens/types'
+import { AccountReduxTypes, NavigationProps } from '../../screens/types'
 import GroupListHeader from '../group-list-header/group-list-header.component'
 
-const PaymentListDaily = ({
-  currentPayments,
-  navigation,
-  userList
-}: AccountReduxTypes & NavigationProps & UserListProps) => {
+type UserListProps = {
+  userList: {
+    [key: string]: string
+  }
+}
+
+const PaymentListDaily: React.FC<{
+  currentPayments: AccountReduxTypes
+  navigation: NavigationProps
+  userList: UserListProps
+}> = ({ currentPayments, navigation, userList }): ReactElement => {
   const [selectedUser, setSelectedUser] = useState('all-items')
 
   const onValueChange = (user: string) => {
