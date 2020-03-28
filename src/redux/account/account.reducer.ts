@@ -1,9 +1,9 @@
 import { MonthlyPayments } from '../../../repository/firebase/accounts/account-types'
-import { setCurrentPayments, updateIsPaymentsUpdated } from './account.actions'
+import { setCurrentPayments } from './account.actions'
 import { AccountActionTypes } from './account.types'
 
-type State = {
-  currentPayments: [MonthlyPayments] | undefined
+export type AccountReduxProps = {
+  currentPayments: MonthlyPayments | null | undefined
   isPaymentsUpdated: boolean
 }
 
@@ -12,11 +12,12 @@ const INITIAL_STATE = {
   isPaymentsUpdated: false
 }
 
-type Actions =
-  | ReturnType<typeof setCurrentPayments>
-  | ReturnType<typeof updateIsPaymentsUpdated>
+type Actions = ReturnType<typeof setCurrentPayments>
 
-const accountReducer = (state = INITIAL_STATE, action: Actions): State => {
+const accountReducer = (
+  state = INITIAL_STATE,
+  action: Actions
+): AccountReduxProps => {
   switch (action.type) {
     case AccountActionTypes.SET_CURRENT_PAYMENTS:
       return {

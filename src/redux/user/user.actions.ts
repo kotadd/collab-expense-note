@@ -6,7 +6,7 @@ type Action = {
   payload: User | {}
 }
 
-export const setCurrentUser = (user: User): Action => ({
+export const setCurrentUser = (user: User | {}): Action => ({
   type: UserActionTypes.SET_CURRENT_USER,
   payload: user
 })

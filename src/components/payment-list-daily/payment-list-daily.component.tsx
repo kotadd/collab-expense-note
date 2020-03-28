@@ -1,33 +1,27 @@
-import {
-  Body,
-  CardItem,
-  Icon,
-  Item,
-  Left,
-  Picker,
-  Right,
-  Text
-} from 'native-base'
-import React, { useState, ReactElement } from 'react'
+import { Body, CardItem, Icon, Left, Picker, Right, Text } from 'native-base'
+import React, { ReactElement, useState } from 'react'
 import { connect } from 'react-redux'
+import {
+  DailyScreenRouteProp,
+  DetailScreenNavigationProp
+} from '../../../AppContainer'
+import {
+  MonthlyPayments,
+  PaymentType
+} from '../../../repository/firebase/accounts/account-types'
 import { timestampToLocaleDate } from '../../../repository/firebase/firebase.utils'
-import { AccountReduxTypes, NavigationProps } from '../../screens/types'
-import GroupListHeader from '../group-list-header/group-list-header.component'
-
-type UserListProps = {
-  userList: {
-    [key: string]: string
-  }
-}
+import { AccountReduxTypes, UserListProps } from '../../redux/types'
+import GroupListPicker from '../group-list-picker/group-list-picker.component'
 
 const PaymentListDaily: React.FC<{
-  currentPayments: AccountReduxTypes
-  navigation: NavigationProps
+  currentPayments?: MonthlyPayments
+  navigation: DetailScreenNavigationProp
+  route: DailyScreenRouteProp
   userList: UserListProps
-}> = ({ currentPayments, navigation, userList }): ReactElement => {
+}> = ({ currentPayments, navigation, route, userList }): ReactElement => {
   const [selectedUser, setSelectedUser] = useState('all-items')
 
-  const onValueChange = (user: string) => {
+  const onValueChange: (user: string) => void = user => {
     setSelectedUser(user)
   }
 
@@ -42,22 +36,12 @@ const PaymentListDaily: React.FC<{
   }
 
   const resultDom = [
-    <Item picker key="picker-item">
-      <Picker
-        key="picker-dropdown"
-        mode="dropdown"
-        iosIcon={<Icon name="arrow-down" />}
-        style={{ width: undefined }}
-        placeholder="全体"
-        placeholderStyle={{ color: '#bfc6ea' }}
-        placeholderIconColor="#007aff"
-        selectedValue={selectedUser}
-        onValueChange={onValueChange.bind(this)}
-        renderHeader={backAction => GroupListHeader(backAction)}
-      >
-        {pickerItems}
-      </Picker>
-    </Item>,
+    <GroupListPicker
+      key={'GroupListPicker'}
+      selectedUser={selectedUser}
+      onValueChange={onValueChange.bind(this)}
+      pickerItems={pickerItems}
+    />,
     <CardItem
       header
       bordered
@@ -90,16 +74,14 @@ const PaymentListDaily: React.FC<{
     let currentDate: string
     let currentDay: string
 
-    const targetDate = navigation.state.params
-      ? (navigation.state.params.date as string)
-      : ''
-    const targetPayments = currentPayments[targetDate]
+    const targetPayments = currentPayments[route.params.date]
 
     if (targetPayments) {
       for (let i = 0; i < targetPayments.length; i++) {
         payment = targetPayments[i]
-        if (selectedUser !== 'all-items' && selectedUser !== payment.userID)
-          return
+        if (selectedUser !== 'all-items' && selectedUser !== payment.userID) {
+          return <></>
+        }
 
         resultKey = `result-${i}`
 
@@ -126,7 +108,7 @@ const PaymentListDaily: React.FC<{
             bordered
             button
             key={resultKey}
-            onPress={() => {
+            onPress={(): void => {
               // navigation.navigate('Details');
               alert('fetched from firestore')
             }}

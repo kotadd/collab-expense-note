@@ -18,7 +18,7 @@ import {
   fetchAllGroupData,
   addUserProfileDocument
 } from '../../../repository/firebase/firebase.utils'
-import { NavigationProps, UserReduxTypes } from '../../screens/types'
+import { NavigationProps, UserReduxTypes } from '../../redux/types'
 
 const AddInfoForm = ({
   navigation,
@@ -77,7 +77,7 @@ const AddInfoForm = ({
           type: 'danger'
         })
       }
-      navigation.navigate('App')
+      navigation.navigate('Main')
     } catch (error) {
       return Toast.show({
         text: 'ユーザーの情報を追加するのに失敗しました。',

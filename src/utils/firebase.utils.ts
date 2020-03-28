@@ -2,12 +2,12 @@ type UserListType = {
   [key: string]: string
 }
 
-export const findGroupUsers: {} = (
+export const findGroupUsers: (
   userIDs: [string],
   users: firebase.firestore.QueryDocumentSnapshot<
     firebase.firestore.DocumentData
   >[]
-) => {
+) => UserListType = (userIDs, users) => {
   const userList = {} as UserListType
 
   users.forEach(user => {

@@ -3,11 +3,12 @@ import 'firebase/auth'
 import 'firebase/firestore'
 import {
   CreatePaymentType,
-  GroupType,
+  MonthlyPayments,
   PaymentProps,
-  UserAuthType,
-  UserType
-} from '../../src/screens/types'
+  PaymentType
+} from './accounts/account-types'
+import { GroupType } from './groups/group-types'
+import { UserAuthType, UserType } from './users/user-types'
 
 const config = {
   apiKey: 'AIzaSyDxYGmo8Y9WQIBJ-oemrLr8MrnYUHGZa8Y',
@@ -32,26 +33,38 @@ const dateOptions = {
   weekday: 'short'
 }
 
-export const timestampToLocaleDate = (
+export const timestampToLocaleDate: (
   timestamp: firebase.firestore.Timestamp,
   locale: string
-) => {
+) => string = (timestamp, locale) => {
   return timestamp.toDate().toLocaleDateString(locale, dateOptions)
 }
 
-export const fetchAllGroupData = async () => {
+export const fetchAllGroupData: () => Promise<
+  firebase.firestore.QueryDocumentSnapshot<firebase.firestore.DocumentData>[]
+> = async () => {
   const groupCollectionRef = firestore.collection('groups')
   const groupCollectionSnapshot = await groupCollectionRef.get()
   return groupCollectionSnapshot.docs
 }
 
-export const loginUser = async (email: string, password: string) => {
+export const loginUser: (
+  email: string,
+  password: string
+) => Promise<firebase.auth.UserCredential | undefined> = async (
+  email,
+  password
+) => {
   if (!email || !password) return
   const userAuth = auth.signInWithEmailAndPassword(email, password)
   return userAuth
 }
 
-export const fetchGroupUsers = async userInfo => {
+export const fetchGroupUsers: (
+  userInfo: UserType
+) => Promise<
+  firebase.firestore.DocumentData[] | undefined
+> = async userInfo => {
   if (!userInfo) return
   const { groupID } = userInfo
   if (!groupID) return
@@ -62,20 +75,19 @@ export const fetchGroupUsers = async userInfo => {
     .where('groupID', '==', groupID)
     .get()
 
-  const userList = []
+  const userList: firebase.firestore.DocumentData[] = []
   querySnapshot.forEach(doc => {
     const object = doc.data()
     object.uid = doc.id
     userList.push(object)
   })
-  // console.log(`userList: ${JSON.stringify(userList, null, ' ')}`)
 
   return userList
 }
 
-export const fetchGroupByUser = async (
-  userInfo: firebase.firestore.DocumentData | undefined
-) => {
+export const fetchGroupByUser: (
+  userInfo: UserType | undefined
+) => Promise<GroupType | undefined> = async userInfo => {
   if (!userInfo) return
   const { groupID } = userInfo
   if (!groupID) return
@@ -84,11 +96,12 @@ export const fetchGroupByUser = async (
   const groupSnapshot = await groupRef.get()
   const groupInfo = groupSnapshot.data()
 
-  // console.log(`groupInfo: ${JSON.stringify(groupInfo)}`);
   return groupInfo as GroupType
 }
 
-export const fetchPaymentsByUser = async (userInfo: UserType | undefined) => {
+export const fetchPaymentsByUser: (
+  userInfo: UserType | undefined
+) => Promise<MonthlyPayments | undefined> = async userInfo => {
   if (!userInfo) return
   const { accountID, groupID } = userInfo
 
@@ -101,7 +114,9 @@ export const fetchPaymentsByUser = async (userInfo: UserType | undefined) => {
   return accountInfo.payments
 }
 
-export const fetchUserByUserAuth = async (userAuth: UserAuthType) => {
+export const fetchUserByUserAuth: (
+  userAuth: UserAuthType
+) => Promise<UserType | undefined> = async (userAuth: UserAuthType) => {
   if (!userAuth) return
 
   const userRef = firestore.doc(`users/${userAuth.uid}`)
@@ -111,10 +126,10 @@ export const fetchUserByUserAuth = async (userAuth: UserAuthType) => {
   return userInfo as UserType
 }
 
-export const addUserToGroups = async (
+export const addUserToGroups: (
   userAuth: UserAuthType,
   groupID: string
-) => {
+) => Promise<void> = async (userAuth, groupID) => {
   if (!userAuth || !groupID) return
 
   const userID = userAuth.uid
@@ -149,10 +164,10 @@ export const addUserToGroups = async (
   }
 }
 
-export const createPaymentsData = async (
+export const createPaymentsData: (
   userAuth: UserAuthType,
   props: CreatePaymentType
-) => {
+) => Promise<MonthlyPayments | null | undefined> = async (userAuth, props) => {
   const {
     collected,
     date,
@@ -187,7 +202,7 @@ export const createPaymentsData = async (
     const targetDate = date.toLocaleDateString('ja-JP', dateOptions)
     const yearMonth = targetDate.replace(/(\d\d|\d)日.*/, '')
 
-    const currentPayment = {
+    const currentPayment: PaymentType = {
       _createdAt,
       _updatedAt,
       collected,
@@ -222,7 +237,9 @@ export const createPaymentsData = async (
   return null
 }
 
-export const createAccountAndGroup = async (name: string) => {
+export const createAccountAndGroup: (
+  name: string
+) => Promise<null | undefined> = async name => {
   const accountsRef = firestore.collection('accounts').doc()
   const groupsRef = firestore.collection('groups').doc()
   try {

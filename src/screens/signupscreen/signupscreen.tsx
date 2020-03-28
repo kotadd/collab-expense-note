@@ -1,9 +1,9 @@
 import { Container } from 'native-base'
 import React from 'react'
 import SignupForm from '../../components/signup-form/signup-form.component'
-import { NavigationProps } from '../types'
+import { NavigationProps } from '../../redux/types'
 
-const SignupScreen: NavigationProps = ({ navigation }: NavigationProps) => {
+const SignupScreen = ({ navigation }: NavigationProps) => {
   return (
     <Container>
       <SignupForm navigation={navigation} />

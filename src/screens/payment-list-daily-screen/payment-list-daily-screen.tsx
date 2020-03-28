@@ -1,42 +1,53 @@
+import { useNavigation, useRoute } from '@react-navigation/native'
 import { Content } from 'native-base'
 import React, { useEffect, useState } from 'react'
-import { Button } from 'react-native'
-import { connect, useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import {
-  fetchAllUserData,
+  DetailScreenNavigationProp,
+  DailyScreenRouteProp
+} from '../../../AppContainer'
+import {
   fetchGroupByUser,
   fetchPaymentsByUser,
   fetchUserByUserAuth
 } from '../../../repository/firebase/firebase.utils'
+import { fetchAllUserData } from '../../../repository/firebase/users/user-repository'
+import {
+  UserAuthType,
+  UserProps
+} from '../../../repository/firebase/users/user-types'
 import PaymentListDaily from '../../components/payment-list-daily/payment-list-daily.component'
 import { setCurrentPayments } from '../../redux/account/account.actions'
-import { findGroupUsers } from '../../utils'
-import {
-  NavigationProps,
-  UserProps,
-  UserAuthType,
-  UserReduxTypes
-} from '../types'
+import { AccountReduxProps } from '../../redux/account/account.reducer'
+import { UserListProps } from '../../redux/types'
+import { findGroupUsers } from '../../utils/firebase.utils'
 
-const PaymentListDailyScreen = ({
-  currentUser,
-  navigation
-}: UserReduxTypes & NavigationProps) => {
-  const [userList, setUserList] = useState({})
+const PaymentListDailyScreen: React.FC = () => {
+  const [userList, setUserList] = useState<UserListProps>({})
   const dispatch = useDispatch()
+  const navigation = useNavigation<DetailScreenNavigationProp>()
+  const route = useRoute<DailyScreenRouteProp>()
+
+  const userSelector: (state: UserProps) => UserAuthType = state =>
+    state.user.currentUser
+  const isPaymentsUpdatedSelector: (
+    state: AccountReduxProps
+  ) => boolean = state => state.isPaymentsUpdated
+
+  const currentUser = useSelector(userSelector)
+  const isPaymentsUpdated = useSelector(isPaymentsUpdatedSelector)
 
   useEffect(() => {
-    async function fetchData() {
+    const fetchPaymentsData = async (): Promise<void> => {
       const userInfo = await fetchUserByUserAuth(currentUser)
       const payments = await fetchPaymentsByUser(userInfo)
-
       dispatch(setCurrentPayments(payments))
     }
-    fetchData()
-  }, [])
+    fetchPaymentsData()
+  }, [isPaymentsUpdated])
 
   useEffect(() => {
-    async function fetchData() {
+    const fetchGroupUserList = async (): Promise<void> => {
       const userInfo = await fetchUserByUserAuth(currentUser)
       const group = await fetchGroupByUser(userInfo)
       if (!group) return
@@ -44,43 +55,21 @@ const PaymentListDailyScreen = ({
 
       const users = await fetchAllUserData()
       const userList = findGroupUsers(userIDs, users)
-
       setUserList(userList)
     }
-    fetchData()
+    fetchGroupUserList()
   }, [])
+
   return (
     <Content>
-      <PaymentListDaily navigation={navigation} userList={userList} />
+      <PaymentListDaily
+        navigation={navigation}
+        userList={userList}
+        route={route}
+      />
       {/* <NativeFooter /> */}
     </Content>
   )
 }
 
-PaymentListDailyScreen.navigationOptions = ({
-  navigation
-}: NavigationProps) => {
-  const date = navigation.state.params ? navigation.state.params.date : null
-  let title = '日付ごとの支出'
-  if (date) title = `${date}の支出`
-
-  return {
-    title,
-    headerRight: () => (
-      <Button
-        title="＋"
-        onPress={() =>
-          navigation.navigate('CreateNew', {
-            from: 'daily'
-          })
-        }
-      />
-    )
-  }
-}
-
-const mapStateToProps = ({ user }: UserProps) => ({
-  currentUser: user.currentUser
-})
-
-export default connect(mapStateToProps)(PaymentListDailyScreen)
+export default PaymentListDailyScreen

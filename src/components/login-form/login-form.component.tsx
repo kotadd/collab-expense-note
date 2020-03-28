@@ -12,13 +12,12 @@ import {
   Toast
 } from 'native-base'
 import React, { useState } from 'react'
-import { useNavigation } from 'react-navigation-hooks'
 import { useDispatch } from 'react-redux'
 import { loginUser } from '../../../repository/firebase/firebase.utils'
 import { setCurrentUser } from '../../redux/user/user.actions'
+import { useNavigation } from '@react-navigation/native'
 
-const LoginForm = () => {
-  const { navigate } = useNavigation()
+const LoginForm = ({ navigation }) => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [togglePassword, setTogglePassword] = useState(false)
@@ -28,7 +27,7 @@ const LoginForm = () => {
     const userAuth = await loginUser(email, password)
     if (userAuth && userAuth.user) {
       dispatch(setCurrentUser(userAuth.user))
-      navigate('App')
+      navigation.navigate('Main')
     } else {
       dispatch(setCurrentUser({}))
       return Toast.show({

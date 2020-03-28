@@ -10,7 +10,7 @@ import {
   Right,
   Text
 } from 'native-base'
-import { NavigationStackProp } from 'react-navigation-stack'
+import { NavigationStackProp } from '@react-navigation/stack'
 
 type Props = {
   navigation: NavigationStackProp

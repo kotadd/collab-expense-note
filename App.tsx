@@ -1,3 +1,4 @@
+import { NavigationContainer } from '@react-navigation/native'
 import 'firebase/auth'
 import 'firebase/firestore'
 import { Root } from 'native-base'
@@ -6,16 +7,14 @@ import { Provider } from 'react-redux'
 import AppContainer from './AppContainer'
 import store from './src/redux/store'
 
-class App extends React.Component {
-  render() {
-    return (
-      <Provider store={store}>
-        <Root>
-          <AppContainer />
-        </Root>
-      </Provider>
-    )
-  }
-}
+const App: React.FC = () => (
+  <Provider store={store}>
+    <Root>
+      <NavigationContainer>
+        <AppContainer />
+      </NavigationContainer>
+    </Root>
+  </Provider>
+)
 
 export default App

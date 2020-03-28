@@ -1,5 +1,3 @@
-import { useNavigation } from 'react-navigation-hooks'
-
 import {
   Body,
   Button,
@@ -25,7 +23,8 @@ import NativeHeader from '../../components/native-header/native-header.component
 import PickerInput from '../../components/picker-input/picker-input.component'
 import OPTIONS from '../../components/picker-input/picker-options'
 import { updateIsPaymentsUpdated } from '../../redux/account/account.actions'
-import { CreatePaymentType, UserReduxTypes } from '../types'
+import { CreatePaymentType, UserReduxTypes } from '../../redux/types'
+import { useNavigation } from '@react-navigation/native'
 
 const ModalScreen = ({ currentUser }: UserReduxTypes) => {
   const dateOption = {
@@ -44,6 +43,7 @@ const ModalScreen = ({ currentUser }: UserReduxTypes) => {
   const [usage, setUsage] = useState('')
 
   const dispatch = useDispatch()
+  const navigation = useNavigation()
 
   const setPurchaseDate = (event: Event, selectedDate: Date) => {
     setShow(Platform.OS === 'ios' ? true : false)
@@ -80,7 +80,7 @@ const ModalScreen = ({ currentUser }: UserReduxTypes) => {
         })
 
         dispatch(updateIsPaymentsUpdated())
-        useNavigation().navigate('Home')
+        navigation.navigate('Home')
       }
     } catch (e) {
       console.log(`failed to create data: ${e}`)
@@ -89,7 +89,7 @@ const ModalScreen = ({ currentUser }: UserReduxTypes) => {
 
   return (
     <Container>
-      <NativeHeader navigation={useNavigation()} />
+      <NativeHeader navigation={navigation} />
       <Content>
         <Form style={{ marginRight: 16 }}>
           <Item fixedLabel>

@@ -1,7 +1,7 @@
 import { Container } from 'native-base'
 import React from 'react'
 import CreateGroupForm from '../../components/create-group-form/create-agroup-form.component'
-import { NavigationProps } from '../types'
+import { NavigationProps } from '../../redux/types'
 
 const CreateGroupScreen = ({ navigation }: NavigationProps) => {
   return (

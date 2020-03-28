@@ -7,16 +7,18 @@ import {
 } from '../../../repository/firebase/firebase.utils'
 import LoginForm from '../../components/login-form/login-form.component'
 import { setCurrentUser } from '../../redux/user/user.actions'
-import { NavigationProps } from '../types'
+import { useNavigation } from '@react-navigation/native'
 
-const LoginScreen: NavigationProps = ({ navigation }: NavigationProps) => {
+const LoginScreen: React.FC = () => {
   const dispatch = useDispatch()
+  const navigation = useNavigation()
+
   auth.onAuthStateChanged(async userAuth => {
     if (!userAuth) return
     const groupInfo = await fetchGroupByUser(userAuth)
     if (groupInfo && navigation) {
       dispatch(setCurrentUser(userAuth))
-      navigation.navigate('App')
+      navigation.navigate('Main')
     }
   })
 
@@ -25,10 +27,6 @@ const LoginScreen: NavigationProps = ({ navigation }: NavigationProps) => {
       <LoginForm navigation={navigation} />
     </Container>
   )
-}
-
-LoginScreen.navigationOptions = {
-  title: 'ログイン'
 }
 
 export default LoginScreen

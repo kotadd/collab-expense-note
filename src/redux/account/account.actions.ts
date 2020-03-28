@@ -2,7 +2,7 @@ import { MonthlyPayments } from '../../../repository/firebase/accounts/account-t
 
 type SetCurrentPaymentsAction = {
   type: 'SET_CURRENT_PAYMENTS'
-  payload: [MonthlyPayments] | undefined
+  payload: MonthlyPayments | null | undefined
 }
 
 type UpdateIsPaymentsUpdatedAction = {
@@ -11,7 +11,7 @@ type UpdateIsPaymentsUpdatedAction = {
 }
 
 export const setCurrentPayments = (
-  account: [MonthlyPayments]
+  account: MonthlyPayments | undefined
 ): SetCurrentPaymentsAction => ({
   type: 'SET_CURRENT_PAYMENTS',
   payload: account

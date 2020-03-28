@@ -16,7 +16,7 @@ import {
   createAccountAndGroup,
   fetchAllGroupData
 } from '../../../repository/firebase/firebase.utils'
-import { NavigationProps } from '../../screens/types'
+import { NavigationProps } from '../../redux/types'
 
 const CreateGroupForm = ({ navigation }: NavigationProps) => {
   const [name, setName] = useState('')
