@@ -1,4 +1,4 @@
-import { RouteProp, useNavigation } from '@react-navigation/native'
+import { useNavigation } from '@react-navigation/native'
 import {
   createStackNavigator,
   StackNavigationProp
@@ -14,45 +14,27 @@ import paymentListDailyScreen from './src/screens/payment-list-daily-screen/paym
 import PaymentListMonthlyScreen from './src/screens/payment-list-monthly-screen/payment-list-monthly-screen'
 import SignupScreen from './src/screens/signupscreen/signupscreen'
 
-type MainStackParamList = {
+export type MainStackParamList = {
   Home: undefined
   Daily: { date: string }
   Detail: undefined
 }
 
-type AuthStackParamList = {
+export type AuthStackParamList = {
   Login: undefined
   Signup: undefined
-}
-
-type GroupStackParamList = {
-  Group: undefined
   AddInfo: undefined
 }
 
-type RootStackParamList = {
+export type GroupStackParamList = {
+  Group: undefined
+}
+
+export type RootStackParamList = {
   Main: { date: Date }
   CreateNew: { from: 'monthly' | 'daily' }
   Auth: undefined
   Group: undefined
-}
-
-type CreateNewScreenNavigationProp = StackNavigationProp<
-  RootStackParamList,
-  'CreateNew'
->
-
-export type CreateNewProps = {
-  navigation: CreateNewScreenNavigationProp
-}
-
-export type AuthScreenNavigationProp = StackNavigationProp<
-  RootStackParamList,
-  'Auth'
->
-
-export type AuthProps = {
-  navigation: AuthScreenNavigationProp
 }
 
 export type HomeScreenNavigationProp = StackNavigationProp<
@@ -70,27 +52,45 @@ export type DetailScreenNavigationProp = StackNavigationProp<
   'Detail'
 >
 
+export type LoginScreenNavigationProp = StackNavigationProp<
+  AuthStackParamList,
+  'Login'
+>
+
+export type SignupScreenNavigationProp = StackNavigationProp<
+  AuthStackParamList,
+  'Signup'
+>
+
+export type AddInfoScreenNavigationProp = StackNavigationProp<
+  AuthStackParamList,
+  'AddInfo'
+>
+
+export type GroupScreenNavigationProp = StackNavigationProp<
+  GroupStackParamList,
+  'Group'
+>
+
 export type MainScreenNavigationProp = StackNavigationProp<
   RootStackParamList,
   'Main'
 >
 
-export type GroupScreenNavigationProp = StackNavigationProp<
+export type CreateNewScreenNavigationProp = StackNavigationProp<
   RootStackParamList,
-  'Group'
+  'CreateNew'
 >
 
-export type DailyScreenRouteProp = RouteProp<MainStackParamList, 'Daily'>
-
-export type DailyProps = {
-  navigation: DailyScreenNavigationProp
-  route: DailyScreenRouteProp
-}
+export type AuthScreenNavigationProp = StackNavigationProp<
+  RootStackParamList,
+  'Auth'
+>
 
 const MainStack = createStackNavigator<MainStackParamList>()
 const AuthStack = createStackNavigator<AuthStackParamList>()
 const GroupStack = createStackNavigator<GroupStackParamList>()
-const RootStack = createStackNavigator()
+const RootStack = createStackNavigator<RootStackParamList>()
 
 const MainStackScreen: React.FC = () => {
   const createNewNavigation = useNavigation<CreateNewScreenNavigationProp>()
@@ -146,25 +146,25 @@ const MainStackScreen: React.FC = () => {
 const AuthStackScreen: React.FC = () => (
   <AuthStack.Navigator>
     <AuthStack.Screen
+      name="Signup"
+      component={SignupScreen}
+      options={{ title: '登録する' }}
+    />
+    <AuthStack.Screen
       name="Login"
       component={LoginScreen}
       options={{ title: 'ログイン' }}
     />
     <AuthStack.Screen
-      name="Signup"
-      component={SignupScreen}
-      options={{ title: '登録する' }}
+      name="AddInfo"
+      component={AddInfoScreen}
+      options={{ title: '情報の追加' }}
     />
   </AuthStack.Navigator>
 )
 
 const GroupStackScreen: React.FC = () => (
   <GroupStack.Navigator>
-    <GroupStack.Screen
-      name="AddInfo"
-      component={AddInfoScreen}
-      options={{ title: '情報の追加' }}
-    />
     <GroupStack.Screen
       name="Group"
       component={CreateGroupScreen}
@@ -174,7 +174,7 @@ const GroupStackScreen: React.FC = () => (
 )
 
 const RootStackScreen: React.FC = () => (
-  <RootStack.Navigator mode="modal" initialRouteName="Group" headerMode="none">
+  <RootStack.Navigator mode="modal" initialRouteName="Auth" headerMode="none">
     <RootStack.Screen name="Main" component={MainStackScreen} />
     <RootStack.Screen name="CreateNew" component={ModalScreen} />
     <RootStack.Screen name="Auth" component={AuthStackScreen} />

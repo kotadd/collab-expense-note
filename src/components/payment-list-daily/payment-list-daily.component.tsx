@@ -1,9 +1,10 @@
+import { RouteProp } from '@react-navigation/native'
 import { Body, CardItem, Icon, Left, Picker, Right, Text } from 'native-base'
-import React, { ReactElement, useState } from 'react'
+import React, { useState } from 'react'
 import { connect } from 'react-redux'
 import {
-  DailyScreenRouteProp,
-  DetailScreenNavigationProp
+  DetailScreenNavigationProp,
+  MainStackParamList
 } from '../../../AppContainer'
 import {
   MonthlyPayments,
@@ -13,12 +14,20 @@ import { timestampToLocaleDate } from '../../../repository/firebase/firebase.uti
 import { AccountReduxTypes, UserListProps } from '../../redux/types'
 import GroupListPicker from '../group-list-picker/group-list-picker.component'
 
-const PaymentListDaily: React.FC<{
+type DailyScreenRouteProp = RouteProp<MainStackParamList, 'Daily'>
+
+type PaymentListDailyProps = {
   currentPayments?: MonthlyPayments
   navigation: DetailScreenNavigationProp
   route: DailyScreenRouteProp
   userList: UserListProps
-}> = ({ currentPayments, navigation, route, userList }): ReactElement => {
+}
+const PaymentListDaily: React.FC<PaymentListDailyProps> = ({
+  currentPayments,
+  navigation,
+  route,
+  userList
+}: PaymentListDailyProps) => {
   const [selectedUser, setSelectedUser] = useState('all-items')
 
   const onValueChange: (user: string) => void = user => {
@@ -109,8 +118,7 @@ const PaymentListDaily: React.FC<{
             button
             key={resultKey}
             onPress={(): void => {
-              // navigation.navigate('Details');
-              alert('fetched from firestore')
+              navigation.navigate('Detail')
             }}
           >
             <Left>
@@ -137,7 +145,11 @@ const PaymentListDaily: React.FC<{
   return resultDom
 }
 
-const mapStateToProps = ({ account }: AccountReduxTypes) => ({
+const mapStateToProps: ({
+  account
+}: AccountReduxTypes) => {
+  currentPayments: MonthlyPayments | null | undefined
+} = ({ account }: AccountReduxTypes) => ({
   currentPayments: account.currentPayments
 })
 

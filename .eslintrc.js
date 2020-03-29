@@ -28,5 +28,10 @@ module.exports = {
   plugins: ['@typescript-eslint', 'react'],
   rules: {
     'prettier/prettier': 'error'
+  },
+  settings: {
+    react: {
+      version: 'detect'
+    }
   }
 }

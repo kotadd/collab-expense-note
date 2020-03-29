@@ -12,6 +12,9 @@ export type UserReduxTypes = {
 export type AccountReduxTypes = {
   currentPayments: MonthlyPayments | null | undefined
   isPaymentsUpdated: boolean
+  account: {
+    currentPayments: MonthlyPayments | null | undefined
+  }
 }
 
 export type UserListProps = {

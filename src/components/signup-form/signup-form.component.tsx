@@ -14,25 +14,30 @@ import {
 import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import {
-  auth,
-  createUserProfileDocument
-} from '../../../repository/firebase/firebase.utils'
+  AddInfoScreenNavigationProp,
+  LoginScreenNavigationProp
+} from '../../../AppContainer'
+import { auth } from '../../../repository/firebase/firebase.utils'
+import { createUserProfileDocument } from '../../../repository/firebase/users/user-repository'
 import { setCurrentUser } from '../../redux/user/user.actions'
 
-const SignupForm = ({ navigation }: NavigationProps) => {
+type SignupProps = {
+  navigation: AddInfoScreenNavigationProp | LoginScreenNavigationProp
+}
+
+const SignupForm: React.FC<SignupProps> = ({ navigation }: SignupProps) => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
   const [togglePassword, setTogglePassword] = useState(false)
-  const [toggleConfirmPassword, setToggleConfirmPassword] = useState(false)
 
   const dispatch = useDispatch()
 
-  const validateSignup = async (
+  const validateSignup: (
     email: string,
     password: string,
     confirmPassword: string
-  ) => {
+  ) => Promise<void> = async (email, password, confirmPassword) => {
     if (password != confirmPassword) {
       return Toast.show({
         text: 'パスワードと確認用パスワードが一致していません',
@@ -83,7 +88,7 @@ const SignupForm = ({ navigation }: NavigationProps) => {
           <Label>メールアドレス</Label>
           <Input
             defaultValue=""
-            onChangeText={text => setEmail(text)}
+            onChangeText={(text): void => setEmail(text)}
             value={email}
           />
         </Item>
@@ -94,14 +99,14 @@ const SignupForm = ({ navigation }: NavigationProps) => {
             <Input
               secureTextEntry={false}
               defaultValue=""
-              onChangeText={text => setPassword(text)}
+              onChangeText={(text): void => setPassword(text)}
               value={password}
             />
             <Icon
               type="FontAwesome"
               active
               name="eye"
-              onPress={() => setTogglePassword(false)}
+              onPress={(): void => setTogglePassword(false)}
             />
           </Item>
         ) : (
@@ -111,14 +116,14 @@ const SignupForm = ({ navigation }: NavigationProps) => {
             <Input
               secureTextEntry={true}
               defaultValue=""
-              onChangeText={text => setPassword(text)}
+              onChangeText={(text): void => setPassword(text)}
               value={password}
             />
             <Icon
               type="FontAwesome"
               active
               name="eye-slash"
-              onPress={() => setTogglePassword(true)}
+              onPress={(): void => setTogglePassword(true)}
             />
           </Item>
         )}
@@ -130,14 +135,14 @@ const SignupForm = ({ navigation }: NavigationProps) => {
             <Input
               secureTextEntry={false}
               defaultValue=""
-              onChangeText={text => setConfirmPassword(text)}
+              onChangeText={(text): void => setConfirmPassword(text)}
               value={confirmPassword}
             />
             <Icon
               type="FontAwesome"
               active
               name="eye"
-              onPress={() => setTogglePassword(false)}
+              onPress={(): void => setTogglePassword(false)}
             />
           </Item>
         ) : (
@@ -147,14 +152,14 @@ const SignupForm = ({ navigation }: NavigationProps) => {
             <Input
               secureTextEntry={true}
               defaultValue=""
-              onChangeText={text => setConfirmPassword(text)}
+              onChangeText={(text): void => setConfirmPassword(text)}
               value={confirmPassword}
             />
             <Icon
               type="FontAwesome"
               active
               name="eye-slash"
-              onPress={() => setTogglePassword(true)}
+              onPress={(): void => setTogglePassword(true)}
             />
           </Item>
         )}
@@ -165,11 +170,13 @@ const SignupForm = ({ navigation }: NavigationProps) => {
         <Button
           block
           dark
-          onPress={() => validateSignup(email, password, confirmPassword)}
+          onPress={(): Promise<void> =>
+            validateSignup(email, password, confirmPassword)
+          }
         >
           <Text> 登録する </Text>
         </Button>
-        <Button transparent onPress={() => navigation.navigate('Login')}>
+        <Button transparent onPress={(): void => navigation.navigate('Login')}>
           <Text>もう登録済みですか？</Text>
         </Button>
       </Form>

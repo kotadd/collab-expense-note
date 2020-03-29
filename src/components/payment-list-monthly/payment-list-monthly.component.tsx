@@ -178,7 +178,11 @@ const PaymentListMonthly: React.FC<{
   return resultDom
 }
 
-const mapStateToProps = ({ account }: AccountReduxTypes) => ({
+const mapStateToProps: ({
+  account
+}: AccountReduxTypes) => {
+  currentPayments: MonthlyPayments | null | undefined
+} = ({ account }: AccountReduxTypes) => ({
   currentPayments: account.currentPayments
 })
 

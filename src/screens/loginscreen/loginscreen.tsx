@@ -3,19 +3,27 @@ import React from 'react'
 import { useDispatch } from 'react-redux'
 import {
   auth,
-  fetchGroupByUser
+  fetchGroupByUser,
+  fetchUserByUserAuth
 } from '../../../repository/firebase/firebase.utils'
 import LoginForm from '../../components/login-form/login-form.component'
 import { setCurrentUser } from '../../redux/user/user.actions'
 import { useNavigation } from '@react-navigation/native'
+import {
+  MainScreenNavigationProp,
+  SignupScreenNavigationProp
+} from '../../../AppContainer'
 
 const LoginScreen: React.FC = () => {
   const dispatch = useDispatch()
-  const navigation = useNavigation()
+  const navigation = useNavigation<
+    MainScreenNavigationProp | SignupScreenNavigationProp
+  >()
 
   auth.onAuthStateChanged(async userAuth => {
     if (!userAuth) return
-    const groupInfo = await fetchGroupByUser(userAuth)
+    const userInfo = await fetchUserByUserAuth(userAuth)
+    const groupInfo = await fetchGroupByUser(userInfo)
     if (groupInfo && navigation) {
       dispatch(setCurrentUser(userAuth))
       navigation.navigate('Main')

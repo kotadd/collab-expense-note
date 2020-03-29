@@ -1,11 +1,16 @@
+import { useNavigation } from '@react-navigation/native'
 import { Container } from 'native-base'
 import React from 'react'
+import {
+  AddInfoScreenNavigationProp,
+  LoginScreenNavigationProp
+} from '../../../AppContainer'
 import SignupForm from '../../components/signup-form/signup-form.component'
-import { useNavigation } from '@react-navigation/native'
-import { AuthScreenNavigationProp } from '../../../AppContainer'
 
 const SignupScreen: React.FC = () => {
-  const navigation = useNavigation<AuthScreenNavigationProp>()
+  const navigation = useNavigation<
+    AddInfoScreenNavigationProp | LoginScreenNavigationProp
+  >()
 
   return (
     <Container>
