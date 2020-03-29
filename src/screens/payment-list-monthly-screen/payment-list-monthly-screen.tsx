@@ -1,8 +1,7 @@
-import { useNavigation } from '@react-navigation/native'
 import { Container, Toast } from 'native-base'
 import React, { useEffect, useState } from 'react'
+import { Keyboard } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
-import { DailyScreenNavigationProp } from '../../../AppContainer'
 import {
   fetchGroupUsers,
   fetchPaymentsByUser,
@@ -16,7 +15,6 @@ import { userSelector } from '../../redux/user/user.selector'
 const PaymentListMonthlyScreen: React.FC = () => {
   const [userList, setUserList] = useState({})
   const dispatch = useDispatch()
-  const navigation = useNavigation<DailyScreenNavigationProp>()
   const currentUser = useSelector(userSelector)
   const isPaymentsUpdated = useSelector(isPaymentsUpdatedSelector)
 
@@ -48,6 +46,7 @@ const PaymentListMonthlyScreen: React.FC = () => {
           text: 'ログインしました',
           type: 'success'
         })
+        Keyboard.dismiss()
       }
     }
     showToast()
@@ -55,7 +54,7 @@ const PaymentListMonthlyScreen: React.FC = () => {
 
   return (
     <Container>
-      <PaymentListMonthly userList={userList} navigation={navigation} />
+      <PaymentListMonthly userList={userList} />
       {/* <NativeFooter /> */}
     </Container>
   )

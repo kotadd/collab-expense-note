@@ -4,8 +4,10 @@ import { MonthlyPayments } from '../../repository/firebase/accounts/account-type
 
 export type UserReduxTypes = {
   currentUser: User
+  isUserUpdated: boolean
   user: {
     currentUser: UserType
+    selectedUser: string
   }
 }
 
@@ -17,6 +19,10 @@ export type AccountReduxTypes = {
   }
 }
 
+type UidType = {
+  uid: string
+}
+
 export type UserListProps = {
-  [key: string]: string
+  [userList: string]: UserType & UidType
 }

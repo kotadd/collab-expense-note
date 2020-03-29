@@ -1,26 +1,32 @@
-import { UserActionTypes } from './user.types'
-import { setCurrentUser } from './user.actions'
 import { User } from 'firebase'
+import { SET_SELECTED_USER, SET_CURRENT_USER } from './user.types'
+import { SetCurrentUserAction, SetSelectedUserAction } from './user.actions'
 
-export type UserReduxProps = {
+export type UserReduxProps = Readonly<{
   currentUser: User | {}
+  selectedUser?: string
+  isUserUpdated: boolean
+}>
+
+const initialState = {
+  currentUser: {},
+  selectedUser: 'all-items',
+  isUserUpdated: false
 }
 
-const INITIAL_STATE = {
-  currentUser: {}
-}
+type Action = SetCurrentUserAction | SetSelectedUserAction
 
-type Actions = ReturnType<typeof setCurrentUser>
-
-const userReducer = (
-  state = INITIAL_STATE,
-  action: Actions
-): UserReduxProps => {
+const userReducer = (state = initialState, action: Action): UserReduxProps => {
   switch (action.type) {
-    case UserActionTypes.SET_CURRENT_USER:
+    case SET_CURRENT_USER:
       return {
         ...state,
         currentUser: action.payload
+      }
+    case SET_SELECTED_USER:
+      return {
+        ...state,
+        selectedUser: action.payload
       }
     default:
       return state

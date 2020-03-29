@@ -1,3 +1,2 @@
-export const UserActionTypes = {
-  SET_CURRENT_USER: 'SET_CURRENT_USER'
-}
+export const SET_CURRENT_USER = 'SET_CURRENT_USER'
+export const SET_SELECTED_USER = 'SET_SELECTED_USER'

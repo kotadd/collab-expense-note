@@ -1,11 +1,8 @@
-import { useNavigation, useRoute, RouteProp } from '@react-navigation/native'
+import { RouteProp } from '@react-navigation/native'
 import { Content } from 'native-base'
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import {
-  DetailScreenNavigationProp,
-  MainStackParamList
-} from '../../../AppContainer'
+import { MainStackParamList } from '../../../AppContainer'
 import {
   fetchGroupByUser,
   fetchPaymentsByUser,
@@ -24,8 +21,6 @@ export type DailyScreenRouteProp = RouteProp<MainStackParamList, 'Daily'>
 const PaymentListDailyScreen: React.FC = () => {
   const [userList, setUserList] = useState<UserListProps>({})
   const dispatch = useDispatch()
-  const navigation = useNavigation<DetailScreenNavigationProp>()
-  const route = useRoute<DailyScreenRouteProp>()
   const currentUser = useSelector(userSelector)
   const isPaymentsUpdated = useSelector(isPaymentsUpdatedSelector)
 
@@ -54,11 +49,7 @@ const PaymentListDailyScreen: React.FC = () => {
 
   return (
     <Content>
-      <PaymentListDaily
-        navigation={navigation}
-        userList={userList}
-        route={route}
-      />
+      <PaymentListDaily userList={userList} />
       {/* <NativeFooter /> */}
     </Content>
   )

@@ -1,43 +1,55 @@
 import { Body, CardItem, Icon, Left, Picker, Right, Text } from 'native-base'
-import React, { useState } from 'react'
-import { connect } from 'react-redux'
+import React, { useState, ReactElement } from 'react'
+import { connect, useDispatch } from 'react-redux'
 import { DetailScreenNavigationProp } from '../../../AppContainer'
 import {
   MonthlyPayments,
   PaymentType
 } from '../../../repository/firebase/accounts/account-types'
 import { timestampToLocaleDate } from '../../../repository/firebase/firebase.utils'
-import { AccountReduxTypes, UserListProps } from '../../redux/types'
+import {
+  AccountReduxTypes,
+  UserListProps,
+  UserReduxTypes
+} from '../../redux/types'
 import { DailyScreenRouteProp } from '../../screens/payment-list-daily-screen/payment-list-daily-screen'
 import GroupListPicker from '../group-list-picker/group-list-picker.component'
+import { useNavigation, useRoute } from '@react-navigation/native'
+import { setSelectedUser } from '../../redux/user/user.actions'
+
+const ALL_ITEMS = 'all-items'
 
 type PaymentListDailyProps = {
-  currentPayments?: MonthlyPayments
-  navigation: DetailScreenNavigationProp
-  route: DailyScreenRouteProp
+  currentPayments?: MonthlyPayments | null | undefined
+  selectedUser?: string
   userList: UserListProps
 }
+
 const PaymentListDaily: React.FC<PaymentListDailyProps> = ({
   currentPayments,
-  navigation,
-  route,
+  selectedUser,
   userList
-}) => {
-  const [selectedUser, setSelectedUser] = useState('all-items')
+}): ReactElement => {
+  const navigation = useNavigation<DetailScreenNavigationProp>()
+  const route = useRoute<DailyScreenRouteProp>()
+  const dispatch = useDispatch()
 
   const onValueChange: (user: string) => void = user => {
-    setSelectedUser(user)
+    dispatch(setSelectedUser(user))
   }
 
   const pickerItems = [
     <Picker.Item label="全体" value="all-items" key="all-items" />
   ]
+
   for (const key in userList) {
     const pickerItem = (
       <Picker.Item label={userList[key]} value={key} key={key} />
     )
     pickerItems.push(pickerItem)
   }
+
+  if (!selectedUser) selectedUser = ALL_ITEMS
 
   const resultDom = [
     <GroupListPicker
@@ -73,11 +85,11 @@ const PaymentListDaily: React.FC<PaymentListDailyProps> = ({
   if (currentPayments) {
     let resultKey: string
     let currentDom = <></>
-    let payment: PaymentType
 
     let currentDate: string
     let currentDay: string
 
+    let payment: PaymentType
     const targetPayments = currentPayments[route.params.date]
 
     if (targetPayments) {
@@ -141,11 +153,14 @@ const PaymentListDaily: React.FC<PaymentListDailyProps> = ({
 }
 
 const mapStateToProps: ({
-  account
-}: AccountReduxTypes) => {
+  account,
+  user
+}: AccountReduxTypes & UserReduxTypes) => {
   currentPayments: MonthlyPayments | null | undefined
-} = ({ account }: AccountReduxTypes) => ({
-  currentPayments: account.currentPayments
+  selectedUser: string
+} = ({ account, user }: AccountReduxTypes & UserReduxTypes) => ({
+  currentPayments: account.currentPayments,
+  selectedUser: user.selectedUser
 })
 
 export default connect(mapStateToProps, null)(PaymentListDaily)
