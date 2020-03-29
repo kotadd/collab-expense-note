@@ -34,7 +34,7 @@ const LoginForm: React.FC<LoginProps> = ({ navigation }: LoginProps) => {
     const userAuth = await loginUser(email, password)
     if (userAuth && userAuth.user) {
       dispatch(setCurrentUser(userAuth.user))
-      navigation.navigate('Home')
+      navigation.navigate('Main')
     } else {
       dispatch(setCurrentUser({}))
       return Toast.show({

@@ -13,6 +13,7 @@ import ModalScreen from './src/screens/modalscreen/modalscreen'
 import paymentListDailyScreen from './src/screens/payment-list-daily-screen/payment-list-daily-screen'
 import PaymentListMonthlyScreen from './src/screens/payment-list-monthly-screen/payment-list-monthly-screen'
 import SignupScreen from './src/screens/signupscreen/signupscreen'
+import { ReactElement } from 'react'
 
 export type MainStackParamList = {
   Home: undefined
@@ -103,17 +104,15 @@ const MainStackScreen: React.FC = () => {
         component={PaymentListMonthlyScreen}
         options={{
           headerBackTitle: '戻る',
-          title: '月ごとの支出',
-          headerRight: (): React.FC => {
-            const rightButton: React.FC = () => (
+          headerTitle: '月ごとの支出',
+          headerRight: (): ReactElement => {
+            const rightButton = (
               <HeaderRightButton navigation={createNewNavigation} />
             )
             return rightButton
           },
-          headerLeft: (): React.FC => {
-            const leftButton: React.FC = () => (
-              <HeaderLeftButton navigation={authNavigation} />
-            )
+          headerLeft: (): ReactElement => {
+            const leftButton = <HeaderLeftButton navigation={authNavigation} />
             return leftButton
           }
         }}
@@ -124,17 +123,11 @@ const MainStackScreen: React.FC = () => {
         options={{
           headerBackTitle: '戻る',
           title: '日付ごとの支出',
-          headerRight: (): React.FC => {
-            const rightButton: React.FC = () => (
+          headerRight: (): ReactElement => {
+            const rightButton = (
               <HeaderRightButton navigation={createNewNavigation} />
             )
             return rightButton
-          },
-          headerLeft: (): React.FC => {
-            const leftButton: React.FC = () => (
-              <HeaderLeftButton navigation={authNavigation} />
-            )
-            return leftButton
           }
         }}
       />
@@ -174,10 +167,10 @@ const GroupStackScreen: React.FC = () => (
 
 const RootStackScreen: React.FC = () => (
   <RootStack.Navigator mode="modal" initialRouteName="Auth" headerMode="none">
-    <RootStack.Screen name="Main" component={MainStackScreen} />
-    <RootStack.Screen name="CreateNew" component={ModalScreen} />
     <RootStack.Screen name="Auth" component={AuthStackScreen} />
+    <RootStack.Screen name="CreateNew" component={ModalScreen} />
     <RootStack.Screen name="Group" component={GroupStackScreen} />
+    <RootStack.Screen name="Main" component={MainStackScreen} />
   </RootStack.Navigator>
 )
 

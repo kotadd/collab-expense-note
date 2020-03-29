@@ -6,7 +6,6 @@ import { Container } from 'native-base'
 import React from 'react'
 import { useDispatch } from 'react-redux'
 import {
-  HomeScreenNavigationProp,
   MainScreenNavigationProp,
   SignupScreenNavigationProp
 } from '../../../AppContainer'
@@ -19,7 +18,7 @@ import LoginForm from '../../components/login-form/login-form.component'
 import { setCurrentUser } from '../../redux/user/user.actions'
 
 export type LoginNavigationProp = CompositeNavigationProp<
-  CompositeNavigationProp<HomeScreenNavigationProp, MainScreenNavigationProp>,
+  MainScreenNavigationProp,
   SignupScreenNavigationProp
 >
 

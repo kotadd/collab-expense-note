@@ -10,7 +10,7 @@ const HeaderRightButton: React.FC<CreateNewProps> = ({
   navigation
 }: CreateNewProps) => (
   <Button
-    title="＋"
+    title="➕"
     onPress={(): void =>
       navigation.navigate('CreateNew', {
         from: 'monthly'

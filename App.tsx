@@ -9,11 +9,11 @@ import store from './src/redux/store'
 
 const App: React.FC = () => (
   <Provider store={store}>
-    <Root>
-      <NavigationContainer>
+    <NavigationContainer>
+      <Root>
         <AppContainer />
-      </NavigationContainer>
-    </Root>
+      </Root>
+    </NavigationContainer>
   </Provider>
 )
 
