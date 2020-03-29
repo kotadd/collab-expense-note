@@ -1,18 +1,13 @@
 import { Container } from 'native-base'
 import React from 'react'
-import CreateGroupForm from '../../components/create-group-form/create-agroup-form.component'
-import { NavigationProps } from '../../redux/types'
+import CreateGroupForm from '../../components/create-group-form/create-group-form.component'
 
-const CreateGroupScreen = ({ navigation }: NavigationProps) => {
+const CreateGroupScreen: React.FC = () => {
   return (
     <Container>
-      <CreateGroupForm navigation={navigation} />
+      <CreateGroupForm />
     </Container>
   )
 }
-
-CreateGroupScreen.navigationOptions = () => ({
-  title: 'グループの作成'
-})
 
 export default CreateGroupScreen

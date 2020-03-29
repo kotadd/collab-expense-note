@@ -3,7 +3,7 @@ import React from 'react'
 
 type DatePickerType = {
   value: Date
-  onChange: () => void
+  onChange: (event: Event, selectedDate: Date) => void
 }
 const DatePicker: React.FC<DatePickerType> = ({
   value,

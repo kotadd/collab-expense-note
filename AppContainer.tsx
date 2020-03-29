@@ -1,4 +1,4 @@
-import { useNavigation, RouteProp } from '@react-navigation/native'
+import { RouteProp, useNavigation } from '@react-navigation/native'
 import {
   createStackNavigator,
   StackNavigationProp
@@ -22,12 +22,12 @@ type MainStackParamList = {
 
 type AuthStackParamList = {
   Login: undefined
-  AddInfo: undefined
   Signup: undefined
 }
 
 type GroupStackParamList = {
   Group: undefined
+  AddInfo: undefined
 }
 
 type RootStackParamList = {
@@ -55,9 +55,29 @@ export type AuthProps = {
   navigation: AuthScreenNavigationProp
 }
 
+export type HomeScreenNavigationProp = StackNavigationProp<
+  MainStackParamList,
+  'Home'
+>
+
 export type DailyScreenNavigationProp = StackNavigationProp<
   MainStackParamList,
   'Daily'
+>
+
+export type DetailScreenNavigationProp = StackNavigationProp<
+  MainStackParamList,
+  'Detail'
+>
+
+export type MainScreenNavigationProp = StackNavigationProp<
+  RootStackParamList,
+  'Main'
+>
+
+export type GroupScreenNavigationProp = StackNavigationProp<
+  RootStackParamList,
+  'Group'
 >
 
 export type DailyScreenRouteProp = RouteProp<MainStackParamList, 'Daily'>
@@ -66,11 +86,6 @@ export type DailyProps = {
   navigation: DailyScreenNavigationProp
   route: DailyScreenRouteProp
 }
-
-export type DetailScreenNavigationProp = StackNavigationProp<
-  MainStackParamList,
-  'Detail'
->
 
 const MainStack = createStackNavigator<MainStackParamList>()
 const AuthStack = createStackNavigator<AuthStackParamList>()
@@ -136,22 +151,30 @@ const AuthStackScreen: React.FC = () => (
       options={{ title: 'ログイン' }}
     />
     <AuthStack.Screen
-      name="AddInfo"
-      component={AddInfoScreen}
-      options={{ title: '情報の追加' }}
+      name="Signup"
+      component={SignupScreen}
+      options={{ title: '登録する' }}
     />
-    <AuthStack.Screen name="Signup" component={SignupScreen} />
   </AuthStack.Navigator>
 )
 
 const GroupStackScreen: React.FC = () => (
   <GroupStack.Navigator>
-    <GroupStack.Screen name="Group" component={CreateGroupScreen} />
+    <GroupStack.Screen
+      name="AddInfo"
+      component={AddInfoScreen}
+      options={{ title: '情報の追加' }}
+    />
+    <GroupStack.Screen
+      name="Group"
+      component={CreateGroupScreen}
+      options={{ title: 'グループの作成' }}
+    />
   </GroupStack.Navigator>
 )
 
 const RootStackScreen: React.FC = () => (
-  <RootStack.Navigator mode="modal" initialRouteName="Auth" headerMode="none">
+  <RootStack.Navigator mode="modal" initialRouteName="Group" headerMode="none">
     <RootStack.Screen name="Main" component={MainStackScreen} />
     <RootStack.Screen name="CreateNew" component={ModalScreen} />
     <RootStack.Screen name="Auth" component={AuthStackScreen} />

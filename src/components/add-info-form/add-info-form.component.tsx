@@ -13,32 +13,30 @@ import {
   Toast
 } from 'native-base'
 import React, { useEffect, useState } from 'react'
-import { connect } from 'react-redux'
-import {
-  fetchAllGroupData,
-  addUserProfileDocument
-} from '../../../repository/firebase/firebase.utils'
-import { NavigationProps, UserReduxTypes } from '../../redux/types'
+import { MainScreenNavigationProp } from '../../../AppContainer'
+import { fetchAllGroupData } from '../../../repository/firebase/firebase.utils'
+import { addUserProfileDocument } from '../../../repository/firebase/users/user-repository'
+import { UserAuthType } from '../../../repository/firebase/users/user-types'
 
-const AddInfoForm = ({
+type AddInfoProps = {
+  navigation: MainScreenNavigationProp
+  currentUser: UserAuthType
+}
+
+const AddInfoForm: React.FC<AddInfoProps> = ({
   navigation,
   currentUser
-}: NavigationProps & UserReduxTypes) => {
+}: AddInfoProps) => {
   const [name, setName] = useState('')
-  const [pickerItemDom, setPickerItemDom] = useState([] as JSX.Element[])
-
   const [selectedGroupId, setSelectedGroupId] = useState('')
-
-  const onValueChange = (groupId: string) => {
-    setSelectedGroupId(groupId)
-  }
+  const [pickerItemDom, setPickerItemDom] = useState([] as JSX.Element[])
 
   useEffect(() => {
     type GroupsType = {
       [key: string]: string
     }
 
-    const fetchGroups = async () => {
+    const fetchGroups: () => Promise<void> = async () => {
       const groupCollectionSnapshot = await fetchAllGroupData()
       if (!groupCollectionSnapshot) return
       const groups = {} as GroupsType
@@ -63,7 +61,14 @@ const AddInfoForm = ({
     fetchGroups()
   }, [])
 
-  const addGroupInfo = async (name: string, selectedGroupId: string) => {
+  const joinGroup: (groupId: string) => void = groupId => {
+    setSelectedGroupId(groupId)
+  }
+
+  const addGroupInfo: (name: string, selectedGroupId: string) => void = async (
+    name,
+    selectedGroupId
+  ) => {
     try {
       const result = await addUserProfileDocument(
         currentUser,
@@ -91,10 +96,10 @@ const AddInfoForm = ({
       <Form>
         <Item floatingLabel>
           <Icon type="FontAwesome" active name="user" />
-          <Label>グループで表示するあなたの名前を入力してください</Label>
+          <Label>表示するあなたの名前を入力してください</Label>
           <Input
             defaultValue=""
-            onChangeText={text => setName(text)}
+            onChangeText={(text): void => setName(text)}
             value={name}
           />
         </Item>
@@ -112,7 +117,7 @@ const AddInfoForm = ({
             placeholderStyle={{ color: '#bfc6ea' }}
             placeholderIconColor="#007aff"
             selectedValue={selectedGroupId}
-            onValueChange={value => onValueChange(value)}
+            onValueChange={(groupId: string): void => joinGroup(groupId)}
           >
             {pickerItemDom}
           </Picker>
@@ -120,7 +125,11 @@ const AddInfoForm = ({
         <Grid>
           <Col style={{ height: 40 }}></Col>
         </Grid>
-        <Button block dark onPress={() => addGroupInfo(name, selectedGroupId)}>
+        <Button
+          block
+          dark
+          onPress={(): void => addGroupInfo(name, selectedGroupId)}
+        >
           <Text> 登録する </Text>
         </Button>
       </Form>
@@ -128,8 +137,4 @@ const AddInfoForm = ({
   )
 }
 
-const mapStateToProps = ({ user }: UserReduxTypes) => ({
-  currentUser: user.currentUser
-})
-
-export default connect(mapStateToProps)(AddInfoForm)
+export default AddInfoForm

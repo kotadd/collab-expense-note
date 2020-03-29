@@ -13,6 +13,6 @@ const OPTIONS = {
     { key: 'situation_key1', type: 'usage', label: '必要経費' },
     { key: 'situation_key2', type: 'usage', label: 'その他' }
   ]
-};
+}
 
-export default OPTIONS;
+export default OPTIONS

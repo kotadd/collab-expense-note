@@ -1,3 +1,4 @@
+import { useNavigation } from '@react-navigation/native'
 import {
   Body,
   Button,
@@ -16,17 +17,20 @@ import {
 } from 'native-base'
 import React, { useState } from 'react'
 import { Platform, Text } from 'react-native'
-import { connect, useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
+import { CreatePaymentType } from '../../../repository/firebase/accounts/account-types'
 import { createPaymentsData } from '../../../repository/firebase/firebase.utils'
 import DatePicker from '../../components/datepicker/datepicker-component'
 import NativeHeader from '../../components/native-header/native-header.component'
 import PickerInput from '../../components/picker-input/picker-input.component'
 import OPTIONS from '../../components/picker-input/picker-options'
 import { updateIsPaymentsUpdated } from '../../redux/account/account.actions'
-import { CreatePaymentType, UserReduxTypes } from '../../redux/types'
-import { useNavigation } from '@react-navigation/native'
+import { userSelector } from '../../redux/user/user.selector'
+import { HomeScreenNavigationProp } from '../../../AppContainer'
 
-const ModalScreen = ({ currentUser }: UserReduxTypes) => {
+const ModalScreen: React.FC = () => {
+  const currentUser = useSelector(userSelector)
+
   const dateOption = {
     year: 'numeric',
     month: 'short',
@@ -43,24 +47,27 @@ const ModalScreen = ({ currentUser }: UserReduxTypes) => {
   const [usage, setUsage] = useState('')
 
   const dispatch = useDispatch()
-  const navigation = useNavigation()
+  const navigation = useNavigation<HomeScreenNavigationProp>()
 
-  const setPurchaseDate = (event: Event, selectedDate: Date) => {
+  const setPurchaseDate: (event: Event, selectedDate: Date) => void = (
+    event,
+    selectedDate
+  ) => {
     setShow(Platform.OS === 'ios' ? true : false)
     setDate(selectedDate || date)
   }
 
-  const changeShop = (value: string) => {
+  const changeShop: (value: string) => void = value => {
     setShopName(value)
     setShow(false)
   }
 
-  const changeUsage = (value: string) => {
+  const changeUsage: (value: string) => void = value => {
     setUsage(value)
     setShow(false)
   }
 
-  const handleSubmit = async () => {
+  const handleSubmit: () => void = async () => {
     const state: CreatePaymentType = {
       collected,
       date,
@@ -94,7 +101,7 @@ const ModalScreen = ({ currentUser }: UserReduxTypes) => {
         <Form style={{ marginRight: 16 }}>
           <Item fixedLabel>
             <Label>日付：</Label>
-            <Button transparent onPress={() => setShow(true)}>
+            <Button transparent onPress={(): void => setShow(true)}>
               <Text style={{ fontSize: 16 }}>
                 {date.toLocaleDateString('ja-JP', dateOption) ||
                   new Date().toLocaleDateString('ja-JP', dateOption)}
@@ -123,7 +130,7 @@ const ModalScreen = ({ currentUser }: UserReduxTypes) => {
               keyboardType="numeric"
               maxLength={6}
               style={{ textAlign: 'right', lineHeight: 18 }}
-              onChangeText={text => {
+              onChangeText={(text): void => {
                 setGroupAmount(parseInt(text))
                 setShow(false)
               }}
@@ -144,7 +151,7 @@ const ModalScreen = ({ currentUser }: UserReduxTypes) => {
               keyboardType="numeric"
               maxLength={6}
               style={{ textAlign: 'right', lineHeight: 18 }}
-              onChangeText={text => {
+              onChangeText={(text): void => {
                 setUserAmount(parseInt(text))
                 setShow(false)
               }}
@@ -154,21 +161,22 @@ const ModalScreen = ({ currentUser }: UserReduxTypes) => {
             </Text>
           </Item>
           <Textarea
-            onChangeText={text => setPurchaseMemo(text)}
+            onChangeText={(text): void => setPurchaseMemo(text)}
             rowSpan={3}
             bordered
+            underline
             placeholder="メモ"
             style={{
               marginLeft: 16,
               backgroundColor: '#f8fbfd'
             }}
           />
-          <ListItem onPress={() => setCollected(!collected)}>
+          <ListItem onPress={(): void => setCollected(!collected)}>
             <CheckBox
               checked={collected}
               color="green"
               style={{ marginRight: 16 }}
-              onPress={() => setCollected(!collected)}
+              onPress={(): void => setCollected(!collected)}
             />
             <Body>
               <Text>家計費から徴収済み</Text>
@@ -190,8 +198,4 @@ const ModalScreen = ({ currentUser }: UserReduxTypes) => {
   )
 }
 
-const mapStateToProps = ({ user }: UserReduxTypes) => ({
-  currentUser: user.currentUser
-})
-
-export default connect(mapStateToProps)(ModalScreen)
+export default ModalScreen
