@@ -13,21 +13,12 @@ import {
 } from 'native-base'
 import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
-import {
-  HomeScreenNavigationProp,
-  SignupScreenNavigationProp
-} from '../../../AppContainer'
 import { loginUser } from '../../../repository/firebase/firebase.utils'
 import { setCurrentUser } from '../../redux/user/user.actions'
-import { CompositeNavigationProp } from '@react-navigation/native'
-
-type LoginScreenNavigationProp = CompositeNavigationProp<
-  HomeScreenNavigationProp,
-  SignupScreenNavigationProp
->
+import { LoginNavigationProp } from '../../screens/loginscreen/loginscreen'
 
 type LoginProps = {
-  navigation: LoginScreenNavigationProp
+  navigation: LoginNavigationProp
 }
 
 const LoginForm: React.FC<LoginProps> = ({ navigation }: LoginProps) => {

@@ -95,7 +95,6 @@ const RootStack = createStackNavigator<RootStackParamList>()
 const MainStackScreen: React.FC = () => {
   const createNewNavigation = useNavigation<CreateNewScreenNavigationProp>()
   const authNavigation = useNavigation<AuthScreenNavigationProp>()
-  // const dailyNavigation = useNavigation<DailyScreenNavigationProp>()
 
   return (
     <MainStack.Navigator>
@@ -146,14 +145,14 @@ const MainStackScreen: React.FC = () => {
 const AuthStackScreen: React.FC = () => (
   <AuthStack.Navigator>
     <AuthStack.Screen
-      name="Signup"
-      component={SignupScreen}
-      options={{ title: '登録する' }}
-    />
-    <AuthStack.Screen
       name="Login"
       component={LoginScreen}
       options={{ title: 'ログイン' }}
+    />
+    <AuthStack.Screen
+      name="Signup"
+      component={SignupScreen}
+      options={{ title: '登録する' }}
     />
     <AuthStack.Screen
       name="AddInfo"
