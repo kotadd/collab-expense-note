@@ -1,10 +1,10 @@
-import { useNavigation, useRoute } from '@react-navigation/native'
+import { useNavigation, useRoute, RouteProp } from '@react-navigation/native'
 import { Content } from 'native-base'
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import {
-  DailyScreenRouteProp,
-  DetailScreenNavigationProp
+  DetailScreenNavigationProp,
+  MainStackParamList
 } from '../../../AppContainer'
 import {
   fetchGroupByUser,
@@ -18,6 +18,8 @@ import { isPaymentsUpdatedSelector } from '../../redux/account/account.selector'
 import { UserListProps } from '../../redux/types'
 import { userSelector } from '../../redux/user/user.selector'
 import { findGroupUsers } from '../../utils/firebase.utils'
+
+export type DailyScreenRouteProp = RouteProp<MainStackParamList, 'Daily'>
 
 const PaymentListDailyScreen: React.FC = () => {
   const [userList, setUserList] = useState<UserListProps>({})

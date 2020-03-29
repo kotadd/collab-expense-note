@@ -2,10 +2,10 @@ import firebase from 'firebase/app'
 import 'firebase/auth'
 import 'firebase/firestore'
 import {
+  CreatePaymentProps,
   CreatePaymentType,
   MonthlyPayments,
-  PaymentProps,
-  PaymentType
+  PaymentProps
 } from './accounts/account-types'
 import { GroupType } from './groups/group-types'
 import { UserAuthType, UserType } from './users/user-types'
@@ -167,7 +167,9 @@ export const addUserToGroups: (
 export const createPaymentsData: (
   userAuth: UserAuthType,
   props: CreatePaymentType
-) => Promise<MonthlyPayments | null | undefined> = async (userAuth, props) => {
+) => Promise<
+  { [date: string]: [CreatePaymentType] } | null | undefined
+> = async (userAuth, props) => {
   const {
     collected,
     date,
@@ -195,14 +197,14 @@ export const createPaymentsData: (
   const accountSnapshot = await accountRef.get()
 
   if (accountSnapshot.exists) {
-    const { payments } = accountSnapshot.data() as PaymentProps
+    const { payments } = accountSnapshot.data() as CreatePaymentProps
 
     const _updatedAt = new Date()
     const _createdAt = _updatedAt
     const targetDate = date.toLocaleDateString('ja-JP', dateOptions)
     const yearMonth = targetDate.replace(/(\d\d|\d)日.*/, '')
 
-    const currentPayment: PaymentType = {
+    const currentPayment: CreatePaymentType = {
       _createdAt,
       _updatedAt,
       collected,
