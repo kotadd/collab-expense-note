@@ -50,7 +50,7 @@ const PickerInput: React.FC<PickerInputType> = ({
           placeholderStyle={{ color: '#bfc6ea' }}
           placeholderIconColor="#007aff"
           selectedValue={selected}
-          onValueChange={onValueChange.bind(this)}
+          onValueChange={onValueChange}
         >
           {doms}
         </Picker>

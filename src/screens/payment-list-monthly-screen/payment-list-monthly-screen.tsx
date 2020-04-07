@@ -9,23 +9,22 @@ import {
 } from '../../../repository/firebase/firebase.utils'
 import PaymentListMonthly from '../../components/payment-list-monthly/payment-list-monthly.component'
 import { setCurrentPayments } from '../../redux/account/account.actions'
-import { isPaymentsUpdatedSelector } from '../../redux/account/account.selector'
 import { userSelector } from '../../redux/user/user.selector'
+import { useFocusEffect } from '@react-navigation/native'
 
 const PaymentListMonthlyScreen: React.FC = () => {
   const [userList, setUserList] = useState({})
   const dispatch = useDispatch()
   const currentUser = useSelector(userSelector)
-  const isPaymentsUpdated = useSelector(isPaymentsUpdatedSelector)
 
-  useEffect(() => {
+  useFocusEffect(() => {
     const fetchPaymentsData = async (): Promise<void> => {
       const userInfo = await fetchUserByUserAuth(currentUser)
       const payments = await fetchPaymentsByUser(userInfo)
       dispatch(setCurrentPayments(payments))
     }
     fetchPaymentsData()
-  }, [isPaymentsUpdated])
+  })
 
   useEffect(() => {
     const fetchGroupUserList = async (): Promise<void> => {

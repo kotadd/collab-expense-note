@@ -1,5 +1,6 @@
+import { useNavigation, useRoute } from '@react-navigation/native'
 import { Body, CardItem, Icon, Left, Picker, Right, Text } from 'native-base'
-import React, { useState, ReactElement } from 'react'
+import React, { ReactElement } from 'react'
 import { connect, useDispatch } from 'react-redux'
 import { DetailScreenNavigationProp } from '../../../AppContainer'
 import {
@@ -12,10 +13,9 @@ import {
   UserListProps,
   UserReduxTypes
 } from '../../redux/types'
+import { setSelectedUser } from '../../redux/user/user.actions'
 import { DailyScreenRouteProp } from '../../screens/payment-list-daily-screen/payment-list-daily-screen'
 import GroupListPicker from '../group-list-picker/group-list-picker.component'
-import { useNavigation, useRoute } from '@react-navigation/native'
-import { setSelectedUser } from '../../redux/user/user.actions'
 
 const ALL_ITEMS = 'all-items'
 
@@ -55,7 +55,7 @@ const PaymentListDaily: React.FC<PaymentListDailyProps> = ({
     <GroupListPicker
       key={'GroupListPicker'}
       selectedUser={selectedUser}
-      onValueChange={onValueChange.bind(this)}
+      onValueChange={onValueChange}
       pickerItems={pickerItems}
     />,
     <CardItem

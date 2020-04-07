@@ -115,14 +115,14 @@ const ModalScreen: React.FC = () => {
             title="店舗"
             placeholder="購入したお店を選択して下さい"
             items={OPTIONS.SHOP_OPTIONS}
-            onChange={changeShop.bind(this)}
+            onChange={changeShop}
           />
           <PickerInput
             key="usage"
             title="用途"
             placeholder="購入した用途を選択して下さい"
             items={OPTIONS.SITUATION_OPTIONS}
-            onChange={changeUsage.bind(this)}
+            onChange={changeUsage}
           />
           <Item fixedLabel>
             <Label>負担額：</Label>
@@ -185,11 +185,7 @@ const ModalScreen: React.FC = () => {
           <Grid>
             <Col style={{ height: 40 }}></Col>
           </Grid>
-          <Button
-            block
-            onPress={handleSubmit.bind(this)}
-            style={{ marginLeft: 16 }}
-          >
+          <Button block onPress={handleSubmit} style={{ marginLeft: 16 }}>
             <Text style={{ color: 'white', fontSize: 16 }}>確定する</Text>
           </Button>
         </Form>

@@ -56,7 +56,7 @@ const PaymentListMonthly: React.FC<PaymentListMonthlyProps> = ({
     <GroupListPicker
       key={'GroupListPicker'}
       selectedUser={selectedUser}
-      onValueChange={onValueChange.bind(this)}
+      onValueChange={onValueChange}
       pickerItems={pickerItems}
     />,
     <CardItem
