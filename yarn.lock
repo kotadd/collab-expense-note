@@ -2837,8 +2837,8 @@ eslint-plugin-prettier@^3.1.2:
 
 eslint-plugin-react-hooks@^3.0.0:
   version "3.0.0"
-  resolved "https://registry.yarnpkg.com/eslint-plugin-react-hooks/-/eslint-plugin-react-hooks-3.0.0.tgz#9e80c71846eb68dd29c3b21d832728aa66e5bd35"
-  integrity sha512-EjxTHxjLKIBWFgDJdhKKzLh5q+vjTFrqNZX36uIxWS4OfyXe5DawqPj3U5qeJ1ngLwatjzQnmR0Lz0J0YH3kxw==
+  resolved "http://edge.artifactory.corp.yahoo.co.jp:8000/artifactory/api/npm/apj-npm/eslint-plugin-react-hooks/-/eslint-plugin-react-hooks-3.0.0.tgz#9e80c71846eb68dd29c3b21d832728aa66e5bd35"
+  integrity sha1-noDHGEbraN0pw7IdgycoqmblvTU=
 
 eslint-plugin-react@^7.18.3:
   version "7.18.3"
@@ -4921,10 +4921,10 @@ native-base-shoutem-theme@0.3.1:
     lodash "^4.17.14"
     prop-types "^15.5.10"
 
-native-base@^2.13.8:
+native-base@2.13.8:
   version "2.13.8"
-  resolved "https://registry.yarnpkg.com/native-base/-/native-base-2.13.8.tgz#817dfaf74ec63cd17f48991fab452fdc75103db9"
-  integrity sha512-47Wm7bjH5Dc99gBUeVvsURyADU97aiLMLPGX4ewPgR9kW47TD9slS/Y5vGMToBgz1bsku9anXgN2T1rpdQbpFA==
+  resolved "http://edge.artifactory.corp.yahoo.co.jp:8000/artifactory/api/npm/apj-npm/native-base/-/native-base-2.13.8.tgz#817dfaf74ec63cd17f48991fab452fdc75103db9"
+  integrity sha1-gX36907GPNF/SJkfq0Uv3HUQPbk=
   dependencies:
     blueimp-md5 "^2.5.0"
     clamp "^1.0.1"

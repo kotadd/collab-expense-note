@@ -91,6 +91,7 @@ const PaymentListDaily: React.FC<PaymentListDailyProps> = ({
 
     let payment: PaymentType
     const targetPayments = currentPayments[route.params.date]
+    navigation.setOptions({ headerTitle: route.params.date })
 
     if (targetPayments) {
       for (let i = 0; i < targetPayments.length; i++) {
