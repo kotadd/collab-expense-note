@@ -10,7 +10,8 @@ import AddInfoScreen from './src/screens/add-info-screen/add-info.screen'
 import CreateGroupScreen from './src/screens/create-group-screen/create-group.screen'
 import LoginScreen from './src/screens/loginscreen/loginscreen'
 import ModalScreen from './src/screens/modalscreen/modalscreen'
-import paymentListDailyScreen from './src/screens/payment-list-daily-screen/payment-list-daily-screen'
+import PaymentListDailyScreen from './src/screens/payment-list-daily-screen/payment-list-daily-screen'
+import PaymentListDetailScreen from './src/screens/payment-list-detail-screen/payment-list-detail-screen'
 import PaymentListMonthlyScreen from './src/screens/payment-list-monthly-screen/payment-list-monthly-screen'
 import SignupScreen from './src/screens/signupscreen/signupscreen'
 import { ReactElement } from 'react'
@@ -119,10 +120,24 @@ const MainStackScreen: React.FC = () => {
       />
       <MainStack.Screen
         name="Daily"
-        component={paymentListDailyScreen}
+        component={PaymentListDailyScreen}
         options={{
           headerBackTitle: '戻る',
           title: '日付ごとの支出',
+          headerRight: (): ReactElement => {
+            const rightButton = (
+              <HeaderRightButton navigation={createNewNavigation} />
+            )
+            return rightButton
+          }
+        }}
+      />
+      <MainStack.Screen
+        name="Detail"
+        component={PaymentListDetailScreen}
+        options={{
+          headerBackTitle: '戻る',
+          title: '支払いの詳細',
           headerRight: (): ReactElement => {
             const rightButton = (
               <HeaderRightButton navigation={createNewNavigation} />
