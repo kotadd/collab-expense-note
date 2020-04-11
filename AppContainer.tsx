@@ -18,8 +18,8 @@ import { ReactElement } from 'react'
 
 export type MainStackParamList = {
   Home: undefined
-  Daily: { date: string }
-  Detail: undefined
+  Daily: { yearMonth: string }
+  Detail: { yearMonth: string; day: string }
 }
 
 export type AuthStackParamList = {

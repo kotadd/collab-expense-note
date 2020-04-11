@@ -162,7 +162,7 @@ const PaymentListMonthly: React.FC<PaymentListMonthlyProps> = ({
             key={resultKey + j}
             onPress={(): void => {
               navigation.navigate('Daily', {
-                date: yearMonth
+                yearMonth: yearMonth
               })
             }}
           >

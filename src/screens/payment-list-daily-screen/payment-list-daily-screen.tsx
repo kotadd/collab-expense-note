@@ -1,5 +1,5 @@
 import { RouteProp, useFocusEffect } from '@react-navigation/native'
-import { Content } from 'native-base'
+import { Container } from 'native-base'
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { MainStackParamList } from '../../../AppContainer'
@@ -46,10 +46,10 @@ const PaymentListDailyScreen: React.FC = () => {
   }, [])
 
   return (
-    <Content>
+    <Container>
       <PaymentListDaily userList={userList} />
       {/* <NativeFooter /> */}
-    </Content>
+    </Container>
   )
 }
 

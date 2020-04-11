@@ -90,8 +90,10 @@ const PaymentListDaily: React.FC<PaymentListDailyProps> = ({
     let currentDay: string
 
     let payment: PaymentType
-    const targetPayments = currentPayments[route.params.date]
-    navigation.setOptions({ headerTitle: route.params.date })
+
+    const { yearMonth } = route.params
+    const targetPayments = currentPayments[yearMonth]
+    navigation.setOptions({ headerTitle: yearMonth })
 
     if (targetPayments) {
       for (let i = 0; i < targetPayments.length; i++) {
@@ -126,7 +128,10 @@ const PaymentListDaily: React.FC<PaymentListDailyProps> = ({
             button
             key={resultKey}
             onPress={(): void => {
-              navigation.navigate('Detail')
+              navigation.navigate('Detail', {
+                yearMonth,
+                day: currentDay.toString()
+              })
             }}
           >
             <Left>
