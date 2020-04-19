@@ -5,13 +5,13 @@ import { connect, useDispatch } from 'react-redux'
 import { DailyScreenNavigationProp } from '../../../AppContainer'
 import {
   MonthlyPayments,
-  PaymentType
+  PaymentType,
 } from '../../../repository/firebase/accounts/account-types'
 import { timestampToLocaleDate } from '../../../repository/firebase/firebase.utils'
 import {
   AccountReduxTypes,
   UserListProps,
-  UserReduxTypes
+  UserReduxTypes,
 } from '../../redux/types'
 import { setSelectedUser } from '../../redux/user/user.actions'
 import GroupListPicker from '../group-list-picker/group-list-picker.component'
@@ -31,17 +31,17 @@ type PaymentListMonthlyProps = {
 const PaymentListMonthly: React.FC<PaymentListMonthlyProps> = ({
   currentPayments,
   selectedUser,
-  userList
+  userList,
 }): ReactElement => {
   const navigation = useNavigation<DailyScreenNavigationProp>()
   const dispatch = useDispatch()
 
-  const onValueChange: (user: string) => void = user => {
+  const onValueChange: (user: string) => void = (user) => {
     dispatch(setSelectedUser(user))
   }
 
   const pickerItems = [
-    <Picker.Item label="全体" value={ALL_ITEMS} key={ALL_ITEMS} />
+    <Picker.Item label="全体" value={ALL_ITEMS} key={ALL_ITEMS} />,
   ]
 
   for (const key in userList) {
@@ -74,7 +74,7 @@ const PaymentListMonthly: React.FC<PaymentListMonthlyProps> = ({
       <Right>
         <Text>未精算額</Text>
       </Right>
-    </CardItem>
+    </CardItem>,
   ]
 
   if (currentPayments) {
@@ -162,7 +162,7 @@ const PaymentListMonthly: React.FC<PaymentListMonthlyProps> = ({
             key={resultKey + j}
             onPress={(): void => {
               navigation.navigate('Daily', {
-                date: yearMonth
+                date: yearMonth,
               })
             }}
           >
@@ -186,13 +186,13 @@ const PaymentListMonthly: React.FC<PaymentListMonthlyProps> = ({
 
 const mapStateToProps: ({
   account,
-  user
+  user,
 }: AccountReduxTypes & UserReduxTypes) => {
   currentPayments: MonthlyPayments | null | undefined
   selectedUser: string
 } = ({ account, user }: AccountReduxTypes & UserReduxTypes) => ({
   currentPayments: account.currentPayments,
-  selectedUser: user.selectedUser
+  selectedUser: user.selectedUser,
 })
 
 export default connect(mapStateToProps, null)(PaymentListMonthly)
