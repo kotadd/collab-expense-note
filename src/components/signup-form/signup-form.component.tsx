@@ -51,9 +51,8 @@ const SignupForm: React.FC<SignupProps> = ({ navigation }: SignupProps) => {
         password
       )
 
-      await createUserProfileDocument(user)
-
       if (user) {
+        await createUserProfileDocument(user)
         dispatch(setCurrentUser(user))
         navigation.navigate('AddInfo')
       } else {

@@ -15,11 +15,12 @@ import PaymentListDetailScreen from './src/screens/payment-list-detail-screen/pa
 import PaymentListMonthlyScreen from './src/screens/payment-list-monthly-screen/payment-list-monthly-screen'
 import SignupScreen from './src/screens/signupscreen/signupscreen'
 import { ReactElement } from 'react'
+import { PaymentType } from './repository/firebase/accounts/account-types'
 
 export type MainStackParamList = {
   Home: undefined
   Daily: { yearMonth: string }
-  Detail: { yearMonth: string; day: string }
+  Detail: { yearMonth: string; day: string; monthlyPayments: [PaymentType] }
 }
 
 export type AuthStackParamList = {

@@ -112,6 +112,13 @@ const PaymentListMonthly: React.FC<PaymentListMonthlyProps> = ({
       return 0
     })
 
+    const dateOptions = {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+      weekday: 'short'
+    }
+
     for (let i = 0; i < resultKeys.length; i++) {
       resultKey = resultKeys[i]
 
@@ -120,7 +127,11 @@ const PaymentListMonthly: React.FC<PaymentListMonthlyProps> = ({
       const paymentsMap = resultVals.reduce(
         (accumulator: AccumulatorType, payment: PaymentType) => {
           if (selectedUser === ALL_ITEMS || selectedUser === payment.userID) {
-            currentDate = timestampToLocaleDate(payment.date, 'ja-JP')
+            currentDate = timestampToLocaleDate(
+              payment.date,
+              'ja-JP',
+              dateOptions
+            )
 
             yearMonth = currentDate.replace(/(\d\d|\d)日.*/, '')
 

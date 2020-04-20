@@ -26,17 +26,18 @@ firebase.initializeApp(config)
 export const auth = firebase.auth()
 export const firestore = firebase.firestore()
 
-const dateOptions = {
-  year: 'numeric',
-  month: 'short',
-  day: 'numeric',
-  weekday: 'short'
+type DateOptionProps = {
+  year: string
+  month: string
+  day: string
+  weekday?: string
 }
 
 export const timestampToLocaleDate: (
   timestamp: firebase.firestore.Timestamp,
-  locale: string
-) => string = (timestamp, locale) => {
+  locale: string,
+  dateOptions: DateOptionProps
+) => string = (timestamp, locale, dateOptions) => {
   return timestamp.toDate().toLocaleDateString(locale, dateOptions)
 }
 
@@ -136,7 +137,7 @@ export const addUserToGroups: (
   const userRef = firestore.doc(`users/${userID}`)
   const userSnapshot = await userRef.get()
 
-  const _updatedAt = new Date()
+  const _updatedAt = firebase.firestore.FieldValue.serverTimestamp()
   if (userSnapshot.exists) {
     try {
       await userRef.update({ _updatedAt })
@@ -201,7 +202,12 @@ export const createPaymentsData: (
 
     const _updatedAt = new Date()
     const _createdAt = _updatedAt
-    const targetDate = date.toLocaleDateString('ja-JP', dateOptions)
+    const targetDate = date.toLocaleDateString('ja-JP', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+      weekday: 'short'
+    })
     const yearMonth = targetDate.replace(/(\d\d|\d)日.*/, '')
 
     const currentPayment: CreatePaymentType = {
@@ -245,7 +251,7 @@ export const createAccountAndGroup: (
   const accountsRef = firestore.collection('accounts').doc()
   const groupsRef = firestore.collection('groups').doc()
   try {
-    const _updatedAt = new Date()
+    const _updatedAt = firebase.firestore.FieldValue.serverTimestamp()
     const _createdAt = _updatedAt
     accountsRef.set({
       _createdAt,
@@ -263,6 +269,41 @@ export const createAccountAndGroup: (
     console.log('error creating user', error.message)
   }
 
+  return null
+}
+
+export const signUp: () => Promise<void> = async () => {
+  const provider = new firebase.auth.TwitterAuthProvider()
+  await firebase.auth().signInWithRedirect(provider)
+
+  // firebase
+  //   .auth()
+  //   .getRedirectResult()
+  //   .then(function(result) {
+  //     if (result.credential) {
+  //       const token = result.credential.accessToken
+  //     }
+  //     const user = result.user
+  //   })
+
+  // const batch = firebase.firestore().batch()
+
+  // batch.set(firebase.firestore().doc(`users/${user.uid}`), {
+  //   _createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+  //   _updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+  //   accountID: null,
+  //   groupID: null,
+  //   name: null
+  // })
+
+  // batch.set(firebase.firestore().doc(`public-profiles/${user.uid}`), {
+  //   _createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+  //   _updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+  //   displayName: user.displayName,
+  //   photoURL: user.photoURL
+  // })
+
+  // return batch.commit()
   return null
 }
 

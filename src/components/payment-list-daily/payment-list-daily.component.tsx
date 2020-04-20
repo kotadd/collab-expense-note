@@ -95,6 +95,13 @@ const PaymentListDaily: React.FC<PaymentListDailyProps> = ({
     const targetPayments = currentPayments[yearMonth]
     navigation.setOptions({ headerTitle: yearMonth })
 
+    const dateOptions = {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+      weekday: 'short'
+    }
+
     if (targetPayments) {
       for (let i = 0; i < targetPayments.length; i++) {
         payment = targetPayments[i]
@@ -104,7 +111,7 @@ const PaymentListDaily: React.FC<PaymentListDailyProps> = ({
 
         resultKey = `result-${i}`
 
-        currentDate = timestampToLocaleDate(payment.date, 'ja-JP')
+        currentDate = timestampToLocaleDate(payment.date, 'ja-JP', dateOptions)
 
         currentDay = currentDate.replace(/.*月/, '')
 
@@ -130,7 +137,8 @@ const PaymentListDaily: React.FC<PaymentListDailyProps> = ({
             onPress={(): void => {
               navigation.navigate('Detail', {
                 yearMonth,
-                day: currentDay.toString()
+                day: currentDay.toString(),
+                monthlyPayments: targetPayments
               })
             }}
           >

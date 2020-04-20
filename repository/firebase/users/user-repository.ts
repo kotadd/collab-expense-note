@@ -1,7 +1,7 @@
 import firebase from 'firebase/app'
 import 'firebase/auth'
 import 'firebase/firestore'
-import { UserAuthType } from './user-types'
+import { UserAuthType, PublicProfileType } from './user-types'
 import { addUserToGroups } from '../firebase.utils'
 import { GroupType } from '../groups/group-types'
 
@@ -20,18 +20,14 @@ export const createUserProfileDocument: (
   | firebase.firestore.DocumentReference<firebase.firestore.DocumentData>
   | undefined
 > = async (userAuth: UserAuthType) => {
-  if (!userAuth) return
-
   const userRef = firestore.doc(`users/${userAuth.uid}`)
   const userSnapshot = await userRef.get()
 
   if (!userSnapshot.exists) {
-    const { email } = userAuth
-    const _updatedAt = new Date()
+    const _updatedAt = firebase.firestore.FieldValue.serverTimestamp()
     const _createdAt = _updatedAt
     try {
       await userRef.set({
-        email,
         _createdAt,
         _updatedAt
       })
@@ -41,6 +37,18 @@ export const createUserProfileDocument: (
   }
 
   return userRef
+}
+
+export const createUser: (user: PublicProfileType) => Promise<void> = async (
+  user: PublicProfileType
+) => {
+  const currentUser = firebase.auth().currentUser
+  if (!currentUser) return
+  return firebase
+    .firestore()
+    .collection('public-profiles')
+    .doc(currentUser.uid)
+    .set(user)
 }
 
 export const addUserProfileDocument: (

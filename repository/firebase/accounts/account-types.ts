@@ -13,6 +13,7 @@ export type PaymentType = {
   date: firebase.firestore.Timestamp
   groupAmount: number
   groupID: string
+  itemId: string
   purchaseMemo: string
   shopName: string | 'その他'
   usage: string | 'その他'
@@ -27,8 +28,8 @@ export type CreatePaymentProps = {
 }
 
 export type CreatePaymentType = {
-  _createdAt?: Date
-  _updatedAt?: Date
+  _createdAt: firebase.firestore.FieldValue
+  _updatedAt: firebase.firestore.FieldValue
   collected: boolean
   date: Date
   groupAmount: number

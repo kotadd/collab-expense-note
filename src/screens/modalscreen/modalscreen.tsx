@@ -27,6 +27,7 @@ import OPTIONS from '../../components/picker-input/picker-options'
 import { updateIsPaymentsUpdated } from '../../redux/account/account.actions'
 import { userSelector } from '../../redux/user/user.selector'
 import { HomeScreenNavigationProp } from '../../../AppContainer'
+import firebase from 'firebase'
 
 const ModalScreen: React.FC = () => {
   const currentUser = useSelector(userSelector)
@@ -69,6 +70,8 @@ const ModalScreen: React.FC = () => {
 
   const handleSubmit: () => void = async () => {
     const state: CreatePaymentType = {
+      _createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+      _updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
       collected,
       date,
       groupAmount,
@@ -78,6 +81,7 @@ const ModalScreen: React.FC = () => {
       userAmount
     }
 
+    console.log('called')
     try {
       const paymentData = await createPaymentsData(currentUser, state)
       if (paymentData) {

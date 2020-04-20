@@ -5,14 +5,14 @@ import { ReactElement } from 'react'
 const GroupListHeader: (
   backAction: (() => void) | undefined
 ) => ReactElement = backAction => (
-  <Header style={{ backgroundColor: '#f44242' }}>
+  <Header>
     <Left>
       <Button transparent onPress={backAction}>
-        <Icon name="arrow-back" style={{ color: '#fff' }} />
+        <Icon name="arrow-back" />
       </Button>
     </Left>
     <Body style={{ flex: 3 }}>
-      <Title style={{ color: '#fff' }}>同じグループのメンバー</Title>
+      <Title>同じグループのメンバー</Title>
     </Body>
     <Right />
   </Header>
