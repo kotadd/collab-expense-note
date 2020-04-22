@@ -12,7 +12,7 @@ type GroupListPickerProps = {
 const GroupListPicker: React.FC<GroupListPickerProps> = ({
   selectedUser,
   onValueChange,
-  pickerItems
+  pickerItems,
 }: GroupListPickerProps) => (
   <>
     <Item picker key="picker-item">

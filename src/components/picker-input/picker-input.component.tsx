@@ -16,11 +16,11 @@ const PickerInput: React.FC<PickerInputType> = ({
   title,
   placeholder,
   items,
-  onChange
+  onChange,
 }: PickerInputType) => {
   const [selected, setSelected] = useState('')
 
-  const onValueChange: (value: string) => void = value => {
+  const onValueChange: (value: string) => void = (value) => {
     setSelected(value)
     onChange(value)
     return

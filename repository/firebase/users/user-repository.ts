@@ -29,7 +29,7 @@ export const createUserProfileDocument: (
     try {
       await userRef.set({
         _createdAt,
-        _updatedAt
+        _updatedAt,
       })
     } catch (error) {
       console.log('error creating user', error.message)
@@ -78,7 +78,7 @@ export const addUserProfileDocument: (
         name,
         accountID,
         groupID,
-        _updatedAt
+        _updatedAt,
       })
       addUserToGroups(userAuth, groupID)
     } catch (error) {

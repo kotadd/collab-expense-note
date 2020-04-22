@@ -9,22 +9,24 @@ import {
   Item,
   Label,
   Text,
-  Toast
+  Toast,
 } from 'native-base'
 import React, { useState } from 'react'
 import {
   createAccountAndGroup,
-  fetchAllGroupData
+  fetchAllGroupData,
 } from '../../../repository/firebase/firebase.utils'
 
 const CreateGroupForm: React.FC = () => {
   const [name, setName] = useState('')
   const [isNewGroup, setIsNewGroup] = useState(true)
 
-  const createNewGroup: (name: string) => Promise<void | null> = async name => {
+  const createNewGroup: (name: string) => Promise<void | null> = async (
+    name
+  ) => {
     try {
       const groups = await fetchAllGroupData()
-      groups.forEach(group => {
+      groups.forEach((group) => {
         if (name === group.data().name) {
           return setIsNewGroup(false)
         }
@@ -33,7 +35,7 @@ const CreateGroupForm: React.FC = () => {
       if (!isNewGroup) {
         return Toast.show({
           text: 'このグループ名はすでに登録されています',
-          type: 'danger'
+          type: 'danger',
         })
       }
 

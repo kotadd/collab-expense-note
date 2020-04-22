@@ -13,10 +13,10 @@ export type SetSelectedUserAction = {
 
 export const setCurrentUser = (user: User | {}): SetCurrentUserAction => ({
   type: SET_CURRENT_USER,
-  payload: user
+  payload: user,
 })
 
 export const setSelectedUser = (userName: string): SetSelectedUserAction => ({
   type: SET_SELECTED_USER,
-  payload: userName
+  payload: userName,
 })

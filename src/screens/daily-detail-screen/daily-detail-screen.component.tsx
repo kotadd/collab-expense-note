@@ -21,7 +21,7 @@ import {
   CheckBox,
   Grid,
   Col,
-  Body
+  Body,
 } from 'native-base'
 import { updateIsPaymentsUpdated } from '../../redux/account/account.actions'
 import NativeHeader from '../../components/native-header/native-header.component'
@@ -34,7 +34,7 @@ const DailyDetailScreen: React.FC = () => {
   const dateOption = {
     year: 'numeric',
     month: 'short',
-    day: 'numeric'
+    day: 'numeric',
   }
 
   const [collected, setCollected] = useState(false)
@@ -57,12 +57,12 @@ const DailyDetailScreen: React.FC = () => {
     setDate(selectedDate || date)
   }
 
-  const changeShop: (value: string) => void = value => {
+  const changeShop: (value: string) => void = (value) => {
     setShopName(value)
     setShow(false)
   }
 
-  const changeUsage: (value: string) => void = value => {
+  const changeUsage: (value: string) => void = (value) => {
     setUsage(value)
     setShow(false)
   }
@@ -75,7 +75,7 @@ const DailyDetailScreen: React.FC = () => {
       purchaseMemo,
       shopName,
       usage,
-      userAmount
+      userAmount,
     }
 
     try {
@@ -83,7 +83,7 @@ const DailyDetailScreen: React.FC = () => {
       if (paymentData) {
         Toast.show({
           text: 'データが修正されました',
-          type: 'success'
+          type: 'success',
         })
 
         dispatch(updateIsPaymentsUpdated())
@@ -139,7 +139,7 @@ const DailyDetailScreen: React.FC = () => {
               style={{
                 color: '#575757',
                 paddingRight: 5,
-                fontSize: 17
+                fontSize: 17,
               }}
             >
               円
@@ -168,7 +168,7 @@ const DailyDetailScreen: React.FC = () => {
             placeholder="メモ"
             style={{
               marginLeft: 16,
-              backgroundColor: '#f8fbfd'
+              backgroundColor: '#f8fbfd',
             }}
           />
           <ListItem onPress={(): void => setCollected(!collected)}>

@@ -12,13 +12,13 @@ export async function logOut(
     navigation.navigate('Auth')
     Toast.show({
       text: 'ログアウトしました',
-      type: 'success'
+      type: 'success',
     })
   } catch (error) {
     console.log(error)
     Toast.show({
       text: 'ログアウトに失敗しました',
-      type: 'danger'
+      type: 'danger',
     })
   }
 }

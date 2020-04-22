@@ -8,7 +8,7 @@ import {
   Label,
   ListItem,
   Text,
-  Textarea
+  Textarea,
 } from 'native-base'
 import React from 'react'
 import { DetailScreenNavigationProp } from '../../../AppContainer'
@@ -18,7 +18,7 @@ import { timestampToLocaleDate } from '../../../repository/firebase/firebase.uti
 const dateOptions = {
   year: 'numeric',
   month: 'short',
-  day: 'numeric'
+  day: 'numeric',
 }
 
 const PaymentListDetail: React.FC = () => {
@@ -63,7 +63,7 @@ const PaymentListDetail: React.FC = () => {
           style={{
             color: '#575757',
             paddingRight: 5,
-            fontSize: 17
+            fontSize: 17,
           }}
         >
           5,000 円
@@ -83,7 +83,7 @@ const PaymentListDetail: React.FC = () => {
         underline
         style={{
           marginLeft: 16,
-          backgroundColor: '#f8fbfd'
+          backgroundColor: '#f8fbfd',
         }}
         value="ライフで買ったよ"
       />

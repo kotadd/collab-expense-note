@@ -1,7 +1,7 @@
 import { useNavigation } from '@react-navigation/native'
 import {
   createStackNavigator,
-  StackNavigationProp
+  StackNavigationProp,
 } from '@react-navigation/stack'
 import * as React from 'react'
 import HeaderLeftButton from './src/components/header/header-left-button.component'
@@ -116,7 +116,7 @@ const MainStackScreen: React.FC = () => {
           headerLeft: (): ReactElement => {
             const leftButton = <HeaderLeftButton navigation={authNavigation} />
             return leftButton
-          }
+          },
         }}
       />
       <MainStack.Screen
@@ -130,7 +130,7 @@ const MainStackScreen: React.FC = () => {
               <HeaderRightButton navigation={createNewNavigation} />
             )
             return rightButton
-          }
+          },
         }}
       />
       <MainStack.Screen
@@ -144,7 +144,7 @@ const MainStackScreen: React.FC = () => {
               <HeaderRightButton navigation={createNewNavigation} />
             )
             return rightButton
-          }
+          },
         }}
       />
     </MainStack.Navigator>

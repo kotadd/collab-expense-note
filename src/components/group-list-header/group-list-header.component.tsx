@@ -4,7 +4,7 @@ import { ReactElement } from 'react'
 
 const GroupListHeader: (
   backAction: (() => void) | undefined
-) => ReactElement = backAction => (
+) => ReactElement = (backAction) => (
   <Header>
     <Left>
       <Button transparent onPress={backAction}>

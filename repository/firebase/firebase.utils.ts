@@ -5,7 +5,7 @@ import {
   CreatePaymentProps,
   CreatePaymentType,
   MonthlyPayments,
-  PaymentProps
+  PaymentProps,
 } from './accounts/account-types'
 import { GroupType } from './groups/group-types'
 import { UserAuthType, UserType } from './users/user-types'
@@ -18,7 +18,7 @@ const config = {
   storageBucket: 'collab-expense-note-db.appspot.com',
   messagingSenderId: '661228793540',
   appId: '1:661228793540:web:40a094d31c50d5d961a391',
-  measurementId: 'G-1SQD65LYH7'
+  measurementId: 'G-1SQD65LYH7',
 }
 
 firebase.initializeApp(config)
@@ -63,9 +63,9 @@ export const loginUser: (
 
 export const fetchGroupUsers: (
   userInfo: UserType
-) => Promise<
-  firebase.firestore.DocumentData[] | undefined
-> = async userInfo => {
+) => Promise<firebase.firestore.DocumentData[] | undefined> = async (
+  userInfo
+) => {
   if (!userInfo) return
   const { groupID } = userInfo
   if (!groupID) return
@@ -77,7 +77,7 @@ export const fetchGroupUsers: (
     .get()
 
   const userList: firebase.firestore.DocumentData[] = []
-  querySnapshot.forEach(doc => {
+  querySnapshot.forEach((doc) => {
     const object = doc.data()
     object.uid = doc.id
     userList.push(object)
@@ -88,7 +88,7 @@ export const fetchGroupUsers: (
 
 export const fetchGroupByUser: (
   userInfo: UserType | undefined
-) => Promise<GroupType | undefined> = async userInfo => {
+) => Promise<GroupType | undefined> = async (userInfo) => {
   if (!userInfo) return
   const { groupID } = userInfo
   if (!groupID) return
@@ -102,7 +102,7 @@ export const fetchGroupByUser: (
 
 export const fetchPaymentsByUser: (
   userInfo: UserType | undefined
-) => Promise<MonthlyPayments | undefined> = async userInfo => {
+) => Promise<MonthlyPayments | undefined> = async (userInfo) => {
   if (!userInfo) return
   const { accountID, groupID } = userInfo
 
@@ -165,22 +165,7 @@ export const addUserToGroups: (
   }
 }
 
-export const createPaymentsData: (
-  userAuth: UserAuthType,
-  props: CreatePaymentType
-) => Promise<
-  { [date: string]: [CreatePaymentType] } | null | undefined
-> = async (userAuth, props) => {
-  const {
-    collected,
-    date,
-    groupAmount,
-    purchaseMemo,
-    shopName,
-    usage,
-    userAmount
-  } = props
-
+export const createPaymentsData = async (userAuth, props) => {
   if (!userAuth) return
 
   const userID = userAuth.uid
@@ -194,60 +179,19 @@ export const createPaymentsData: (
 
   if (!accountID || !groupID) return
 
-  const accountRef = firestore.doc(`accounts/${accountID}`)
-  const accountSnapshot = await accountRef.get()
-
-  if (accountSnapshot.exists) {
-    const { payments } = accountSnapshot.data() as CreatePaymentProps
-
-    const _updatedAt = new Date()
-    const _createdAt = _updatedAt
-    const targetDate = date.toLocaleDateString('ja-JP', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
-      weekday: 'short'
-    })
-    const yearMonth = targetDate.replace(/(\d\d|\d)日.*/, '')
-
-    const currentPayment: CreatePaymentType = {
-      _createdAt,
-      _updatedAt,
-      collected,
-      date,
-      groupID,
-      groupAmount,
-      purchaseMemo,
-      shopName: shopName || 'その他',
-      usage: usage || 'その他',
-      userID,
-      userAmount
-    }
-
-    try {
-      if (payments) {
-        payments[yearMonth]
-          ? payments[yearMonth].push(currentPayment)
-          : (payments[yearMonth] = [currentPayment])
-        await accountRef.update({ payments })
-      } else {
-        const yearMonthPayment = {
-          [yearMonth]: [currentPayment]
-        }
-        await accountRef.update({ payments: yearMonthPayment })
-      }
-      return payments
-    } catch (error) {
-      console.log('error creating payments', error.message)
-    }
+  const payment = {
+    ...props,
+    _updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+    _createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+    user: `user/${userID}`,
   }
 
-  return null
+  return firestore.collection(`groups/${groupID}/payments/`).add(payment)
 }
 
 export const createAccountAndGroup: (
   name: string
-) => Promise<null | undefined> = async name => {
+) => Promise<null | undefined> = async (name) => {
   const accountsRef = firestore.collection('accounts').doc()
   const groupsRef = firestore.collection('groups').doc()
   try {
@@ -255,14 +199,14 @@ export const createAccountAndGroup: (
     const _createdAt = _updatedAt
     accountsRef.set({
       _createdAt,
-      _updatedAt
+      _updatedAt,
     })
     groupsRef.set({
       _createdAt,
       _updatedAt,
       name,
       accountID: accountsRef.id,
-      userIDs: []
+      userIDs: [],
     })
     return
   } catch (error) {

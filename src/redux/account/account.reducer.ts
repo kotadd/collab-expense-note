@@ -2,7 +2,7 @@ import { MonthlyPayments } from '../../../repository/firebase/accounts/account-t
 import { setCurrentPayments, updateIsPaymentsUpdated } from './account.actions'
 import {
   SET_CURRENT_PAYMENTS,
-  UPDATE_IS_PAYMENTS_UPDATED
+  UPDATE_IS_PAYMENTS_UPDATED,
 } from './account.types'
 
 export type AccountReduxProps = {
@@ -12,7 +12,7 @@ export type AccountReduxProps = {
 
 const INITIAL_STATE = {
   currentPayments: null,
-  isPaymentsUpdated: false
+  isPaymentsUpdated: false,
 }
 
 type Actions =
@@ -27,12 +27,12 @@ const accountReducer = (
     case SET_CURRENT_PAYMENTS:
       return {
         ...state,
-        currentPayments: action.payload
+        currentPayments: action.payload,
       }
     case UPDATE_IS_PAYMENTS_UPDATED:
       return {
         ...state,
-        isPaymentsUpdated: !state.isPaymentsUpdated
+        isPaymentsUpdated: !state.isPaymentsUpdated,
       }
     default:
       return state

@@ -7,7 +7,6 @@ import PaymentListDetail from '../../components/payment-list-detail/payment-list
 export type DetailScreenRouteProp = RouteProp<MainStackParamList, 'Detail'>
 
 const PaymentListDetailScreen: React.FC = () => {
-  console.log('called screen')
   return (
     <Container>
       <PaymentListDetail />

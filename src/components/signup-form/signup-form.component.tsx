@@ -9,13 +9,13 @@ import {
   Item,
   Label,
   Text,
-  Toast
+  Toast,
 } from 'native-base'
 import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import {
   AddInfoScreenNavigationProp,
-  LoginScreenNavigationProp
+  LoginScreenNavigationProp,
 } from '../../../AppContainer'
 import { auth } from '../../../repository/firebase/firebase.utils'
 import { createUserProfileDocument } from '../../../repository/firebase/users/user-repository'
@@ -41,7 +41,7 @@ const SignupForm: React.FC<SignupProps> = ({ navigation }: SignupProps) => {
     if (password != confirmPassword) {
       return Toast.show({
         text: 'パスワードと確認用パスワードが一致していません',
-        type: 'danger'
+        type: 'danger',
       })
     }
 
@@ -59,7 +59,7 @@ const SignupForm: React.FC<SignupProps> = ({ navigation }: SignupProps) => {
         dispatch(setCurrentUser({}))
         return Toast.show({
           text: '正しく登録できませんでした',
-          type: 'danger'
+          type: 'danger',
         })
       }
     } catch (error) {
@@ -67,13 +67,13 @@ const SignupForm: React.FC<SignupProps> = ({ navigation }: SignupProps) => {
       if (error.message.match(/The email address is badly formatted./)) {
         return Toast.show({
           text: 'メールアドレスの形式が正しくありません',
-          type: 'danger'
+          type: 'danger',
         })
       }
       if (error.message.match(/Password should be at least 6 characters/)) {
         return Toast.show({
           text: 'パスワードは6桁以上で入力して下さい',
-          type: 'danger'
+          type: 'danger',
         })
       }
     }

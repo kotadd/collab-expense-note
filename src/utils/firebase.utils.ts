@@ -8,7 +8,7 @@ export const findGroupUsers: (
 ) => UserListProps = (userIDs, users) => {
   const userList = {} as UserListProps
 
-  users.forEach(user => {
+  users.forEach((user) => {
     if (userIDs.indexOf(user.id) == -1) return
     return (userList[user.id] = user.data().name)
   })

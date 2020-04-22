@@ -6,7 +6,7 @@ import {
   Icon,
   Left,
   Right,
-  Text
+  Text,
 } from 'native-base'
 import React from 'react'
 

@@ -7,13 +7,13 @@ type CreateNewProps = {
 }
 
 const HeaderRightButton: React.FC<CreateNewProps> = ({
-  navigation
+  navigation,
 }: CreateNewProps) => (
   <Button
     title="➕"
     onPress={(): void =>
       navigation.navigate('CreateNew', {
-        from: 'monthly'
+        from: 'monthly',
       })
     }
   />

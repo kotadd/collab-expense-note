@@ -1,23 +1,26 @@
-import { useNavigation, useRoute } from '@react-navigation/native'
+import { useNavigation, useRoute, RouteProp } from '@react-navigation/native'
 import { Body, CardItem, Icon, Left, Picker, Right, Text } from 'native-base'
 import React, { ReactElement } from 'react'
 import { connect, useDispatch } from 'react-redux'
-import { DetailScreenNavigationProp } from '../../../AppContainer'
+import {
+  DetailScreenNavigationProp,
+  MainStackParamList,
+} from '../../../AppContainer'
 import {
   MonthlyPayments,
-  PaymentType
+  PaymentType,
 } from '../../../repository/firebase/accounts/account-types'
 import { timestampToLocaleDate } from '../../../repository/firebase/firebase.utils'
 import {
   AccountReduxTypes,
   UserListProps,
-  UserReduxTypes
+  UserReduxTypes,
 } from '../../redux/types'
 import { setSelectedUser } from '../../redux/user/user.actions'
-import { DailyScreenRouteProp } from '../../screens/payment-list-daily-screen/payment-list-daily-screen'
 import GroupListPicker from '../group-list-picker/group-list-picker.component'
 
 const ALL_ITEMS = 'all-items'
+type DailyScreenRouteProp = RouteProp<MainStackParamList, 'Daily'>
 
 type PaymentListDailyProps = {
   currentPayments?: MonthlyPayments | null | undefined
@@ -28,18 +31,18 @@ type PaymentListDailyProps = {
 const PaymentListDaily: React.FC<PaymentListDailyProps> = ({
   currentPayments,
   selectedUser,
-  userList
+  userList,
 }): ReactElement => {
   const navigation = useNavigation<DetailScreenNavigationProp>()
   const route = useRoute<DailyScreenRouteProp>()
   const dispatch = useDispatch()
 
-  const onValueChange: (user: string) => void = user => {
+  const onValueChange: (user: string) => void = (user) => {
     dispatch(setSelectedUser(user))
   }
 
   const pickerItems = [
-    <Picker.Item label="全体" value="all-items" key="all-items" />
+    <Picker.Item label="全体" value="all-items" key="all-items" />,
   ]
 
   for (const key in userList) {
@@ -79,7 +82,7 @@ const PaymentListDaily: React.FC<PaymentListDailyProps> = ({
       <Right>
         <Text>精算済</Text>
       </Right>
-    </CardItem>
+    </CardItem>,
   ]
 
   if (currentPayments) {
@@ -99,7 +102,7 @@ const PaymentListDaily: React.FC<PaymentListDailyProps> = ({
       year: 'numeric',
       month: 'short',
       day: 'numeric',
-      weekday: 'short'
+      weekday: 'short',
     }
 
     if (targetPayments) {
@@ -138,7 +141,7 @@ const PaymentListDaily: React.FC<PaymentListDailyProps> = ({
               navigation.navigate('Detail', {
                 yearMonth,
                 day: currentDay.toString(),
-                monthlyPayments: targetPayments
+                monthlyPayments: targetPayments,
               })
             }}
           >
@@ -168,13 +171,13 @@ const PaymentListDaily: React.FC<PaymentListDailyProps> = ({
 
 const mapStateToProps: ({
   account,
-  user
+  user,
 }: AccountReduxTypes & UserReduxTypes) => {
   currentPayments: MonthlyPayments | null | undefined
   selectedUser: string
 } = ({ account, user }: AccountReduxTypes & UserReduxTypes) => ({
   currentPayments: account.currentPayments,
-  selectedUser: user.selectedUser
+  selectedUser: user.selectedUser,
 })
 
 export default connect(mapStateToProps, null)(PaymentListDaily)

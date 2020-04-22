@@ -9,7 +9,7 @@ import {
   Item,
   Label,
   Text,
-  Toast
+  Toast,
 } from 'native-base'
 import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
@@ -39,7 +39,7 @@ const LoginForm: React.FC<LoginProps> = ({ navigation }: LoginProps) => {
       dispatch(setCurrentUser({}))
       return Toast.show({
         text: 'ログイン情報が正しくありません',
-        type: 'danger'
+        type: 'danger',
       })
     }
   }

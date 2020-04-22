@@ -27,16 +27,26 @@ export type CreatePaymentProps = {
   }
 }
 
-export type CreatePaymentType = {
-  _createdAt: firebase.firestore.FieldValue
-  _updatedAt: firebase.firestore.FieldValue
+// export type CreatePaymentType = {
+//   _createdAt: firebase.firestore.FieldValue
+//   _updatedAt: firebase.firestore.FieldValue
+//   collected: boolean
+//   date: Date
+//   groupAmount: number
+//   groupID?: string
+//   purchaseMemo: string
+//   shopName: string | 'その他'
+//   usage: string | 'その他'
+//   userAmount: number
+//   userID?: string
+// }
+
+export type ModalType = {
   collected: boolean
-  date: Date
   groupAmount: number
-  groupID?: string
+  privateAmount: number
+  purchaseDate: Date
   purchaseMemo: string
   shopName: string | 'その他'
   usage: string | 'その他'
-  userAmount: number
-  userID?: string
 }

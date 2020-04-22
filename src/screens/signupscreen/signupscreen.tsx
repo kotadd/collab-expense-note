@@ -3,7 +3,7 @@ import { Container } from 'native-base'
 import React from 'react'
 import {
   AddInfoScreenNavigationProp,
-  LoginScreenNavigationProp
+  LoginScreenNavigationProp,
 } from '../../../AppContainer'
 import SignupForm from '../../components/signup-form/signup-form.component'
 

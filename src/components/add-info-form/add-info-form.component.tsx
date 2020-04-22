@@ -10,7 +10,7 @@ import {
   Label,
   Picker,
   Text,
-  Toast
+  Toast,
 } from 'native-base'
 import React, { useEffect, useState } from 'react'
 import { MainScreenNavigationProp } from '../../../AppContainer'
@@ -25,7 +25,7 @@ type AddInfoProps = {
 
 const AddInfoForm: React.FC<AddInfoProps> = ({
   navigation,
-  currentUser
+  currentUser,
 }: AddInfoProps) => {
   const [name, setName] = useState('')
   const [selectedGroupId, setSelectedGroupId] = useState('')
@@ -41,7 +41,7 @@ const AddInfoForm: React.FC<AddInfoProps> = ({
       if (!groupCollectionSnapshot) return
       const groups = {} as GroupsType
 
-      groupCollectionSnapshot.forEach(doc => {
+      groupCollectionSnapshot.forEach((doc) => {
         groups[doc.id] = doc.data().name
       })
 
@@ -61,7 +61,7 @@ const AddInfoForm: React.FC<AddInfoProps> = ({
     fetchGroups()
   }, [])
 
-  const joinGroup: (groupId: string) => void = groupId => {
+  const joinGroup: (groupId: string) => void = (groupId) => {
     setSelectedGroupId(groupId)
   }
 
@@ -79,14 +79,14 @@ const AddInfoForm: React.FC<AddInfoProps> = ({
       if (!result) {
         return Toast.show({
           text: 'ユーザー情報が不明です',
-          type: 'danger'
+          type: 'danger',
         })
       }
       navigation.navigate('Main')
     } catch (error) {
       return Toast.show({
         text: 'ユーザーの情報を追加するのに失敗しました。',
-        type: 'danger'
+        type: 'danger',
       })
     }
   }

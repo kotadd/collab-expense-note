@@ -4,5 +4,5 @@ import userReducer from './user/user.reducer'
 
 export default combineReducers({
   user: userReducer,
-  account: accountReducer
+  account: accountReducer,
 })

@@ -11,7 +11,7 @@ export type UserReduxProps = Readonly<{
 const initialState = {
   currentUser: {},
   selectedUser: 'all-items',
-  isUserUpdated: false
+  isUserUpdated: false,
 }
 
 type Action = SetCurrentUserAction | SetSelectedUserAction
@@ -21,12 +21,12 @@ const userReducer = (state = initialState, action: Action): UserReduxProps => {
     case SET_CURRENT_USER:
       return {
         ...state,
-        currentUser: action.payload
+        currentUser: action.payload,
       }
     case SET_SELECTED_USER:
       return {
         ...state,
-        selectedUser: action.payload
+        selectedUser: action.payload,
       }
     default:
       return state

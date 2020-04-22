@@ -1,7 +1,7 @@
 import { MonthlyPayments } from '../../../repository/firebase/accounts/account-types'
 import {
   SET_CURRENT_PAYMENTS,
-  UPDATE_IS_PAYMENTS_UPDATED
+  UPDATE_IS_PAYMENTS_UPDATED,
 } from './account.types'
 
 type SetCurrentPaymentsAction = {
@@ -18,10 +18,10 @@ export const setCurrentPayments = (
   account: MonthlyPayments | undefined
 ): SetCurrentPaymentsAction => ({
   type: SET_CURRENT_PAYMENTS,
-  payload: account
+  payload: account,
 })
 
 export const updateIsPaymentsUpdated = (): UpdateIsPaymentsUpdatedAction => ({
   type: UPDATE_IS_PAYMENTS_UPDATED,
-  payload: true
+  payload: true,
 })
