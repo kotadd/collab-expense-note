@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/native'
 import { Body, CardItem, Left, Right, Text, View } from 'native-base'
-import React, { ReactNode } from 'react'
+import React, { ReactNode, ReactElement } from 'react'
 import { useSelector } from 'react-redux'
 import { DailyScreenNavigationProp } from '../../../AppContainer'
 import {
@@ -12,11 +12,11 @@ import { userSelector } from '../../redux/user/user.selector'
 import ToggleMember from '../toggle-member/toggle-member.component'
 import { calcMonthlyTotalPayments } from './payment-list-monthly.utils'
 
-const PaymentListMonthly: ReactNode = () => {
-  const selectedUser = useSelector(userSelector)
-  const userList = useGroupUserList(selectedUser)
-  const payments = useCurrentPayments(selectedUser)
-  useToast(selectedUser)
+const PaymentListMonthly: React.FC = (): ReactElement => {
+  const currentUser = useSelector(userSelector)
+  const userList = useGroupUserList(currentUser)
+  const payments = useCurrentPayments(currentUser)
+  useToast(currentUser)
 
   const paymentsMap = calcMonthlyTotalPayments(payments)
   const navigation = useNavigation<DailyScreenNavigationProp>()
@@ -33,9 +33,9 @@ const PaymentListMonthly: ReactNode = () => {
 
   dom.push(
     <ToggleMember
-      key={selectedUser.uid}
+      key={currentUser.uid}
       userList={userList}
-      selectedUser={selectedUser.displayName}
+      selectedUser={currentUser.displayName}
     />
   )
 

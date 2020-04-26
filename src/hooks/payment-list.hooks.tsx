@@ -1,17 +1,13 @@
-import { useFocusEffect } from '@react-navigation/native'
 import { Toast } from 'native-base'
 import { useEffect, useState } from 'react'
 import { Keyboard } from 'react-native'
+import { PaymentProps } from '../../repository/firebase/accounts/account-types'
 import {
   fetchCurrentPayments,
   fetchGroupUsers,
-  timestampToLocaleDate,
+  fetchSpecificMonthPayments,
 } from '../../repository/firebase/firebase.utils'
 import { UserListProps } from '../redux/types'
-import {
-  PaymentType,
-  PaymentProps,
-} from '../../repository/firebase/accounts/account-types'
 
 export function useGroupUserList(currentUser: firebase.User): UserListProps {
   const [userList, setUserList] = useState([{ id: '', name: '' }])
@@ -35,11 +31,24 @@ export function useCurrentPayments(
 
   useEffect(() => {
     const fetchPaymentsData = async (): Promise<void> => {
-      // const userInfo = await fetchUserByUserAuth(currentUser)
-      // const payments = await fetchPaymentsByUser(userInfo)
       const payments = await fetchCurrentPayments(currentUser)
+      setPayments(payments)
+    }
+    fetchPaymentsData()
+  }, [])
 
-      // dispatch(setCurrentPayments(payments))
+  return payments
+}
+
+export function useSpecificMonthPayments(
+  currentUser: firebase.User,
+  yearMonth: string
+): PaymentProps[] | undefined {
+  const [payments, setPayments] = useState<PaymentProps[]>()
+
+  useEffect(() => {
+    const fetchPaymentsData = async (): Promise<void> => {
+      const payments = await fetchSpecificMonthPayments(currentUser, yearMonth)
       setPayments(payments)
     }
     fetchPaymentsData()

@@ -106,9 +106,38 @@ export const fetchCurrentPayments = async (userAuth: firebase.User) => {
   // payments.docs.map((payment) => {
   //   console.log('payment.get(purchaseDate): ' + payment.get('purchaseDate'))
   // })
+  return payments.docs
+}
+
+export const fetchSpecificMonthPayments = async (
+  userAuth: firebase.User,
+  yearMonth: string
+) => {
+  const profileSnapshot = await firestore
+    .doc(`public-profiles/${userAuth.uid}`)
+    .get()
+  const groupID = await profileSnapshot.get('groupID')
+
+  const yearMonthArr = yearMonth.split('年')
+  const year = parseInt(yearMonthArr[0])
+  const month = parseInt(yearMonthArr[1].split('月')[0])
+
+  const startDate = new Date(year, month - 1)
+  const endDate = new Date(year, month)
+
+  const startTimestamp = firebase.firestore.Timestamp.fromDate(startDate)
+  const endTimestamp = firebase.firestore.Timestamp.fromDate(endDate)
+
+  const payments = await firestore
+    .collection(`groups/${groupID}/payments`)
+    .where('purchaseDate', '>=', startTimestamp)
+    .where('purchaseDate', '<', endTimestamp)
+    .orderBy('purchaseDate', 'desc')
+    .get()
 
   return payments.docs
 }
+
 // export const fetchPaymentsByUser: (
 //   userInfo: UserType | undefined
 // ) => Promise<MonthlyPayments | undefined> = async (userInfo) => {

@@ -1,0 +1,24 @@
+import React from 'react'
+import { Right, Icon } from 'native-base'
+
+const CollectionCheck = ({ collected }) => {
+  if (collected) {
+    return (
+      <Right>
+        <Icon
+          type="FontAwesome"
+          name="check"
+          style={{ color: 'green', marginRight: 8 }}
+        />
+      </Right>
+    )
+  }
+
+  return (
+    <Right>
+      <Icon type="FontAwesome" name="minus" style={{ marginRight: 10 }} />
+    </Right>
+  )
+}
+
+export default CollectionCheck
