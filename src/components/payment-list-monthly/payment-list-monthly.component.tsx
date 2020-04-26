@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/native'
-import { Body, CardItem, Left, Right, Text, View } from 'native-base'
-import React, { ReactNode, ReactElement } from 'react'
+import { Text, View } from 'native-base'
+import React, { ReactElement } from 'react'
 import { useSelector } from 'react-redux'
 import { DailyScreenNavigationProp } from '../../../AppContainer'
 import {
@@ -9,6 +9,8 @@ import {
   useToast,
 } from '../../hooks/payment-list.hooks'
 import { userSelector } from '../../redux/user/user.selector'
+import PaymentListMonthlyContent from '../payment-list-monthly-content/payment-list-monthly-content.component'
+import PaymentListMonthlyHeader from '../payment-list-monthly-header/payment-list-monthly-header.component'
 import ToggleMember from '../toggle-member/toggle-member.component'
 import { calcMonthlyTotalPayments } from './payment-list-monthly.utils'
 
@@ -30,36 +32,6 @@ const PaymentListMonthly: React.FC = (): ReactElement => {
   }
 
   const dom = []
-
-  dom.push(
-    <ToggleMember
-      key={currentUser.uid}
-      userList={userList}
-      selectedUser={currentUser.displayName}
-    />
-  )
-
-  const HeaderDom = (
-    <CardItem
-      header
-      bordered
-      key="headerTop"
-      style={{ backgroundColor: '#dce3ea' }}
-    >
-      <Left>
-        <Text>該当年月</Text>
-      </Left>
-      <Body>
-        <Text>支出総額</Text>
-      </Body>
-      <Right>
-        <Text>未精算額</Text>
-      </Right>
-    </CardItem>
-  )
-
-  dom.push(HeaderDom)
-
   const paymentsArr = Object.entries(paymentsMap)
   for (let i = 0; i < paymentsArr.length; i += 2) {
     const total = paymentsArr[i]
@@ -71,30 +43,27 @@ const PaymentListMonthly: React.FC = (): ReactElement => {
     const yearMonth = totalKey.split('_')[0]
 
     dom.push(
-      <CardItem
-        bordered
-        button
-        key={totalKey}
-        onPress={(): void => {
-          navigation.navigate('Daily', {
-            yearMonth: yearMonth,
-          })
-        }}
-      >
-        <Left>
-          <Text>{yearMonth}</Text>
-        </Left>
-        <Body>
-          <Text>{totalVal.toLocaleString()} 円</Text>
-        </Body>
-        <Right>
-          <Text>{uncollectedVal.toLocaleString()} 円</Text>
-        </Right>
-      </CardItem>
+      <PaymentListMonthlyContent
+        totalKey={totalKey}
+        navigation={navigation}
+        yearMonth={yearMonth}
+        totalVal={totalVal}
+        uncollectedVal={uncollectedVal}
+      />
     )
   }
 
-  return dom
+  return (
+    <>
+      <ToggleMember
+        key={currentUser.uid}
+        userList={userList}
+        selectedUser={currentUser.displayName}
+      />
+      <PaymentListMonthlyHeader />
+      {dom}
+    </>
+  )
 }
 
 export default PaymentListMonthly
