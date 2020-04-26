@@ -3,7 +3,7 @@ import {
   useNavigation,
 } from '@react-navigation/native'
 import { Container } from 'native-base'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import {
   MainScreenNavigationProp,
@@ -26,15 +26,17 @@ const LoginScreen: React.FC = () => {
   const dispatch = useDispatch()
   const navigation = useNavigation<LoginNavigationProp>()
 
-  auth.onAuthStateChanged(async (userAuth) => {
-    if (!userAuth) return
-    const userInfo = await fetchUserByUserAuth(userAuth)
-    const groupInfo = await fetchGroupByUser(userInfo)
-    if (groupInfo && navigation) {
-      dispatch(setCurrentUser(userAuth))
-      navigation.navigate('Main')
-    }
-  })
+  useEffect(() => {
+    auth.onAuthStateChanged(async (userAuth) => {
+      if (!userAuth) return
+      const userInfo = await fetchUserByUserAuth(userAuth)
+      const groupInfo = await fetchGroupByUser(userInfo)
+      if (groupInfo && navigation) {
+        dispatch(setCurrentUser(userAuth))
+        navigation.navigate('Main')
+      }
+    })
+  }, [])
 
   return (
     <Container>

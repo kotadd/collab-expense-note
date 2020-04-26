@@ -1,7 +1,7 @@
 import firebase from 'firebase/app'
 import 'firebase/auth'
 import 'firebase/firestore'
-import { UserAuthType, PublicProfileType } from './user-types'
+import { PublicProfileType } from './user-types'
 import { addUserToGroups } from '../firebase.utils'
 import { GroupType } from '../groups/group-types'
 
@@ -15,11 +15,11 @@ export const fetchAllUserData = async () => {
 }
 
 export const createUserProfileDocument: (
-  userAuth: UserAuthType
+  userAuth: firebase.User
 ) => Promise<
   | firebase.firestore.DocumentReference<firebase.firestore.DocumentData>
   | undefined
-> = async (userAuth: UserAuthType) => {
+> = async (userAuth: firebase.User) => {
   const userRef = firestore.doc(`users/${userAuth.uid}`)
   const userSnapshot = await userRef.get()
 
@@ -52,13 +52,13 @@ export const createUser: (user: PublicProfileType) => Promise<void> = async (
 }
 
 export const addUserProfileDocument: (
-  userAuth: UserAuthType,
+  userAuth: firebase.User,
   groupID: string,
   name: string
 ) => Promise<
   | firebase.firestore.DocumentReference<firebase.firestore.DocumentData>
   | undefined
-> = async (userAuth: UserAuthType, groupID: string, name: string) => {
+> = async (userAuth: firebase.User, groupID: string, name: string) => {
   if (!userAuth) return
 
   const userRef = firestore.doc(`users/${userAuth.uid}`)

@@ -2,23 +2,23 @@ import { useFocusEffect } from '@react-navigation/native'
 import { Toast } from 'native-base'
 import { useEffect, useState } from 'react'
 import { Keyboard } from 'react-native'
-import { Dispatch } from 'redux'
 import {
+  fetchCurrentPayments,
   fetchGroupUsers,
-  fetchPaymentsByUser,
-  fetchUserByUserAuth,
+  timestampToLocaleDate,
 } from '../../repository/firebase/firebase.utils'
-import { setCurrentPayments } from '../redux/account/account.actions'
+import { UserListProps } from '../redux/types'
+import {
+  PaymentType,
+  PaymentProps,
+} from '../../repository/firebase/accounts/account-types'
 
-export function useGroupUserList(currentUser: firebase.User): {} {
-  const [userList, setUserList] = useState({})
+export function useGroupUserList(currentUser: firebase.User): UserListProps {
+  const [userList, setUserList] = useState([{ id: '', name: '' }])
 
   useEffect(() => {
-    const fetchGroupUserList = async (): Promise<void> => {
-      const userInfo = await fetchUserByUserAuth(currentUser)
-      if (!userInfo) return
-
-      const userList = await fetchGroupUsers(userInfo)
+    const fetchGroupUserList: () => void = async () => {
+      const userList = await fetchGroupUsers(currentUser)
       if (!userList) return
       setUserList(userList)
     }
@@ -29,19 +29,21 @@ export function useGroupUserList(currentUser: firebase.User): {} {
 }
 
 export function useCurrentPayments(
-  currentUser: firebase.User,
-  dispatch: Dispatch
-): {} {
-  const [payments] = useState({})
+  currentUser: firebase.User
+): PaymentProps[] | undefined {
+  const [payments, setPayments] = useState<PaymentProps[]>()
 
-  useFocusEffect(() => {
+  useEffect(() => {
     const fetchPaymentsData = async (): Promise<void> => {
-      const userInfo = await fetchUserByUserAuth(currentUser)
-      const payments = await fetchPaymentsByUser(userInfo)
-      dispatch(setCurrentPayments(payments))
+      // const userInfo = await fetchUserByUserAuth(currentUser)
+      // const payments = await fetchPaymentsByUser(userInfo)
+      const payments = await fetchCurrentPayments(currentUser)
+
+      // dispatch(setCurrentPayments(payments))
+      setPayments(payments)
     }
     fetchPaymentsData()
-  })
+  }, [])
 
   return payments
 }
@@ -59,4 +61,11 @@ export function useToast(currentUser: firebase.User): void {
     }
     showToast()
   }, [])
+}
+
+export function useMontylyTotalPayments(paymentsMap: PaymentProps[]) {
+  paymentsMap.map((payment) => {
+    console.log(payment)
+  })
+  return
 }

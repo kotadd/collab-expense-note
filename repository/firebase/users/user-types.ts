@@ -15,10 +15,8 @@ export type PublicProfileType = {
 
 export type UnsubscribedUserType = {}
 
-export type UserAuthType = firebase.User
-
 export type UserProps = {
   user: {
-    currentUser: UserAuthType
+    currentUser: firebase.User
   }
 }

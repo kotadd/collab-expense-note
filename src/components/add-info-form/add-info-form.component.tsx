@@ -16,11 +16,10 @@ import React, { useEffect, useState } from 'react'
 import { MainScreenNavigationProp } from '../../../AppContainer'
 import { fetchAllGroupData } from '../../../repository/firebase/firebase.utils'
 import { addUserProfileDocument } from '../../../repository/firebase/users/user-repository'
-import { UserAuthType } from '../../../repository/firebase/users/user-types'
 
 type AddInfoProps = {
   navigation: MainScreenNavigationProp
-  currentUser: UserAuthType
+  currentUser: firebase.User
 }
 
 const AddInfoForm: React.FC<AddInfoProps> = ({

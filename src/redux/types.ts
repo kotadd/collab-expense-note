@@ -19,10 +19,7 @@ export type AccountReduxTypes = {
   }
 }
 
-type UidType = {
-  uid: string
-}
-
 export type UserListProps = {
-  [userList: string]: UserType & UidType
-}
+  id: string
+  name: string
+}[]

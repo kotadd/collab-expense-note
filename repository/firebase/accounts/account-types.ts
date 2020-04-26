@@ -1,25 +1,27 @@
-export type PaymentProps = {
-  payments: MonthlyPayments
-}
+// export type PaymentProps = {
+//   payments: MonthlyPayments
+// }
 
 export type MonthlyPayments = {
   [date: string]: [PaymentType]
 }
 
 export type PaymentType = {
-  _createdAt?: firebase.firestore.Timestamp
-  _updatedAt?: firebase.firestore.Timestamp
+  _createdAt: firebase.firestore.Timestamp
+  _updatedAt: firebase.firestore.Timestamp
   collected: boolean
-  date: firebase.firestore.Timestamp
   groupAmount: number
-  groupID: string
-  itemId: string
+  privateAmount: number
+  purchaseDate: firebase.firestore.Timestamp
   purchaseMemo: string
   shopName: string | 'その他'
   usage: string | 'その他'
-  userAmount: number
-  userID: string
+  user: firebase.firestore.CollectionReference
 }
+
+export type PaymentProps = firebase.firestore.QueryDocumentSnapshot<
+  firebase.firestore.DocumentData
+>
 
 export type CreatePaymentProps = {
   payments: {
