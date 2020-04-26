@@ -18,10 +18,7 @@ import {
 import React, { useState } from 'react'
 import { Platform, Text } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
-import {
-  CreatePaymentType,
-  ModalType,
-} from '../../../repository/firebase/accounts/account-types'
+import { HomeScreenNavigationProp } from '../../../AppContainer'
 import { createPaymentsData } from '../../../repository/firebase/firebase.utils'
 import DatePicker from '../../components/datepicker/datepicker-component'
 import NativeHeader from '../../components/native-header/native-header.component'
@@ -29,8 +26,6 @@ import PickerInput from '../../components/picker-input/picker-input.component'
 import OPTIONS from '../../components/picker-input/picker-options'
 import { updateIsPaymentsUpdated } from '../../redux/account/account.actions'
 import { userSelector } from '../../redux/user/user.selector'
-import { HomeScreenNavigationProp } from '../../../AppContainer'
-import firebase from 'firebase'
 
 const ModalScreen: React.FC = () => {
   const currentUser = useSelector(userSelector)
@@ -69,6 +64,16 @@ const ModalScreen: React.FC = () => {
   const changeUsage: (value: string) => void = (value) => {
     setUsage(value)
     setShow(false)
+  }
+
+  type ModalType = {
+    collected: boolean
+    groupAmount: number
+    privateAmount: number
+    purchaseDate: Date
+    purchaseMemo: string
+    shopName: string | 'その他'
+    usage: string | 'その他'
   }
 
   const handleSubmit: () => void = async () => {

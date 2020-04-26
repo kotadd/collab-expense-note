@@ -1,4 +1,4 @@
-import { MonthlyPayments } from '../../../repository/firebase/accounts/account-types'
+import { MonthlyPayments } from '../../../repository/firebase/payments/payment-types'
 import { setCurrentPayments, updateIsPaymentsUpdated } from './account.actions'
 import {
   SET_CURRENT_PAYMENTS,

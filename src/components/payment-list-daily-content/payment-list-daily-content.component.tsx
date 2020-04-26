@@ -4,7 +4,7 @@ import CollectionCheck from '../collection-check/collection-check.component'
 import { timestampToLocaleDate } from '../../../repository/firebase/firebase.utils'
 import { MainStackParamList } from '../../../AppContainer'
 import { StackNavigationProp } from '@react-navigation/stack/lib/typescript/src/types'
-import { PaymentProps } from '../../../repository/firebase/accounts/account-types'
+import { PaymentProps } from '../../../repository/firebase/payments/payment-types'
 
 type ContentProps = {
   navigation: StackNavigationProp<MainStackParamList, 'Detail'>

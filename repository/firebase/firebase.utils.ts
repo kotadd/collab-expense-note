@@ -100,7 +100,7 @@ export const fetchCurrentPayments = async (userAuth: firebase.User) => {
   const groupID = await profileSnapshot.get('groupID')
   const payments = await firestore
     .collection(`groups/${groupID}/payments`)
-    .orderBy('purchaseDate')
+    .orderBy('purchaseDate', 'desc')
     .get()
 
   // payments.docs.map((payment) => {
@@ -203,29 +203,22 @@ export const fetchUserByUserAuth: (
 //   }
 // }
 
-// export const createPaymentsData = async (userAuth, props) => {
-//   if (!userAuth) return
+export const createPaymentsData = async (userAuth, props) => {
+  if (!userAuth) return
+  const profileSnapshot = await firestore
+    .doc(`public-profiles/${userAuth.uid}`)
+    .get()
+  const groupID = await profileSnapshot.get('groupID')
 
-//   const userID = userAuth.uid
+  const payment = {
+    ...props,
+    _updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+    _createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+    user: `user/${userAuth.uid}`,
+  }
 
-//   const userRef = firestore.doc(`users/${userID}`)
-//   const userSnapshot = await userRef.get()
-//   const userInfo = userSnapshot.data()
-
-//   if (!userInfo) return
-//   const { accountID, groupID } = userInfo
-
-//   if (!accountID || !groupID) return
-
-//   const payment = {
-//     ...props,
-//     _updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
-//     _createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-//     user: `user/${userID}`,
-//   }
-
-//   return firestore.collection(`groups/${groupID}/payments/`).add(payment)
-// }
+  return await firestore.collection(`groups/${groupID}/payments`).add(payment)
+}
 
 // export const createAccountAndGroup: (
 //   name: string

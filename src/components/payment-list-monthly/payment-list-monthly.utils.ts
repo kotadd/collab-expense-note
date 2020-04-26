@@ -1,11 +1,13 @@
-import { PaymentProps } from '../../../repository/firebase/accounts/account-types'
+import { PaymentProps } from '../../../repository/firebase/payments/payment-types'
 import { timestampToLocaleDate } from '../../../repository/firebase/firebase.utils'
 
 type AccumulatorType = {
   [key: string]: number
 }
 
-export function calcMonthlyTotalPayments(payments: PaymentProps[] | undefined) {
+export function calcMonthlyTotalPayments(
+  payments: PaymentProps[] | undefined
+): AccumulatorType | [] {
   if (!payments) return []
   const paymentsMap = payments.reduce(
     (accumulator: AccumulatorType, payment: PaymentProps) => {

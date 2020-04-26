@@ -1,7 +1,7 @@
 import {
   MonthlyPayments,
   PaymentType,
-} from '../../../repository/firebase/accounts/account-types'
+} from '../../../repository/firebase/payments/payment-types'
 import {
   SET_CURRENT_PAYMENTS,
   UPDATE_IS_PAYMENTS_UPDATED,

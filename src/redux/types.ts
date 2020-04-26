@@ -1,6 +1,6 @@
 import { User } from 'firebase'
 import { UserType } from '../../repository/firebase/users/user-types'
-import { MonthlyPayments } from '../../repository/firebase/accounts/account-types'
+import { MonthlyPayments } from '../../repository/firebase/payments/payment-types'
 
 export type UserReduxTypes = {
   currentUser: User

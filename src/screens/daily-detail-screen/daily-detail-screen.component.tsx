@@ -4,7 +4,7 @@ import React, { useState } from 'react'
 import { useNavigation } from '@react-navigation/native'
 import { HomeScreenNavigationProp } from '../../../AppContainer'
 import { Platform, Text } from 'react-native'
-import { CreatePaymentType } from '../../../repository/firebase/accounts/account-types'
+import { CreatePaymentType } from '../../../repository/firebase/payments/payment-types'
 import { createPaymentsData } from '../../../repository/firebase/firebase.utils'
 import {
   Toast,

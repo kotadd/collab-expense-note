@@ -1,28 +1,25 @@
+import { useNavigation } from '@react-navigation/native'
+import { Body, CardItem, Left, Right, Text } from 'native-base'
 import React from 'react'
-import { CardItem, Left, Right, Body, Text } from 'native-base'
-import { StackNavigationProp } from '@react-navigation/stack/lib/typescript/src/types'
-import { MainStackParamList } from '../../../AppContainer'
+import { DailyScreenNavigationProp } from '../../../AppContainer'
 
 type ContentType = {
-  navigation: StackNavigationProp<MainStackParamList, 'Daily'>
-  totalKey: string
   yearMonth: string
   totalVal: number
   uncollectedVal: number
 }
 
 const PaymentListMonthlyContent: React.FC<ContentType> = ({
-  totalKey,
-  navigation,
   yearMonth,
   totalVal,
   uncollectedVal,
 }: ContentType) => {
+  const navigation = useNavigation<DailyScreenNavigationProp>()
+
   return (
     <CardItem
       bordered
       button
-      key={totalKey}
       onPress={(): void => {
         navigation.navigate('Daily', {
           yearMonth: yearMonth,

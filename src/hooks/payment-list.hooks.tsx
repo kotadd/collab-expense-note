@@ -1,7 +1,7 @@
 import { Toast } from 'native-base'
 import { useEffect, useState } from 'react'
 import { Keyboard } from 'react-native'
-import { PaymentProps } from '../../repository/firebase/accounts/account-types'
+import { PaymentProps } from '../../repository/firebase/payments/payment-types'
 import {
   fetchCurrentPayments,
   fetchGroupUsers,

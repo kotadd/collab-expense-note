@@ -1,8 +1,6 @@
-import { useNavigation } from '@react-navigation/native'
 import { Text, View } from 'native-base'
 import React, { ReactElement } from 'react'
 import { useSelector } from 'react-redux'
-import { DailyScreenNavigationProp } from '../../../AppContainer'
 import {
   useCurrentPayments,
   useGroupUserList,
@@ -13,6 +11,7 @@ import PaymentListMonthlyContent from '../payment-list-monthly-content/payment-l
 import PaymentListMonthlyHeader from '../payment-list-monthly-header/payment-list-monthly-header.component'
 import ToggleMember from '../toggle-member/toggle-member.component'
 import { calcMonthlyTotalPayments } from './payment-list-monthly.utils'
+import Loading from '../loading/loading.component'
 
 const PaymentListMonthly: React.FC = (): ReactElement => {
   const currentUser = useSelector(userSelector)
@@ -21,14 +20,9 @@ const PaymentListMonthly: React.FC = (): ReactElement => {
   useToast(currentUser)
 
   const paymentsMap = calcMonthlyTotalPayments(payments)
-  const navigation = useNavigation<DailyScreenNavigationProp>()
 
   if (!paymentsMap) {
-    return (
-      <View>
-        <Text>Loading...</Text>
-      </View>
-    )
+    return <Loading />
   }
 
   const dom = []
@@ -44,8 +38,7 @@ const PaymentListMonthly: React.FC = (): ReactElement => {
 
     dom.push(
       <PaymentListMonthlyContent
-        totalKey={totalKey}
-        navigation={navigation}
+        key={totalKey}
         yearMonth={yearMonth}
         totalVal={totalVal}
         uncollectedVal={uncollectedVal}

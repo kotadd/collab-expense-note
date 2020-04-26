@@ -5,7 +5,7 @@ import {
 } from '@react-navigation/stack'
 import * as React from 'react'
 import { ReactElement } from 'react'
-import { PaymentProps } from './repository/firebase/accounts/account-types'
+import { PaymentProps } from './repository/firebase/payments/payment-types'
 import HeaderLeftButton from './src/components/header/header-left-button.component'
 import HeaderRightButton from './src/components/header/header-right-button.component'
 import AddInfoScreen from './src/screens/add-info-screen/add-info.screen'
