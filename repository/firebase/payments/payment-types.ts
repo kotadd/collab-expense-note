@@ -14,3 +14,13 @@ export type PaymentType = {
 export type PaymentProps = firebase.firestore.QueryDocumentSnapshot<
   firebase.firestore.DocumentData
 >
+
+export type ModalProps = {
+  collected: boolean
+  groupAmount: number
+  privateAmount: number
+  purchaseDate: Date
+  purchaseMemo: string
+  shopName: string | 'その他'
+  usage: string | 'その他'
+}

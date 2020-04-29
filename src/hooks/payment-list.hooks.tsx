@@ -19,7 +19,7 @@ export function useGroupUserList(currentUser: firebase.User): UserListProps {
       setUserList(userList)
     }
     fetchGroupUserList()
-  }, [])
+  }, [currentUser])
 
   return userList
 }
@@ -34,7 +34,7 @@ export function useCurrentPayments(
       await setCurrentPayments(selectedUser, setPayments)
     }
     fetchPaymentsData()
-  }, [])
+  }, [selectedUser])
 
   return payments
 }
@@ -47,15 +47,11 @@ export function useSpecificMonthPayments(
 
   useEffect(() => {
     const fetchPaymentsData = async (): Promise<void> => {
-      const payments = await fetchSpecificMonthPayments(
-        currentUser,
-        yearMonth,
-        setPayments
-      )
+      const payments = await fetchSpecificMonthPayments(currentUser, yearMonth)
       setPayments(payments)
     }
     fetchPaymentsData()
-  }, [])
+  }, [currentUser, yearMonth])
 
   return payments
 }
@@ -72,5 +68,5 @@ export function useToast(currentUser: firebase.User): void {
       }
     }
     showToast()
-  }, [])
+  }, [currentUser])
 }

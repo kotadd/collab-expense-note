@@ -25,6 +25,7 @@ import NativeHeader from '../../components/native-header/native-header.component
 import PickerInput from '../../components/picker-input/picker-input.component'
 import OPTIONS from '../../components/picker-input/picker-options'
 import { currentUserSelector } from '../../redux/user/user.selector'
+import { ModalProps } from '../../../repository/firebase/payments/payment-types'
 
 const ModalScreen: React.FC = () => {
   const currentUser = useSelector(currentUserSelector)
@@ -64,18 +65,8 @@ const ModalScreen: React.FC = () => {
     setShow(false)
   }
 
-  type ModalType = {
-    collected: boolean
-    groupAmount: number
-    privateAmount: number
-    purchaseDate: Date
-    purchaseMemo: string
-    shopName: string | 'その他'
-    usage: string | 'その他'
-  }
-
   const handleSubmit: () => void = async () => {
-    const state: ModalType = {
+    const state: ModalProps = {
       collected,
       groupAmount,
       privateAmount,

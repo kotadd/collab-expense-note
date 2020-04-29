@@ -34,7 +34,7 @@ const LoginScreen: React.FC = () => {
         navigation.navigate('Main')
       }
     })
-  }, [])
+  }, [dispatch, navigation])
 
   return (
     <Container>
