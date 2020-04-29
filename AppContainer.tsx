@@ -1,24 +1,26 @@
 import { useNavigation } from '@react-navigation/native'
 import {
   createStackNavigator,
-  StackNavigationProp
+  StackNavigationProp,
 } from '@react-navigation/stack'
 import * as React from 'react'
+import { ReactElement } from 'react'
+import { PaymentProps } from './repository/firebase/payments/payment-types'
 import HeaderLeftButton from './src/components/header/header-left-button.component'
 import HeaderRightButton from './src/components/header/header-right-button.component'
 import AddInfoScreen from './src/screens/add-info-screen/add-info.screen'
 import CreateGroupScreen from './src/screens/create-group-screen/create-group.screen'
 import LoginScreen from './src/screens/loginscreen/loginscreen'
 import ModalScreen from './src/screens/modalscreen/modalscreen'
-import paymentListDailyScreen from './src/screens/payment-list-daily-screen/payment-list-daily-screen'
+import PaymentListDailyScreen from './src/screens/payment-list-daily-screen/payment-list-daily-screen'
+import PaymentListDetailScreen from './src/screens/payment-list-detail-screen/payment-list-detail-screen'
 import PaymentListMonthlyScreen from './src/screens/payment-list-monthly-screen/payment-list-monthly-screen'
 import SignupScreen from './src/screens/signupscreen/signupscreen'
-import { ReactElement } from 'react'
 
 export type MainStackParamList = {
   Home: undefined
-  Daily: { date: string }
-  Detail: undefined
+  Daily: { yearMonth: string }
+  Detail: { yearMonth: string; day: string; monthlyPayments: PaymentProps[] }
 }
 
 export type AuthStackParamList = {
@@ -114,12 +116,12 @@ const MainStackScreen: React.FC = () => {
           headerLeft: (): ReactElement => {
             const leftButton = <HeaderLeftButton navigation={authNavigation} />
             return leftButton
-          }
+          },
         }}
       />
       <MainStack.Screen
         name="Daily"
-        component={paymentListDailyScreen}
+        component={PaymentListDailyScreen}
         options={{
           headerBackTitle: '戻る',
           title: '日付ごとの支出',
@@ -128,7 +130,21 @@ const MainStackScreen: React.FC = () => {
               <HeaderRightButton navigation={createNewNavigation} />
             )
             return rightButton
-          }
+          },
+        }}
+      />
+      <MainStack.Screen
+        name="Detail"
+        component={PaymentListDetailScreen}
+        options={{
+          headerBackTitle: '戻る',
+          title: '支払いの詳細',
+          headerRight: (): ReactElement => {
+            const rightButton = (
+              <HeaderRightButton navigation={createNewNavigation} />
+            )
+            return rightButton
+          },
         }}
       />
     </MainStack.Navigator>

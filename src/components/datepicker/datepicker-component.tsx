@@ -7,7 +7,7 @@ type DatePickerType = {
 }
 const DatePicker: React.FC<DatePickerType> = ({
   value,
-  onChange
+  onChange,
 }: DatePickerType) => {
   return (
     <>

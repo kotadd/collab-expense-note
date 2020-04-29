@@ -1,7 +1,7 @@
-import { auth } from '../../repository/firebase/firebase.utils'
-import { setCurrentUser } from '../redux/user/user.actions'
 import { Toast } from 'native-base'
 import { AuthScreenNavigationProp } from '../../AppContainer'
+import { auth } from '../../repository/firebase/firebase.utils'
+import { setCurrentUser } from '../redux/user/user.actions'
 
 export async function logOut(
   navigation: AuthScreenNavigationProp
@@ -12,13 +12,13 @@ export async function logOut(
     navigation.navigate('Auth')
     Toast.show({
       text: 'ログアウトしました',
-      type: 'success'
+      type: 'success',
     })
   } catch (error) {
     console.log(error)
     Toast.show({
       text: 'ログアウトに失敗しました',
-      type: 'danger'
+      type: 'danger',
     })
   }
 }

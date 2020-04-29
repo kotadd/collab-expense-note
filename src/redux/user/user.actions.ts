@@ -1,5 +1,5 @@
 import { User } from 'firebase'
-import { SET_SELECTED_USER, SET_CURRENT_USER } from './user.types'
+import { SelectedUserProps } from './user.types'
 
 export type SetCurrentUserAction = {
   type: 'SET_CURRENT_USER'
@@ -8,15 +8,17 @@ export type SetCurrentUserAction = {
 
 export type SetSelectedUserAction = {
   type: 'SET_SELECTED_USER'
-  payload: string
+  payload: SelectedUserProps
 }
 
 export const setCurrentUser = (user: User | {}): SetCurrentUserAction => ({
-  type: SET_CURRENT_USER,
-  payload: user
+  type: 'SET_CURRENT_USER',
+  payload: user,
 })
 
-export const setSelectedUser = (userName: string): SetSelectedUserAction => ({
-  type: SET_SELECTED_USER,
-  payload: userName
+export const setSelectedUser = (
+  user: SelectedUserProps
+): SetSelectedUserAction => ({
+  type: 'SET_SELECTED_USER',
+  payload: user,
 })

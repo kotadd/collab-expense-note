@@ -1,7 +1,7 @@
 module.exports = {
   env: {
     es6: true,
-    browser: true
+    browser: true,
   },
   extends: [
     'eslint:recommended',
@@ -11,28 +11,28 @@ module.exports = {
     'plugin:react-hooks/recommended',
     'prettier',
     'plugin:prettier/recommended',
-    'prettier/@typescript-eslint'
+    'prettier/@typescript-eslint',
   ],
   globals: {
     Atomics: 'readonly',
-    SharedArrayBuffer: 'readonly'
+    SharedArrayBuffer: 'readonly',
   },
   parser: '@typescript-eslint/parser',
   parserOptions: {
     ecmaFeatures: {
-      jsx: true
+      jsx: true,
     },
     ecmaVersion: 2018,
     sourceType: 'module',
-    project: './tsconfig.lint.json'
+    project: './tsconfig.lint.json',
   },
   plugins: ['@typescript-eslint', 'react'],
   rules: {
-    'prettier/prettier': 'error'
+    'prettier/prettier': 'error',
   },
   settings: {
     react: {
-      version: 'detect'
-    }
-  }
+      version: 'detect',
+    },
+  },
 }

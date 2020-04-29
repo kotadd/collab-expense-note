@@ -9,23 +9,23 @@ import {
   Item,
   Label,
   Text,
-  Toast
+  Toast,
 } from 'native-base'
 import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import {
   AddInfoScreenNavigationProp,
-  LoginScreenNavigationProp
+  LoginScreenNavigationProp,
 } from '../../../AppContainer'
 import { auth } from '../../../repository/firebase/firebase.utils'
 import { createUserProfileDocument } from '../../../repository/firebase/users/user-repository'
 import { setCurrentUser } from '../../redux/user/user.actions'
+import { useNavigation } from '@react-navigation/native'
 
-type SignupProps = {
-  navigation: AddInfoScreenNavigationProp | LoginScreenNavigationProp
-}
-
-const SignupForm: React.FC<SignupProps> = ({ navigation }: SignupProps) => {
+const SignupForm: React.FC = () => {
+  const navigation = useNavigation<
+    AddInfoScreenNavigationProp | LoginScreenNavigationProp
+  >()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
@@ -41,7 +41,7 @@ const SignupForm: React.FC<SignupProps> = ({ navigation }: SignupProps) => {
     if (password != confirmPassword) {
       return Toast.show({
         text: 'パスワードと確認用パスワードが一致していません',
-        type: 'danger'
+        type: 'danger',
       })
     }
 
@@ -51,16 +51,15 @@ const SignupForm: React.FC<SignupProps> = ({ navigation }: SignupProps) => {
         password
       )
 
-      await createUserProfileDocument(user)
-
       if (user) {
+        await createUserProfileDocument(user)
         dispatch(setCurrentUser(user))
         navigation.navigate('AddInfo')
       } else {
         dispatch(setCurrentUser({}))
         return Toast.show({
           text: '正しく登録できませんでした',
-          type: 'danger'
+          type: 'danger',
         })
       }
     } catch (error) {
@@ -68,13 +67,13 @@ const SignupForm: React.FC<SignupProps> = ({ navigation }: SignupProps) => {
       if (error.message.match(/The email address is badly formatted./)) {
         return Toast.show({
           text: 'メールアドレスの形式が正しくありません',
-          type: 'danger'
+          type: 'danger',
         })
       }
       if (error.message.match(/Password should be at least 6 characters/)) {
         return Toast.show({
           text: 'パスワードは6桁以上で入力して下さい',
-          type: 'danger'
+          type: 'danger',
         })
       }
     }

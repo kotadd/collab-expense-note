@@ -4,11 +4,11 @@ import React from 'react'
 import { useSelector } from 'react-redux'
 import { MainScreenNavigationProp } from '../../../AppContainer'
 import AddInfoForm from '../../components/add-info-form/add-info-form.component'
-import { userSelector } from '../../redux/user/user.selector'
+import { currentUserSelector } from '../../redux/user/user.selector'
 
 const AddInfoScreen: React.FC = () => {
   const navigation = useNavigation<MainScreenNavigationProp>()
-  const currentUser = useSelector(userSelector)
+  const currentUser = useSelector(currentUserSelector)
 
   return (
     <Container>

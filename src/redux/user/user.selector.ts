@@ -1,7 +1,14 @@
 import {
-  UserAuthType,
-  UserProps
-} from '../../../repository/firebase/users/user-types'
+  ReduxCurrentUserProps,
+  ReduxSelectedUserProps,
+  SelectedUserProps,
+} from './user.types'
 
-export const userSelector: (state: UserProps) => UserAuthType = state =>
-  state.user.currentUser
+export const currentUserSelector: (
+  state: ReduxCurrentUserProps
+) => firebase.User = (state: ReduxCurrentUserProps) => state.user.currentUser
+
+export const selectedUserSelector: (
+  state: ReduxSelectedUserProps
+) => SelectedUserProps = (state: ReduxSelectedUserProps) =>
+  state.user.selectedUser

@@ -1,7 +1,7 @@
 import { Form, Icon, Item, Label, Picker } from 'native-base'
 import React, { useState } from 'react'
 
-type PickerInputType = {
+type PickerInputProps = {
   title: string
   placeholder: string
   items: {
@@ -12,15 +12,15 @@ type PickerInputType = {
   onChange: (value: string) => void
 }
 
-const PickerInput: React.FC<PickerInputType> = ({
+const PickerInput: React.FC<PickerInputProps> = ({
   title,
   placeholder,
   items,
-  onChange
-}: PickerInputType) => {
+  onChange,
+}: PickerInputProps) => {
   const [selected, setSelected] = useState('')
 
-  const onValueChange: (value: string) => void = value => {
+  const onValueChange: (value: string) => void = (value) => {
     setSelected(value)
     onChange(value)
     return
