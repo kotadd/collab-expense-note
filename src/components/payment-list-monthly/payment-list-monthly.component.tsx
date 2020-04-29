@@ -1,4 +1,3 @@
-import { Text, View } from 'native-base'
 import React, { ReactElement } from 'react'
 import { useSelector } from 'react-redux'
 import {
@@ -11,9 +10,8 @@ import PaymentListMonthlyContent from '../payment-list-monthly-content/payment-l
 import PaymentListMonthlyHeader from '../payment-list-monthly-header/payment-list-monthly-header.component'
 import ToggleMember from '../toggle-member/toggle-member.component'
 import { calcMonthlyTotalPayments } from './payment-list-monthly.utils'
-import Loading from '../loading/loading.component'
 
-const PaymentListMonthly: React.FC = (): ReactElement => {
+const PaymentListMonthly: React.FC = () => {
   const currentUser = useSelector(userSelector)
   const userList = useGroupUserList(currentUser)
   const payments = useCurrentPayments(currentUser)
@@ -22,7 +20,7 @@ const PaymentListMonthly: React.FC = (): ReactElement => {
   const paymentsMap = calcMonthlyTotalPayments(payments)
 
   if (!paymentsMap) {
-    return <Loading />
+    return <></>
   }
 
   const dom = []

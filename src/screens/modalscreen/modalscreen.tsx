@@ -17,14 +17,13 @@ import {
 } from 'native-base'
 import React, { useState } from 'react'
 import { Platform, Text } from 'react-native'
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 import { HomeScreenNavigationProp } from '../../../AppContainer'
 import { createPaymentsData } from '../../../repository/firebase/firebase.utils'
 import DatePicker from '../../components/datepicker/datepicker-component'
 import NativeHeader from '../../components/native-header/native-header.component'
 import PickerInput from '../../components/picker-input/picker-input.component'
 import OPTIONS from '../../components/picker-input/picker-options'
-import { updateIsPaymentsUpdated } from '../../redux/account/account.actions'
 import { userSelector } from '../../redux/user/user.selector'
 
 const ModalScreen: React.FC = () => {
@@ -45,7 +44,6 @@ const ModalScreen: React.FC = () => {
   const [privateAmount, setPrivateAmount] = useState(0)
   const [usage, setUsage] = useState('')
 
-  const dispatch = useDispatch()
   const navigation = useNavigation<HomeScreenNavigationProp>()
 
   const setDate: (event: Event, selectedDate: Date) => void = (
@@ -95,7 +93,6 @@ const ModalScreen: React.FC = () => {
           type: 'success',
         })
 
-        dispatch(updateIsPaymentsUpdated())
         navigation.navigate('Home')
       }
     } catch (e) {

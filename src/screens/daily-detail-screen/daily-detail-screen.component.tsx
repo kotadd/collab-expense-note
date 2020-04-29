@@ -4,7 +4,6 @@ import React, { useState } from 'react'
 import { useNavigation } from '@react-navigation/native'
 import { HomeScreenNavigationProp } from '../../../AppContainer'
 import { Platform, Text } from 'react-native'
-import { CreatePaymentType } from '../../../repository/firebase/payments/payment-types'
 import { createPaymentsData } from '../../../repository/firebase/firebase.utils'
 import {
   Toast,
@@ -23,10 +22,10 @@ import {
   Col,
   Body,
 } from 'native-base'
-import { updateIsPaymentsUpdated } from '../../redux/account/account.actions'
 import NativeHeader from '../../components/native-header/native-header.component'
 import PickerInput from '../../components/picker-input/picker-input.component'
 import OPTIONS from '../../components/picker-input/picker-options'
+import { PaymentType } from '../../../repository/firebase/payments/payment-types'
 
 const DailyDetailScreen: React.FC = () => {
   const currentUser = useSelector(userSelector)
@@ -46,7 +45,6 @@ const DailyDetailScreen: React.FC = () => {
   const [userAmount, setUserAmount] = useState(0)
   const [usage, setUsage] = useState('')
 
-  const dispatch = useDispatch()
   const navigation = useNavigation<HomeScreenNavigationProp>()
 
   const setPurchaseDate: (event: Event, selectedDate: Date) => void = (
@@ -68,7 +66,7 @@ const DailyDetailScreen: React.FC = () => {
   }
 
   const handleSubmit: () => void = async () => {
-    const state: CreatePaymentType = {
+    const state: PaymentType = {
       collected,
       date,
       groupAmount,
@@ -86,7 +84,6 @@ const DailyDetailScreen: React.FC = () => {
           type: 'success',
         })
 
-        dispatch(updateIsPaymentsUpdated())
         navigation.navigate('Home')
       }
     } catch (e) {

@@ -1,4 +1,4 @@
-import { AccountReduxProps } from './account.reducer'
+import { AccountReduxProps } from './payment.reducer'
 
 export const isPaymentsUpdatedSelector: (
   state: AccountReduxProps

@@ -1,12 +1,12 @@
 import { Toast } from 'native-base'
 import { useEffect, useState } from 'react'
 import { Keyboard } from 'react-native'
-import { PaymentProps } from '../../repository/firebase/payments/payment-types'
+import { fetchGroupUsers } from '../../repository/firebase/firebase.utils'
 import {
   fetchCurrentPayments,
-  fetchGroupUsers,
   fetchSpecificMonthPayments,
-} from '../../repository/firebase/firebase.utils'
+} from '../../repository/firebase/payments/payment-repository'
+import { PaymentProps } from '../../repository/firebase/payments/payment-types'
 import { UserListProps } from '../redux/types'
 
 export function useGroupUserList(currentUser: firebase.User): UserListProps {
@@ -31,7 +31,7 @@ export function useCurrentPayments(
 
   useEffect(() => {
     const fetchPaymentsData = async (): Promise<void> => {
-      const payments = await fetchCurrentPayments(currentUser)
+      const payments = await fetchCurrentPayments(currentUser, setPayments)
       setPayments(payments)
     }
     fetchPaymentsData()
@@ -48,7 +48,11 @@ export function useSpecificMonthPayments(
 
   useEffect(() => {
     const fetchPaymentsData = async (): Promise<void> => {
-      const payments = await fetchSpecificMonthPayments(currentUser, yearMonth)
+      const payments = await fetchSpecificMonthPayments(
+        currentUser,
+        yearMonth,
+        setPayments
+      )
       setPayments(payments)
     }
     fetchPaymentsData()
