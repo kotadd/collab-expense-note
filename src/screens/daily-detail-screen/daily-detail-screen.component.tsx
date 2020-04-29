@@ -1,34 +1,34 @@
-import { useSelector, useDispatch } from 'react-redux'
-import { userSelector } from '../../redux/user/user.selector'
-import React, { useState } from 'react'
 import { useNavigation } from '@react-navigation/native'
-import { HomeScreenNavigationProp } from '../../../AppContainer'
-import { Platform, Text } from 'react-native'
-import { createPaymentsData } from '../../../repository/firebase/firebase.utils'
 import {
-  Toast,
+  Body,
+  Button,
+  CheckBox,
+  Col,
   Container,
   Content,
-  Item,
-  Form,
-  Label,
-  Button,
   DatePicker,
-  Input,
-  Textarea,
-  ListItem,
-  CheckBox,
+  Form,
   Grid,
-  Col,
-  Body,
+  Input,
+  Item,
+  Label,
+  ListItem,
+  Textarea,
+  Toast,
 } from 'native-base'
+import React, { useState } from 'react'
+import { Platform, Text } from 'react-native'
+import { useSelector } from 'react-redux'
+import { HomeScreenNavigationProp } from '../../../AppContainer'
+import { createPaymentsData } from '../../../repository/firebase/firebase.utils'
+import { PaymentType } from '../../../repository/firebase/payments/payment-types'
 import NativeHeader from '../../components/native-header/native-header.component'
 import PickerInput from '../../components/picker-input/picker-input.component'
 import OPTIONS from '../../components/picker-input/picker-options'
-import { PaymentType } from '../../../repository/firebase/payments/payment-types'
+import { currentUserSelector } from '../../redux/user/user.selector'
 
 const DailyDetailScreen: React.FC = () => {
-  const currentUser = useSelector(userSelector)
+  const currentUser = useSelector(currentUserSelector)
 
   const dateOption = {
     year: 'numeric',

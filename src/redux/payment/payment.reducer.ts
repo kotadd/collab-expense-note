@@ -1,25 +1,28 @@
-import { UPDATE_IS_PAYMENTS_UPDATED } from './payment'
-import { updateIsPaymentsUpdated } from './payment.actions'
+import { SET_UNSUBSCRIBED_PAYMENTS } from './payment'
+import { SetUnsubscribedPaymentsAction } from './payment.actions'
 
-export type AccountReduxProps = {
-  isPaymentsUpdated: boolean
+export type PaymentsReduxProps = Readonly<{
+  unsubscribedPayments: () => void | null
+  payment: {
+    unsubscribedPayments: () => void | null
+  }
+}>
+
+const initialState = {
+  unsubscribedPayments: null,
 }
 
-const INITIAL_STATE = {
-  isPaymentsUpdated: false,
-}
-
-type Actions = ReturnType<typeof updateIsPaymentsUpdated>
+type Actions = SetUnsubscribedPaymentsAction
 
 const accountReducer = (
-  state = INITIAL_STATE,
+  state = initialState,
   action: Actions
-): AccountReduxProps => {
+): PaymentsReduxProps => {
   switch (action.type) {
-    case UPDATE_IS_PAYMENTS_UPDATED:
+    case SET_UNSUBSCRIBED_PAYMENTS:
       return {
         ...state,
-        isPaymentsUpdated: !state.isPaymentsUpdated,
+        unsubscribedPayments: action.payload,
       }
     default:
       return state

@@ -20,12 +20,12 @@ import {
 import { auth } from '../../../repository/firebase/firebase.utils'
 import { createUserProfileDocument } from '../../../repository/firebase/users/user-repository'
 import { setCurrentUser } from '../../redux/user/user.actions'
+import { useNavigation } from '@react-navigation/native'
 
-type SignupProps = {
-  navigation: AddInfoScreenNavigationProp | LoginScreenNavigationProp
-}
-
-const SignupForm: React.FC<SignupProps> = ({ navigation }: SignupProps) => {
+const SignupForm: React.FC = () => {
+  const navigation = useNavigation<
+    AddInfoScreenNavigationProp | LoginScreenNavigationProp
+  >()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')

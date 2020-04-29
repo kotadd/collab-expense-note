@@ -13,19 +13,12 @@ import {
 import React from 'react'
 import { DetailScreenNavigationProp } from '../../../AppContainer'
 import { DetailScreenRouteProp } from '../../screens/payment-list-detail-screen/payment-list-detail-screen'
-import { timestampToLocaleDate } from '../../../repository/firebase/firebase.utils'
-
-const dateOptions = {
-  year: 'numeric',
-  month: 'short',
-  day: 'numeric',
-}
 
 const PaymentListDetail: React.FC = () => {
   const navigation = useNavigation<DetailScreenNavigationProp>()
   const route = useRoute<DetailScreenRouteProp>()
 
-  const { yearMonth, day, monthlyPayments } = route.params
+  const { yearMonth, day } = route.params
 
   navigation.setOptions({ headerTitle: yearMonth + day })
 

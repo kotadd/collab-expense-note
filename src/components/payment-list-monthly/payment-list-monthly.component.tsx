@@ -1,20 +1,35 @@
-import React, { ReactElement } from 'react'
+import React from 'react'
 import { useSelector } from 'react-redux'
 import {
   useCurrentPayments,
   useGroupUserList,
   useToast,
 } from '../../hooks/payment-list.hooks'
-import { userSelector } from '../../redux/user/user.selector'
+import {
+  currentUserSelector,
+  selectedUserSelector,
+} from '../../redux/user/user.selector'
 import PaymentListMonthlyContent from '../payment-list-monthly-content/payment-list-monthly-content.component'
 import PaymentListMonthlyHeader from '../payment-list-monthly-header/payment-list-monthly-header.component'
 import ToggleMember from '../toggle-member/toggle-member.component'
 import { calcMonthlyTotalPayments } from './payment-list-monthly.utils'
 
 const PaymentListMonthly: React.FC = () => {
-  const currentUser = useSelector(userSelector)
+  const currentUser = useSelector(currentUserSelector)
+  const selectedUser = useSelector(selectedUserSelector)
+  let targetUser
+
+  if (selectedUser.id === '-1') {
+    targetUser = currentUser.uid
+  } else {
+    targetUser = selectedUser.id
+  }
+
   const userList = useGroupUserList(currentUser)
-  const payments = useCurrentPayments(currentUser)
+  const payments = useCurrentPayments(targetUser)
+
+  // console.log(`payments: ${JSON.stringify(payments, null, ' ')}`)
+
   useToast(currentUser)
 
   const paymentsMap = calcMonthlyTotalPayments(payments)
@@ -49,7 +64,7 @@ const PaymentListMonthly: React.FC = () => {
       <ToggleMember
         key={currentUser.uid}
         userList={userList}
-        selectedUser={currentUser.displayName}
+        selectedUser={selectedUser}
       />
       <PaymentListMonthlyHeader />
       {dom}

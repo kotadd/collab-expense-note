@@ -12,10 +12,8 @@ import {
   Toast,
 } from 'native-base'
 import React, { useState } from 'react'
-import {
-  createAccountAndGroup,
-  fetchAllGroupData,
-} from '../../../repository/firebase/firebase.utils'
+import { createAccountAndGroup } from '../../../repository/firebase/firebase.utils'
+import { fetchAllGroupData } from '../../../repository/firebase/groups/group-repository'
 
 const CreateGroupForm: React.FC = () => {
   const [name, setName] = useState('')

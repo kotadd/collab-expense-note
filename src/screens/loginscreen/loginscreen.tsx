@@ -9,13 +9,11 @@ import {
   MainScreenNavigationProp,
   SignupScreenNavigationProp,
 } from '../../../AppContainer'
-import {
-  auth,
-  fetchGroupByUser,
-  fetchUserByUserAuth,
-} from '../../../repository/firebase/firebase.utils'
+import { auth } from '../../../repository/firebase/firebase.utils'
 import LoginForm from '../../components/login-form/login-form.component'
 import { setCurrentUser } from '../../redux/user/user.actions'
+import { fetchUserByUserAuth } from '../../../repository/firebase/users/user-repository'
+import { fetchGroupByUser } from '../../../repository/firebase/groups/group-repository'
 
 export type LoginNavigationProp = CompositeNavigationProp<
   MainScreenNavigationProp,

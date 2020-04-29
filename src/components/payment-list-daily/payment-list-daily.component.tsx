@@ -9,7 +9,7 @@ import {
   useGroupUserList,
   useSpecificMonthPayments,
 } from '../../hooks/payment-list.hooks'
-import { userSelector } from '../../redux/user/user.selector'
+import { currentUserSelector } from '../../redux/user/user.selector'
 import PaymentListDailyContent from '../payment-list-daily-content/payment-list-daily-content.component'
 import PaymentListDailyHeader from '../payment-list-daily-header/payment-list-daily-header.component'
 import ToggleMember from '../toggle-member/toggle-member.component'
@@ -17,7 +17,7 @@ import ToggleMember from '../toggle-member/toggle-member.component'
 type DailyScreenRouteProp = RouteProp<MainStackParamList, 'Daily'>
 
 const PaymentListDaily: React.FC = (): ReactElement => {
-  const currentUser = useSelector(userSelector)
+  const currentUser = useSelector(currentUserSelector)
   const userList = useGroupUserList(currentUser)
 
   const navigation = useNavigation<DetailScreenNavigationProp>()

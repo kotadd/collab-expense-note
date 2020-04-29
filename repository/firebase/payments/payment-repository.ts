@@ -1,36 +1,40 @@
 import firebase from 'firebase/app'
-import 'firebase/firestore'
-import { fetchGroupIDByUserAuth } from '../firebase.utils'
+import {
+  fetchGroupIDByUID,
+  fetchGroupIDByUserAuth,
+  firestore,
+} from '../firebase.utils'
 import { PaymentProps } from './payment-types'
-export const firestore = firebase.firestore()
 
-export const fetchCurrentPayments = async (
-  userAuth: firebase.User,
+export const setCurrentPayments: (
+  selectedUser: string,
   setPayments: React.Dispatch<React.SetStateAction<PaymentProps[] | undefined>>
-) => {
-  const groupID = await fetchGroupIDByUserAuth(userAuth)
+) => Promise<() => void> = async (selectedUser, setPayments) => {
+  const groupID = await fetchGroupIDByUID(selectedUser)
 
   const query = firestore
     .collection(`groups/${groupID}/payments`)
     .orderBy('purchaseDate', 'desc')
 
-  const payments = await query.get()
+  const unsubscribedPayments = query.onSnapshot(
+    (querySnapshot) => {
+      setPayments(querySnapshot.docs)
+    },
+    () => {
+      // FirebaseError: Missing or insufficient permissions になるため握り潰す
+      // console.log(error)
+    }
+  )
 
-  query.onSnapshot((querySnapshot) => {
-    setPayments(querySnapshot.docs)
-  })
-  // payments.docs.map((payment) => {
-  //   console.log('payment.id: ' + payment.id)
-  // })
-
-  return payments.docs
+  return unsubscribedPayments
 }
 
-export const fetchSpecificMonthPayments = async (
+export const fetchSpecificMonthPayments: (
   userAuth: firebase.User,
-  yearMonth: string,
-  setPayments: React.Dispatch<React.SetStateAction<PaymentProps[] | undefined>>
-) => {
+  yearMonth: string
+) => Promise<
+  firebase.firestore.QueryDocumentSnapshot<firebase.firestore.DocumentData>[]
+> = async (userAuth: firebase.User, yearMonth: string) => {
   const groupID = await fetchGroupIDByUserAuth(userAuth)
 
   const yearMonthArr = yearMonth.split('年')
@@ -51,8 +55,9 @@ export const fetchSpecificMonthPayments = async (
 
   const payments = await query.get()
 
-  query.onSnapshot((querySnapshot) => {
-    setPayments(querySnapshot.docs)
-  })
+  // query.onSnapshot((querySnapshot) => {
+  //   setPayments(querySnapshot.docs)
+  // })
+
   return payments.docs
 }

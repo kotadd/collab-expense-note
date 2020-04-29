@@ -52,7 +52,7 @@ const PaymentListDailyContent: React.FC<ContentProps> = ({
       <Right>
         <Text>¥{payment.get('privateAmount').toLocaleString()}</Text>
       </Right>
-      <CollectionCheck collected={payment.get('collected')} />
+      <CollectionCheck collected={payment.get('collected') as boolean} />
     </CardItem>
   )
 }

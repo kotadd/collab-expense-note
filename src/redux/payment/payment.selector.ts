@@ -1,5 +1,5 @@
-import { AccountReduxProps } from './payment.reducer'
+import { PaymentsReduxProps } from './payment.reducer'
 
-export const isPaymentsUpdatedSelector: (
-  state: AccountReduxProps
-) => boolean = (state) => state.isPaymentsUpdated
+export const unsubscribedPaymentsSelector: (
+  state: PaymentsReduxProps
+) => () => void = (state) => state.payment.unsubscribedPayments

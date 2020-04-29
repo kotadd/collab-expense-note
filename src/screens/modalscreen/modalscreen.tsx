@@ -24,10 +24,10 @@ import DatePicker from '../../components/datepicker/datepicker-component'
 import NativeHeader from '../../components/native-header/native-header.component'
 import PickerInput from '../../components/picker-input/picker-input.component'
 import OPTIONS from '../../components/picker-input/picker-options'
-import { userSelector } from '../../redux/user/user.selector'
+import { currentUserSelector } from '../../redux/user/user.selector'
 
 const ModalScreen: React.FC = () => {
-  const currentUser = useSelector(userSelector)
+  const currentUser = useSelector(currentUserSelector)
 
   const dateOption = {
     year: 'numeric',

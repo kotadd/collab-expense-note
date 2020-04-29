@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { Button } from 'react-native'
-import { logOut } from '../../utils/navigation.utils'
 import { AuthScreenNavigationProp } from '../../../AppContainer'
+import { logOut } from '../../utils/navigation.utils'
 
 type AuthProps = {
   navigation: AuthScreenNavigationProp

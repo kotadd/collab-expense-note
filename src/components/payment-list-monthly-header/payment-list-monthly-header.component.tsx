@@ -1,7 +1,7 @@
 import React from 'react'
 import { CardItem, Left, Right, Text, Body } from 'native-base'
 
-const PaymentListMonthlyHeader = () => (
+const PaymentListMonthlyHeader: React.FC = () => (
   <CardItem
     header
     bordered

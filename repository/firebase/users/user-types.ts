@@ -12,11 +12,3 @@ export type PublicProfileType = {
   displayName: string
   photoURL: string
 }
-
-export type UnsubscribedUserType = {}
-
-export type UserProps = {
-  user: {
-    currentUser: firebase.User
-  }
-}

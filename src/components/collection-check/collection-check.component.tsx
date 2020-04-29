@@ -1,7 +1,12 @@
 import React from 'react'
 import { Right, Icon } from 'native-base'
 
-const CollectionCheck = ({ collected }) => {
+type CollectionCheckProps = {
+  collected: boolean
+}
+const CollectionCheck: React.FC<CollectionCheckProps> = ({
+  collected,
+}: CollectionCheckProps) => {
   if (collected) {
     return (
       <Right>

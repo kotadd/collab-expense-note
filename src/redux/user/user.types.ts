@@ -1,2 +1,22 @@
-export const SET_CURRENT_USER = 'SET_CURRENT_USER'
-export const SET_SELECTED_USER = 'SET_SELECTED_USER'
+export type SelectedUserProps = {
+  id: string
+  name: string
+}
+
+export type ReduxCurrentUserProps = {
+  user: {
+    currentUser: firebase.User
+  }
+}
+
+export type ReduxSelectedUserProps = {
+  user: {
+    selectedUser: SelectedUserProps
+  }
+  selectedUser: SelectedUserProps
+}
+
+export const ALL_ITEMS_STATE = {
+  id: '-1',
+  name: 'all-items',
+}

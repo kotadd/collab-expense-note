@@ -4,12 +4,11 @@ import { useDispatch } from 'react-redux'
 import { UserListProps } from '../../redux/types'
 import { setSelectedUser } from '../../redux/user/user.actions'
 import GroupListPicker from '../group-list-picker/group-list-picker.component'
-
-const ALL_ITEMS = 'all-items'
+import { SelectedUserProps, ALL_ITEMS_STATE } from '../../redux/user/user.types'
 
 type ToggleMemberProps = {
   userList: UserListProps
-  selectedUser: string | null
+  selectedUser: SelectedUserProps
 }
 
 const ToggleMember: React.FC<ToggleMemberProps> = ({
@@ -19,20 +18,28 @@ const ToggleMember: React.FC<ToggleMemberProps> = ({
   const dispatch = useDispatch()
 
   const pickerItems = [
-    <Picker.Item label="全体" value={ALL_ITEMS} key={ALL_ITEMS} />,
+    <Picker.Item
+      label="全体"
+      value={ALL_ITEMS_STATE}
+      key={ALL_ITEMS_STATE.id}
+    />,
   ]
-
-  const onValueChange: (user: string) => void = (user) => {
-    dispatch(setSelectedUser(user))
-  }
 
   for (const key in userList) {
     const { name, id } = userList[key]
-    const pickerItem = <Picker.Item label={name} value={id} key={id} />
+    const pickerItem = (
+      <Picker.Item label={name} value={userList[key]} key={id} />
+    )
     pickerItems.push(pickerItem)
   }
 
-  if (!selectedUser) selectedUser = ALL_ITEMS
+  if (!selectedUser) selectedUser = ALL_ITEMS_STATE
+
+  const onValueChange: (selectedUser: SelectedUserProps) => void = (
+    selectedUser
+  ) => {
+    dispatch(setSelectedUser(selectedUser))
+  }
 
   return (
     <GroupListPicker

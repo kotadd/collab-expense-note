@@ -3,8 +3,8 @@ import { useEffect, useState } from 'react'
 import { Keyboard } from 'react-native'
 import { fetchGroupUsers } from '../../repository/firebase/firebase.utils'
 import {
-  fetchCurrentPayments,
   fetchSpecificMonthPayments,
+  setCurrentPayments,
 } from '../../repository/firebase/payments/payment-repository'
 import { PaymentProps } from '../../repository/firebase/payments/payment-types'
 import { UserListProps } from '../redux/types'
@@ -25,14 +25,13 @@ export function useGroupUserList(currentUser: firebase.User): UserListProps {
 }
 
 export function useCurrentPayments(
-  currentUser: firebase.User
+  selectedUser: string
 ): PaymentProps[] | undefined {
   const [payments, setPayments] = useState<PaymentProps[]>()
 
   useEffect(() => {
     const fetchPaymentsData = async (): Promise<void> => {
-      const payments = await fetchCurrentPayments(currentUser, setPayments)
-      setPayments(payments)
+      await setCurrentPayments(selectedUser, setPayments)
     }
     fetchPaymentsData()
   }, [])
@@ -74,11 +73,4 @@ export function useToast(currentUser: firebase.User): void {
     }
     showToast()
   }, [])
-}
-
-export function useMontylyTotalPayments(paymentsMap: PaymentProps[]) {
-  paymentsMap.map((payment) => {
-    console.log(payment)
-  })
-  return
 }
