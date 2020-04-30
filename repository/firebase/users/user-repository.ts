@@ -1,14 +1,7 @@
-import { PublicProfileType, UserType } from './user-types'
-import { GroupType } from '../groups/group-types'
-import { firestore, auth } from '../firebase.utils'
 import firebase from 'firebase/app'
-
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-export const fetchAllUserData = async () => {
-  const userCollectionRef = firestore.collection('users')
-  const userCollectionSnapshot = await userCollectionRef.get()
-  return userCollectionSnapshot.docs
-}
+import { auth, firestore } from '../firebase.utils'
+import { GroupType } from '../groups/group-types'
+import { PublicProfileType } from './user-types'
 
 export const addUserToGroups: (
   userAuth: firebase.User,
@@ -117,16 +110,4 @@ export const addUserProfileDocument: (
   }
 
   return userRef
-}
-
-export const fetchUserByUserAuth: (
-  userAuth: firebase.User
-) => Promise<UserType | undefined> = async (userAuth: firebase.User) => {
-  if (!userAuth) return
-
-  const userRef = firestore.doc(`public-profiles/${userAuth.uid}`)
-  const userSnapshot = await userRef.get()
-  const userInfo = userSnapshot.data()
-
-  return userInfo as UserType
 }

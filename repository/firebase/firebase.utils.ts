@@ -42,13 +42,13 @@ export async function fetchGroupIDByUserAuth(
     .doc(`public-profiles/${userAuth.uid}`)
     .get()
 
-  return await profileSnapshot.get('groupID')
+  return (await profileSnapshot.get('groupID')) as string
 }
 
 export async function fetchGroupIDByUID(uid: string): Promise<string> {
   const profileSnapshot = await firestore.doc(`public-profiles/${uid}`).get()
 
-  return await profileSnapshot.get('groupID')
+  return (await profileSnapshot.get('groupID')) as string
 }
 
 export const loginUser: (

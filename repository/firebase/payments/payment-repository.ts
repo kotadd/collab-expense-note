@@ -7,10 +7,10 @@ import {
 import { PaymentProps } from './payment-types'
 
 export const setCurrentPayments: (
-  selectedUser: string,
+  uid: string,
   setPayments: React.Dispatch<React.SetStateAction<PaymentProps[] | undefined>>
-) => Promise<() => void> = async (selectedUser, setPayments) => {
-  const groupID = await fetchGroupIDByUID(selectedUser)
+) => Promise<() => void> = async (uid, setPayments) => {
+  const groupID = await fetchGroupIDByUID(uid)
 
   const query = firestore
     .collection(`groups/${groupID}/payments`)

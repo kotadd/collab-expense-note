@@ -1,5 +1,4 @@
-import { UserType } from '../users/user-types'
-import { GroupType } from './group-types'
+import firebase from 'firebase/app'
 import { firestore } from '../firebase.utils'
 
 export const fetchAllGroupData: () => Promise<
@@ -8,20 +7,6 @@ export const fetchAllGroupData: () => Promise<
   const groupCollectionRef = firestore.collection('groups')
   const groupCollectionSnapshot = await groupCollectionRef.get()
   return groupCollectionSnapshot.docs
-}
-
-export const fetchGroupByUser: (
-  userInfo: UserType | undefined
-) => Promise<GroupType | undefined> = async (userInfo) => {
-  if (!userInfo) return
-  const { groupID } = userInfo
-  if (!groupID) return
-
-  const groupRef = firestore.doc(`groups/${groupID}`)
-  const groupSnapshot = await groupRef.get()
-  const groupInfo = groupSnapshot.data()
-
-  return groupInfo as GroupType
 }
 
 export const createAccountAndGroup: (

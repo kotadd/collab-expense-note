@@ -17,16 +17,16 @@ import { calcMonthlyTotalPayments } from './payment-list-monthly.utils'
 const PaymentListMonthly: React.FC = () => {
   const currentUser = useSelector(currentUserSelector)
   const selectedUser = useSelector(selectedUserSelector)
-  let targetUser
+  let targetUserID
 
   if (selectedUser.id === '-1') {
-    targetUser = currentUser.uid
+    targetUserID = currentUser.uid
   } else {
-    targetUser = selectedUser.id
+    targetUserID = selectedUser.id
   }
 
   const userList = useGroupUserList(currentUser)
-  const payments = useCurrentPayments(targetUser)
+  const payments = useCurrentPayments(targetUserID)
 
   // console.log(`payments: ${JSON.stringify(payments, null, ' ')}`)
 

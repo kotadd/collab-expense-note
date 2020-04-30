@@ -24,17 +24,15 @@ export function useGroupUserList(currentUser: firebase.User): UserListProps {
   return userList
 }
 
-export function useCurrentPayments(
-  selectedUser: string
-): PaymentProps[] | undefined {
+export function useCurrentPayments(uid: string): PaymentProps[] | undefined {
   const [payments, setPayments] = useState<PaymentProps[]>()
 
   useEffect(() => {
     const fetchPaymentsData = async (): Promise<void> => {
-      await setCurrentPayments(selectedUser, setPayments)
+      await setCurrentPayments(uid, setPayments)
     }
     fetchPaymentsData()
-  }, [selectedUser])
+  }, [uid])
 
   return payments
 }
