@@ -1,17 +1,16 @@
+import { Icon, Item, Picker } from 'native-base'
 import * as React from 'react'
-import { Item, Picker, Icon } from 'native-base'
-import GroupListHeader from '../group-list-header/group-list-header.component'
 import { ReactElement } from 'react'
-import { SelectedUserProps } from '../../redux/user/user.types'
+import GroupListHeader from '../group-list-header/group-list-header.component'
 
 type GroupListPickerProps = {
-  selectedUser: SelectedUserProps
-  onValueChange: (user: SelectedUserProps) => void
+  selectedUserName: string
+  onValueChange: (selectedUserName: string) => void
   pickerItems: JSX.Element[]
 }
 
 const GroupListPicker: React.FC<GroupListPickerProps> = ({
-  selectedUser,
+  selectedUserName,
   onValueChange,
   pickerItems,
 }: GroupListPickerProps) => (
@@ -25,7 +24,7 @@ const GroupListPicker: React.FC<GroupListPickerProps> = ({
         placeholder="全体"
         placeholderStyle={{ color: '#bfc6ea' }}
         placeholderIconColor="#007aff"
-        selectedValue={selectedUser}
+        selectedValue={selectedUserName}
         onValueChange={onValueChange}
         renderHeader={(backAction): ReactElement => GroupListHeader(backAction)}
       >

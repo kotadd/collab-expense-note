@@ -1,3 +1,4 @@
+import { useNavigation } from '@react-navigation/native'
 import {
   Button,
   Col,
@@ -9,75 +10,20 @@ import {
   Item,
   Label,
   Text,
-  Toast,
 } from 'native-base'
 import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
-import {
-  AddInfoScreenNavigationProp,
-  LoginScreenNavigationProp,
-} from '../../../AppContainer'
-import { auth } from '../../../repository/firebase/firebase.utils'
-import { createUserProfileDocument } from '../../../repository/firebase/users/user-repository'
-import { setCurrentUser } from '../../redux/user/user.actions'
-import { useNavigation } from '@react-navigation/native'
+import { AddInfoScreenNavigationProp } from '../../../AppContainer'
+import { createNewUser } from './signup-form.utils'
 
 const SignupForm: React.FC = () => {
-  const navigation = useNavigation<
-    AddInfoScreenNavigationProp | LoginScreenNavigationProp
-  >()
+  const navigation = useNavigation<AddInfoScreenNavigationProp>()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
   const [togglePassword, setTogglePassword] = useState(false)
 
   const dispatch = useDispatch()
-
-  const validateSignup: (
-    email: string,
-    password: string,
-    confirmPassword: string
-  ) => Promise<void> = async (email, password, confirmPassword) => {
-    if (password != confirmPassword) {
-      return Toast.show({
-        text: 'パスワードと確認用パスワードが一致していません',
-        type: 'danger',
-      })
-    }
-
-    try {
-      const { user } = await auth.createUserWithEmailAndPassword(
-        email,
-        password
-      )
-
-      if (user) {
-        await createUserProfileDocument(user)
-        dispatch(setCurrentUser(user))
-        navigation.navigate('AddInfo')
-      } else {
-        dispatch(setCurrentUser({}))
-        return Toast.show({
-          text: '正しく登録できませんでした',
-          type: 'danger',
-        })
-      }
-    } catch (error) {
-      console.log(error)
-      if (error.message.match(/The email address is badly formatted./)) {
-        return Toast.show({
-          text: 'メールアドレスの形式が正しくありません',
-          type: 'danger',
-        })
-      }
-      if (error.message.match(/Password should be at least 6 characters/)) {
-        return Toast.show({
-          text: 'パスワードは6桁以上で入力して下さい',
-          type: 'danger',
-        })
-      }
-    }
-  }
 
   return (
     <Content>
@@ -170,7 +116,13 @@ const SignupForm: React.FC = () => {
           block
           dark
           onPress={(): Promise<void> =>
-            validateSignup(email, password, confirmPassword)
+            createNewUser(
+              email,
+              password,
+              confirmPassword,
+              dispatch,
+              navigation
+            )
           }
         >
           <Text> 登録する </Text>

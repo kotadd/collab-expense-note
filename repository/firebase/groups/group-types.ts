@@ -1,10 +1,5 @@
-export type GroupType = {
+export type GroupProps = {
   _createdAt: firebase.firestore.Timestamp
   _updatedAt: firebase.firestore.Timestamp
-  accountID: string
-  groupName: string
-  userIDs: [string]
-}
-export type GroupProps = {
-  group: GroupType
+  name: string
 }

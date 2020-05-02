@@ -10,12 +10,11 @@ import {
   Label,
   Picker,
   Text,
-  Toast,
 } from 'native-base'
 import React, { useEffect, useState } from 'react'
 import { MainScreenNavigationProp } from '../../../AppContainer'
-import { addUserProfileDocument } from '../../../repository/firebase/users/user-repository'
 import { fetchAllGroupData } from '../../../repository/firebase/groups/group-repository'
+import { addGroupInfo } from './add-info-form.utils'
 
 type AddInfoProps = {
   navigation: MainScreenNavigationProp
@@ -60,36 +59,6 @@ const AddInfoForm: React.FC<AddInfoProps> = ({
     fetchGroups()
   }, [])
 
-  const joinGroup: (groupId: string) => void = (groupId) => {
-    setSelectedGroupId(groupId)
-  }
-
-  const addGroupInfo: (name: string, selectedGroupId: string) => void = async (
-    name,
-    selectedGroupId
-  ) => {
-    try {
-      const result = await addUserProfileDocument(
-        currentUser,
-        selectedGroupId,
-        name
-      )
-
-      if (!result) {
-        return Toast.show({
-          text: 'ユーザー情報が不明です',
-          type: 'danger',
-        })
-      }
-      navigation.navigate('Main')
-    } catch (error) {
-      return Toast.show({
-        text: 'ユーザーの情報を追加するのに失敗しました。',
-        type: 'danger',
-      })
-    }
-  }
-
   return (
     <Content>
       <Form>
@@ -116,7 +85,9 @@ const AddInfoForm: React.FC<AddInfoProps> = ({
             placeholderStyle={{ color: '#bfc6ea' }}
             placeholderIconColor="#007aff"
             selectedValue={selectedGroupId}
-            onValueChange={(groupId: string): void => joinGroup(groupId)}
+            onValueChange={(groupId: string): void =>
+              setSelectedGroupId(groupId)
+            }
           >
             {pickerItemDom}
           </Picker>
@@ -127,7 +98,9 @@ const AddInfoForm: React.FC<AddInfoProps> = ({
         <Button
           block
           dark
-          onPress={(): void => addGroupInfo(name, selectedGroupId)}
+          onPress={(): void =>
+            addGroupInfo(name, selectedGroupId, currentUser, navigation)
+          }
         >
           <Text> 登録する </Text>
         </Button>

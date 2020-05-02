@@ -33,7 +33,7 @@ const PaymentListDaily: React.FC = (): ReactElement => {
       <ToggleMember
         key={currentUser.uid}
         userList={userList}
-        selectedUser={currentUser.displayName}
+        selectedUser={currentUser}
       />
       <PaymentListDailyHeader />
       {payments &&

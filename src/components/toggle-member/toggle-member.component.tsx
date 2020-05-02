@@ -3,48 +3,47 @@ import { Picker } from 'react-native'
 import { useDispatch } from 'react-redux'
 import { UserListProps } from '../../redux/types'
 import { setSelectedUser } from '../../redux/user/user.actions'
+import { ALL_ITEMS_STATE } from '../../redux/user/user.types'
 import GroupListPicker from '../group-list-picker/group-list-picker.component'
-import { SelectedUserProps, ALL_ITEMS_STATE } from '../../redux/user/user.types'
 
 type ToggleMemberProps = {
   userList: UserListProps
-  selectedUser: SelectedUserProps
+  selectedUserName: string
 }
 
 const ToggleMember: React.FC<ToggleMemberProps> = ({
   userList,
-  selectedUser,
+  selectedUserName,
 }: ToggleMemberProps) => {
   const dispatch = useDispatch()
 
   const pickerItems = [
     <Picker.Item
       label="全体"
-      value={ALL_ITEMS_STATE}
+      value={ALL_ITEMS_STATE.name}
       key={ALL_ITEMS_STATE.id}
     />,
   ]
 
   for (const key in userList) {
     const { name, id } = userList[key]
-    const pickerItem = (
-      <Picker.Item label={name} value={userList[key]} key={id} />
-    )
+    const pickerItem = <Picker.Item label={name} value={name} key={id} />
     pickerItems.push(pickerItem)
   }
 
-  if (!selectedUser) selectedUser = ALL_ITEMS_STATE
+  if (!selectedUserName) selectedUserName = 'all-items'
 
-  const onValueChange: (selectedUser: SelectedUserProps) => void = (
-    selectedUser
+  const onValueChange: (selectedUserName: string) => void = (
+    selectedUserName
   ) => {
-    dispatch(setSelectedUser(selectedUser))
+    console.log(`selectedUserName: ${JSON.stringify(selectedUserName)}`)
+    dispatch(setSelectedUser(selectedUserName))
   }
 
   return (
     <GroupListPicker
       key={'GroupListPicker'}
-      selectedUser={selectedUser}
+      selectedUserName={selectedUserName}
       onValueChange={onValueChange}
       pickerItems={pickerItems}
     />

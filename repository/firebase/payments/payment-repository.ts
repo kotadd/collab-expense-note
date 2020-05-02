@@ -29,13 +29,13 @@ export const setCurrentPayments: (
   return unsubscribedPayments
 }
 
-export const fetchSpecificMonthPayments: (
-  userAuth: firebase.User,
+export const setSpecificMonthPayments: (
+  uid: string,
   yearMonth: string
 ) => Promise<
   firebase.firestore.QueryDocumentSnapshot<firebase.firestore.DocumentData>[]
-> = async (userAuth: firebase.User, yearMonth: string) => {
-  const groupID = await fetchGroupIDByUserAuth(userAuth)
+> = async (uid, yearMonth) => {
+  const groupID = await fetchGroupIDByUID(uid)
 
   const yearMonthArr = yearMonth.split('年')
   const year = parseInt(yearMonthArr[0])
@@ -54,10 +54,6 @@ export const fetchSpecificMonthPayments: (
     .orderBy('purchaseDate', 'desc')
 
   const payments = await query.get()
-
-  // query.onSnapshot((querySnapshot) => {
-  //   setPayments(querySnapshot.docs)
-  // })
 
   return payments.docs
 }
