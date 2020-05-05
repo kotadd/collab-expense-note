@@ -1,26 +1,30 @@
-import { useNavigation } from '@react-navigation/native'
+import {
+  CompositeNavigationProp,
+  useNavigation,
+} from '@react-navigation/native'
 import {
   createStackNavigator,
   StackNavigationProp,
 } from '@react-navigation/stack'
+import { Button, Icon, Text } from 'native-base'
 import * as React from 'react'
 import { ReactElement } from 'react'
-import { PaymentProps } from './repository/firebase/payments/payment-types'
-import HeaderLeftButton from './src/components/header/header-left-button.component'
-import HeaderRightButton from './src/components/header/header-right-button.component'
+import { enableScreens } from 'react-native-screens'
+import HeaderLeftLogoutButton from './src/components/header/header-left-logout-button.component'
+import HeaderRightCreateButton from './src/components/header/header-right-create-button.component'
 import AddInfoScreen from './src/screens/add-info-screen/add-info.screen'
 import CreateGroupScreen from './src/screens/create-group-screen/create-group.screen'
+import CreateNewScreen from './src/screens/create-new-screen/create-new-screen'
 import LoginScreen from './src/screens/loginscreen/loginscreen'
-import ModalScreen from './src/screens/modalscreen/modalscreen'
 import PaymentListDailyScreen from './src/screens/payment-list-daily-screen/payment-list-daily-screen'
 import PaymentListDetailScreen from './src/screens/payment-list-detail-screen/payment-list-detail-screen'
 import PaymentListMonthlyScreen from './src/screens/payment-list-monthly-screen/payment-list-monthly-screen'
 import SignupScreen from './src/screens/signupscreen/signupscreen'
 
 export type MainStackParamList = {
-  Home: undefined
+  Monthly: undefined
   Daily: { yearMonth: string }
-  Detail: { yearMonth: string; day: string; monthlyPayments: PaymentProps[] }
+  Detail: { yearMonth: string; day: string; paymentID: string }
 }
 
 export type AuthStackParamList = {
@@ -33,41 +37,36 @@ export type GroupStackParamList = {
   Group: undefined
 }
 
-export type RootStackParamList = {
-  Main: { date: Date }
+export type ModalStackParamList = {
   CreateNew: { from: 'monthly' | 'daily' }
-  Auth: undefined
-  Group: undefined
+  Edit: undefined
 }
 
-export type HomeScreenNavigationProp = StackNavigationProp<
-  MainStackParamList,
-  'Home'
->
+export type RootStackParamList = {
+  Main: {
+    screen?: 'Monthly' | 'Daily' | 'Detail'
+    params?: {
+      yearMonth?: string
+      day?: string
+      paymentID?: string
+    }
+  }
+  Modal: {
+    screen: 'CreateNew' | 'Edit'
+    params: {
+      from: 'monthly' | 'daily'
+    }
+  }
+  Auth: { screen: 'Login' | 'Signup' | 'AddInfo' }
+  Group: { screen: 'Group' }
+}
 
-export type DailyScreenNavigationProp = StackNavigationProp<
-  MainStackParamList,
-  'Daily'
->
-
-export type DetailScreenNavigationProp = StackNavigationProp<
-  MainStackParamList,
-  'Detail'
->
-
-export type LoginScreenNavigationProp = StackNavigationProp<
-  AuthStackParamList,
-  'Login'
->
-
-export type SignupScreenNavigationProp = StackNavigationProp<
-  AuthStackParamList,
-  'Signup'
->
-
-export type AddInfoScreenNavigationProp = StackNavigationProp<
-  AuthStackParamList,
-  'AddInfo'
+export type MainScreenNavigationProp = CompositeNavigationProp<
+  StackNavigationProp<MainStackParamList, 'Monthly'>,
+  CompositeNavigationProp<
+    StackNavigationProp<MainStackParamList, 'Daily'>,
+    StackNavigationProp<MainStackParamList, 'Detail'>
+  >
 >
 
 export type GroupScreenNavigationProp = StackNavigationProp<
@@ -75,46 +74,56 @@ export type GroupScreenNavigationProp = StackNavigationProp<
   'Group'
 >
 
-export type MainScreenNavigationProp = StackNavigationProp<
-  RootStackParamList,
-  'Main'
+export type AuthScreenNavigationProp = CompositeNavigationProp<
+  StackNavigationProp<AuthStackParamList, 'Login'>,
+  CompositeNavigationProp<
+    StackNavigationProp<AuthStackParamList, 'Signup'>,
+    StackNavigationProp<AuthStackParamList, 'AddInfo'>
+  >
 >
 
-export type CreateNewScreenNavigationProp = StackNavigationProp<
-  RootStackParamList,
-  'CreateNew'
+export type ModalScreenNavigationProp = CompositeNavigationProp<
+  StackNavigationProp<ModalStackParamList, 'CreateNew'>,
+  StackNavigationProp<ModalStackParamList, 'Edit'>
 >
 
-export type AuthScreenNavigationProp = StackNavigationProp<
-  RootStackParamList,
-  'Auth'
+export type RootScreenNavigationProp = CompositeNavigationProp<
+  StackNavigationProp<RootStackParamList, 'Main'>,
+  CompositeNavigationProp<
+    StackNavigationProp<RootStackParamList, 'Modal'>,
+    CompositeNavigationProp<
+      StackNavigationProp<RootStackParamList, 'Auth'>,
+      StackNavigationProp<RootStackParamList, 'Group'>
+    >
+  >
 >
 
 const MainStack = createStackNavigator<MainStackParamList>()
 const AuthStack = createStackNavigator<AuthStackParamList>()
 const GroupStack = createStackNavigator<GroupStackParamList>()
+const ModalStack = createStackNavigator<ModalStackParamList>()
 const RootStack = createStackNavigator<RootStackParamList>()
 
 const MainStackScreen: React.FC = () => {
-  const createNewNavigation = useNavigation<CreateNewScreenNavigationProp>()
-  const authNavigation = useNavigation<AuthScreenNavigationProp>()
+  const navigation = useNavigation<RootScreenNavigationProp>()
 
   return (
     <MainStack.Navigator>
       <MainStack.Screen
-        name="Home"
+        name="Monthly"
         component={PaymentListMonthlyScreen}
         options={{
-          headerBackTitle: '戻る',
           headerTitle: '月ごとの支出',
           headerRight: (): ReactElement => {
             const rightButton = (
-              <HeaderRightButton navigation={createNewNavigation} />
+              <HeaderRightCreateButton navigation={navigation} from="monthly" />
             )
             return rightButton
           },
           headerLeft: (): ReactElement => {
-            const leftButton = <HeaderLeftButton navigation={authNavigation} />
+            const leftButton = (
+              <HeaderLeftLogoutButton navigation={navigation} />
+            )
             return leftButton
           },
         }}
@@ -123,11 +132,10 @@ const MainStackScreen: React.FC = () => {
         name="Daily"
         component={PaymentListDailyScreen}
         options={{
-          headerBackTitle: '戻る',
           title: '日付ごとの支出',
           headerRight: (): ReactElement => {
             const rightButton = (
-              <HeaderRightButton navigation={createNewNavigation} />
+              <HeaderRightCreateButton navigation={navigation} from="daily" />
             )
             return rightButton
           },
@@ -139,12 +147,6 @@ const MainStackScreen: React.FC = () => {
         options={{
           headerBackTitle: '戻る',
           title: '支払いの詳細',
-          headerRight: (): ReactElement => {
-            const rightButton = (
-              <HeaderRightButton navigation={createNewNavigation} />
-            )
-            return rightButton
-          },
         }}
       />
     </MainStack.Navigator>
@@ -181,14 +183,46 @@ const GroupStackScreen: React.FC = () => (
   </GroupStack.Navigator>
 )
 
+const ModalStackScreen: React.FC = () => {
+  const navigation = useNavigation()
+  return (
+    <ModalStack.Navigator>
+      <ModalStack.Screen
+        name="CreateNew"
+        component={CreateNewScreen}
+        options={{
+          headerTitle: '新規作成',
+          headerLeft: (): ReactElement => {
+            const leftButton = (
+              <Button
+                iconLeft
+                transparent
+                onPress={(): void => navigation.goBack()}
+              >
+                <Icon name="arrow-back" />
+                <Text>戻る</Text>
+              </Button>
+            )
+            return leftButton
+          },
+        }}
+      />
+      <ModalStack.Screen name="Edit" component={CreateNewScreen} />
+    </ModalStack.Navigator>
+  )
+}
+
 const RootStackScreen: React.FC = () => (
   <RootStack.Navigator mode="modal" initialRouteName="Auth" headerMode="none">
     <RootStack.Screen name="Auth" component={AuthStackScreen} />
-    <RootStack.Screen name="CreateNew" component={ModalScreen} />
     <RootStack.Screen name="Group" component={GroupStackScreen} />
     <RootStack.Screen name="Main" component={MainStackScreen} />
+    <RootStack.Screen name="Modal" component={ModalStackScreen} />
   </RootStack.Navigator>
 )
 
 const AppContainer: React.FC = () => <RootStackScreen />
+
+enableScreens()
+
 export default AppContainer

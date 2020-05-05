@@ -15,7 +15,7 @@ export const setCurrentUser = (user: User | {}): SetCurrentUserAction => ({
   payload: user,
 })
 
-export const setSelectedUser = (userName: string) => ({
+export const setSelectedUser = (userName: string): SetSelectedUserAction => ({
   type: 'SET_SELECTED_USER',
   payload: userName,
 })

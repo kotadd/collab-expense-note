@@ -1,13 +1,12 @@
-import { addDetailToProfile } from '../../../repository/firebase/public-profiles/public-profiles-repository'
 import { Toast } from 'native-base'
-import { StackNavigationProp } from '@react-navigation/stack'
-import { RootStackParamList } from '../../../AppContainer'
+import { MainScreenNavigationProp } from '../../../AppContainer'
+import { addDetailToProfile } from '../../../repository/firebase/public-profiles/public-profiles-repository'
 
 export const addGroupInfo: (
   name: string,
   selectedGroupId: string,
   currentUser: firebase.User,
-  navigation: StackNavigationProp<RootStackParamList, 'Main'>
+  navigation: MainScreenNavigationProp
 ) => void = async (name, selectedGroupId, currentUser, navigation) => {
   try {
     const result = await addDetailToProfile(currentUser, selectedGroupId, name)
@@ -18,7 +17,7 @@ export const addGroupInfo: (
         type: 'danger',
       })
     }
-    navigation.navigate('Main')
+    navigation.navigate('Monthly')
   } catch (error) {
     return Toast.show({
       text: 'ユーザーの情報を追加するのに失敗しました。',

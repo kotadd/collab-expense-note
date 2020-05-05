@@ -52,7 +52,6 @@ const PaymentListDailyScreen: React.FC = () => {
           navigation={navigation}
           payment={payment}
           yearMonth={yearMonth}
-          payments={payments}
         />
       )
     })

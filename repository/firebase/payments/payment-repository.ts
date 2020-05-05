@@ -1,10 +1,6 @@
 import firebase from 'firebase/app'
-import {
-  fetchGroupIDByUID,
-  fetchGroupIDByUserAuth,
-  firestore,
-} from '../firebase.utils'
-import { PaymentProps } from './payment-types'
+import { fetchGroupIDByUID, firestore } from '../firebase.utils'
+import { PaymentProps, PaymentType } from './payment-types'
 
 export const setCurrentPayments: (
   uid: string,
@@ -56,4 +52,18 @@ export const setSpecificMonthPayments: (
   const payments = await query.get()
 
   return payments.docs
+}
+
+export const setASpecificPayment: (
+  uid: string,
+  paymentID: string
+) => Promise<PaymentType> = async (uid, paymentID) => {
+  const groupID = await fetchGroupIDByUID(uid)
+
+  const paymentSnapshot = await firestore
+    .collection(`groups/${groupID}/payments`)
+    .doc(paymentID)
+    .get()
+
+  return paymentSnapshot.data() as PaymentType
 }

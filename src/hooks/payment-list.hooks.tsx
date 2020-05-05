@@ -5,8 +5,12 @@ import { fetchGroupUsers } from '../../repository/firebase/firebase.utils'
 import {
   setSpecificMonthPayments,
   setCurrentPayments,
+  setASpecificPayment,
 } from '../../repository/firebase/payments/payment-repository'
-import { PaymentProps } from '../../repository/firebase/payments/payment-types'
+import {
+  PaymentProps,
+  PaymentType,
+} from '../../repository/firebase/payments/payment-types'
 import { UserListProps } from '../redux/types'
 
 export function useGroupUserList(currentUser: firebase.User): UserListProps {
@@ -52,6 +56,23 @@ export function useSpecificMonthPayments(
   }, [uid, yearMonth])
 
   return payments
+}
+
+export function useASpecificPayment(
+  uid: string,
+  paymentID: string
+): PaymentType | undefined {
+  const [payment, setPayment] = useState<PaymentType>()
+
+  useEffect(() => {
+    const fetchPaymentsData = async (): Promise<void> => {
+      const payment = await setASpecificPayment(uid, paymentID)
+      setPayment(payment)
+    }
+    fetchPaymentsData()
+  }, [uid, paymentID])
+
+  return payment
 }
 
 export function useToast(currentUser: firebase.User): void {

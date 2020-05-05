@@ -3,7 +3,7 @@ import React from 'react'
 import { useSelector } from 'react-redux'
 import PaymentListMonthlyContent from '../../components/payment-list-monthly-content/payment-list-monthly-content.component'
 import PaymentListMonthlyHeader from '../../components/payment-list-monthly-header/payment-list-monthly-header.component'
-import { calcMonthlyTotalPayments } from '../../components/payment-list-monthly/payment-list-monthly.utils'
+import { calcMonthlyTotalPayments } from './payment-list-monthly.utils'
 import ToggleMember from '../../components/toggle-member/toggle-member.component'
 import {
   useCurrentPayments,

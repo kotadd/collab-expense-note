@@ -9,14 +9,12 @@ import { PaymentProps } from '../../../repository/firebase/payments/payment-type
 type ContentProps = {
   navigation: StackNavigationProp<MainStackParamList, 'Detail'>
   payment: PaymentProps
-  payments: PaymentProps[]
   yearMonth: string
 }
 
 const PaymentListDailyContent: React.FC<ContentProps> = ({
   navigation,
   payment,
-  payments,
   yearMonth,
 }: ContentProps) => {
   const date = timestampToLocaleDate(payment.get('purchaseDate'), 'ja-JP', {
@@ -27,16 +25,17 @@ const PaymentListDailyContent: React.FC<ContentProps> = ({
   })
   const day = date.replace(/.*月/, '').toString()
 
+  const paymentID = payment.id
   return (
     <CardItem
       bordered
       button
-      key={payment.id}
+      key={paymentID}
       onPress={(): void => {
         navigation.navigate('Detail', {
           yearMonth,
           day,
-          monthlyPayments: payments,
+          paymentID,
         })
       }}
     >

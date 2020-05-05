@@ -36,7 +36,6 @@ const ToggleMember: React.FC<ToggleMemberProps> = ({
   const onValueChange: (selectedUserName: string) => void = (
     selectedUserName
   ) => {
-    console.log(`selectedUserName: ${JSON.stringify(selectedUserName)}`)
     dispatch(setSelectedUser(selectedUserName))
   }
 
