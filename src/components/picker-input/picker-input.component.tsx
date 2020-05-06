@@ -1,5 +1,6 @@
 import { Form, Icon, Item, Label, Picker } from 'native-base'
-import React, { useState } from 'react'
+import React, { useState, ReactElement } from 'react'
+import SelectListHeader from '../group-list-header/group-list-header.component'
 
 type PickerInputProps = {
   title: string
@@ -51,6 +52,9 @@ const PickerInput: React.FC<PickerInputProps> = ({
           placeholderIconColor="#007aff"
           selectedValue={selected}
           onValueChange={onValueChange}
+          renderHeader={(backAction): ReactElement =>
+            SelectListHeader(backAction, title)
+          }
         >
           {doms}
         </Picker>

@@ -3,8 +3,8 @@ import { Container, Content } from 'native-base'
 import React from 'react'
 import { useSelector } from 'react-redux'
 import {
-  DetailScreenNavigationProp,
   MainStackParamList,
+  MainScreenNavigationProp,
 } from '../../../AppContainer'
 import PaymentListDailyContent from '../../components/payment-list-daily-content/payment-list-daily-content.component'
 import PaymentListDailyHeader from '../../components/payment-list-daily-header/payment-list-daily-header.component'
@@ -36,7 +36,7 @@ const PaymentListDailyScreen: React.FC = () => {
     }
   }
 
-  const navigation = useNavigation<DetailScreenNavigationProp>()
+  const navigation = useNavigation<MainScreenNavigationProp>()
   const route = useRoute<DailyScreenRouteProp>()
   const { yearMonth } = route.params
 

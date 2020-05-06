@@ -1,4 +1,4 @@
-import { useNavigation } from '@react-navigation/native'
+import { RouteProp, useNavigation, useRoute } from '@react-navigation/native'
 import {
   Body,
   Button,
@@ -16,16 +16,23 @@ import {
 import React, { useState } from 'react'
 import { Platform, Text } from 'react-native'
 import { useSelector } from 'react-redux'
-import { MainScreenNavigationProp } from '../../../AppContainer'
-import { ModalProps } from '../../../repository/firebase/payments/payment-types'
-import DatePicker from '../../components/datepicker/datepicker-component'
-import PickerInput from '../../components/picker-input/picker-input.component'
-import OPTIONS from '../../components/picker-input/picker-options'
-import { currentUserSelector } from '../../redux/user/user.selector'
+import {
+  MainScreenNavigationProp,
+  ModalStackParamList,
+} from '../../../AppContainer'
 import { createPaymentsData } from '../../../repository/firebase/payments/payment-repository'
+import { ModalProps } from '../../../repository/firebase/payments/payment-types'
+import { currentUserSelector } from '../../redux/user/user.selector'
+import DatePicker from '../datepicker/datepicker-component'
+import PickerInput from '../picker-input/picker-input.component'
+import OPTIONS from '../picker-input/picker-options'
 
-const CreatePaymentForm: React.FC = () => {
+type EditScreenRouteProp = RouteProp<ModalStackParamList, 'Edit'>
+
+const EditPaymentForm: React.FC = () => {
   const currentUser = useSelector(currentUserSelector)
+  const route = useRoute<EditScreenRouteProp>()
+  const { payment, paymentID } = route.params
 
   const dateOption = {
     year: 'numeric',
@@ -33,14 +40,18 @@ const CreatePaymentForm: React.FC = () => {
     day: 'numeric',
   }
 
-  const [collected, setCollected] = useState(false)
-  const [purchaseDate, setPurchaseDate] = useState(new Date())
-  const [groupAmount, setGroupAmount] = useState(0)
-  const [purchaseMemo, setPurchaseMemo] = useState('')
+  console.log(`payment: ${JSON.stringify(payment, null, ' ')}`)
+
+  const [collected, setCollected] = useState(payment.collected)
+  const [purchaseDate, setPurchaseDate] = useState(
+    payment.purchaseDate.toDate()
+  )
+  const [groupAmount, setGroupAmount] = useState(payment.groupAmount)
+  const [purchaseMemo, setPurchaseMemo] = useState(payment.purchaseMemo)
   const [show, setShow] = useState(false)
-  const [shopName, setShopName] = useState('')
-  const [privateAmount, setPrivateAmount] = useState(0)
-  const [usage, setUsage] = useState('')
+  const [shopName, setShopName] = useState(payment.shopName)
+  const [privateAmount, setPrivateAmount] = useState(payment.privateAmount)
+  const [usage, setUsage] = useState(payment.usage)
 
   const navigation = useNavigation<MainScreenNavigationProp>()
 
@@ -74,21 +85,25 @@ const CreatePaymentForm: React.FC = () => {
     }
 
     try {
-      const paymentData = await createPaymentsData(currentUser, state)
+      const paymentData = await createPaymentsData(
+        currentUser,
+        state,
+        paymentID
+      )
       if (paymentData) {
         Toast.show({
-          text: 'データが作成されました',
+          text: 'データが修正されました',
           type: 'success',
         })
 
-        navigation.navigate('Monthly')
+        navigation.goBack()
       }
     } catch (e) {
-      console.log(`failed to create data: ${e}`)
+      console.log(`failed to edit data: ${e}`)
     }
   }
 
-  const displayDate = purchaseDate as Date
+  const displayDate = purchaseDate
 
   return (
     <Form style={{ marginRight: 16 }}>
@@ -123,6 +138,7 @@ const CreatePaymentForm: React.FC = () => {
           keyboardType="numeric"
           maxLength={6}
           style={{ textAlign: 'right', lineHeight: 18 }}
+          value={groupAmount.toString()}
           onChangeText={(text): void => {
             setGroupAmount(parseInt(text))
             setShow(false)
@@ -144,6 +160,7 @@ const CreatePaymentForm: React.FC = () => {
           keyboardType="numeric"
           maxLength={6}
           style={{ textAlign: 'right', lineHeight: 18 }}
+          value={privateAmount.toString()}
           onChangeText={(text): void => {
             setPrivateAmount(parseInt(text))
             setShow(false)
@@ -159,6 +176,7 @@ const CreatePaymentForm: React.FC = () => {
         bordered
         underline
         placeholder="メモ"
+        value={purchaseMemo}
         style={{
           marginLeft: 16,
           backgroundColor: '#f8fbfd',
@@ -185,4 +203,4 @@ const CreatePaymentForm: React.FC = () => {
   )
 }
 
-export default CreatePaymentForm
+export default EditPaymentForm

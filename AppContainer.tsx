@@ -1,7 +1,4 @@
-import {
-  CompositeNavigationProp,
-  useNavigation,
-} from '@react-navigation/native'
+import { useNavigation } from '@react-navigation/native'
 import {
   createStackNavigator,
   StackNavigationProp,
@@ -20,6 +17,11 @@ import PaymentListDailyScreen from './src/screens/payment-list-daily-screen/paym
 import PaymentListDetailScreen from './src/screens/payment-list-detail-screen/payment-list-detail-screen'
 import PaymentListMonthlyScreen from './src/screens/payment-list-monthly-screen/payment-list-monthly-screen'
 import SignupScreen from './src/screens/signupscreen/signupscreen'
+import {
+  ModalProps,
+  PaymentType,
+} from './repository/firebase/payments/payment-types'
+import EditPaymentScreen from './src/screens/edit-payment-screen/edit-payment-screen'
 
 export type MainStackParamList = {
   Monthly: undefined
@@ -39,7 +41,7 @@ export type GroupStackParamList = {
 
 export type ModalStackParamList = {
   CreateNew: { from: 'monthly' | 'daily' }
-  Edit: undefined
+  Edit: { payment: PaymentType; paymentID: string }
 }
 
 export type RootStackParamList = {
@@ -49,54 +51,43 @@ export type RootStackParamList = {
       yearMonth?: string
       day?: string
       paymentID?: string
+      payment?: PaymentType
     }
   }
   Modal: {
-    screen: 'CreateNew' | 'Edit'
-    params: {
-      from: 'monthly' | 'daily'
+    screen?: 'CreateNew' | 'Edit'
+    params?: {
+      from?: 'monthly' | 'daily'
     }
   }
-  Auth: { screen: 'Login' | 'Signup' | 'AddInfo' }
+  Auth: { screen?: 'Login' | 'Signup' | 'AddInfo' }
   Group: { screen: 'Group' }
 }
 
-export type MainScreenNavigationProp = CompositeNavigationProp<
-  StackNavigationProp<MainStackParamList, 'Monthly'>,
-  CompositeNavigationProp<
-    StackNavigationProp<MainStackParamList, 'Daily'>,
-    StackNavigationProp<MainStackParamList, 'Detail'>
-  >
->
+export type MainScreenNavigationProp =
+  | StackNavigationProp<MainStackParamList, 'Monthly'>
+  | StackNavigationProp<MainStackParamList, 'Daily'>
+  | StackNavigationProp<MainStackParamList, 'Detail'>
 
 export type GroupScreenNavigationProp = StackNavigationProp<
   GroupStackParamList,
   'Group'
 >
 
-export type AuthScreenNavigationProp = CompositeNavigationProp<
-  StackNavigationProp<AuthStackParamList, 'Login'>,
-  CompositeNavigationProp<
-    StackNavigationProp<AuthStackParamList, 'Signup'>,
-    StackNavigationProp<AuthStackParamList, 'AddInfo'>
-  >
->
+export type AuthScreenNavigationProp =
+  | StackNavigationProp<AuthStackParamList, 'Login'>
+  | StackNavigationProp<AuthStackParamList, 'Signup'>
+  | StackNavigationProp<AuthStackParamList, 'AddInfo'>
 
-export type ModalScreenNavigationProp = CompositeNavigationProp<
-  StackNavigationProp<ModalStackParamList, 'CreateNew'>,
-  StackNavigationProp<ModalStackParamList, 'Edit'>
->
+export type ModalScreenNavigationProp =
+  | StackNavigationProp<ModalStackParamList, 'CreateNew'>
+  | StackNavigationProp<ModalStackParamList, 'Edit'>
 
-export type RootScreenNavigationProp = CompositeNavigationProp<
-  StackNavigationProp<RootStackParamList, 'Main'>,
-  CompositeNavigationProp<
-    StackNavigationProp<RootStackParamList, 'Modal'>,
-    CompositeNavigationProp<
-      StackNavigationProp<RootStackParamList, 'Auth'>,
-      StackNavigationProp<RootStackParamList, 'Group'>
-    >
-  >
->
+export type RootScreenNavigationProp =
+  | StackNavigationProp<RootStackParamList, 'Main'>
+  | StackNavigationProp<RootStackParamList, 'Modal'>
+  | StackNavigationProp<RootStackParamList, 'Auth'>
+  | StackNavigationProp<RootStackParamList, 'Group'>
 
 const MainStack = createStackNavigator<MainStackParamList>()
 const AuthStack = createStackNavigator<AuthStackParamList>()
@@ -146,7 +137,7 @@ const MainStackScreen: React.FC = () => {
         component={PaymentListDetailScreen}
         options={{
           headerBackTitle: '戻る',
-          title: '支払いの詳細',
+          headerTitle: '支払いの詳細',
         }}
       />
     </MainStack.Navigator>
@@ -207,7 +198,26 @@ const ModalStackScreen: React.FC = () => {
           },
         }}
       />
-      <ModalStack.Screen name="Edit" component={CreateNewScreen} />
+      <ModalStack.Screen
+        name="Edit"
+        component={EditPaymentScreen}
+        options={{
+          headerTitle: '修正',
+          headerLeft: (): ReactElement => {
+            const leftButton = (
+              <Button
+                iconLeft
+                transparent
+                onPress={(): void => navigation.goBack()}
+              >
+                <Icon name="arrow-back" />
+                <Text>戻る</Text>
+              </Button>
+            )
+            return leftButton
+          },
+        }}
+      />
     </ModalStack.Navigator>
   )
 }

@@ -1,13 +1,12 @@
+import { Body, CardItem, Left, Right, Text } from 'native-base'
 import React from 'react'
-import { CardItem, Left, Body, Right, Text } from 'native-base'
-import CollectionCheck from '../collection-check/collection-check.component'
+import { MainScreenNavigationProp } from '../../../AppContainer'
 import { timestampToLocaleDate } from '../../../repository/firebase/firebase.utils'
-import { MainStackParamList } from '../../../AppContainer'
-import { StackNavigationProp } from '@react-navigation/stack/lib/typescript/src/types'
 import { PaymentProps } from '../../../repository/firebase/payments/payment-types'
+import CollectionCheck from '../collection-check/collection-check.component'
 
 type ContentProps = {
-  navigation: StackNavigationProp<MainStackParamList, 'Detail'>
+  navigation: MainScreenNavigationProp
   payment: PaymentProps
   yearMonth: string
 }

@@ -1,7 +1,4 @@
-import {
-  CompositeNavigationProp,
-  useNavigation,
-} from '@react-navigation/native'
+import { useNavigation } from '@react-navigation/native'
 import {
   Button,
   Col,
@@ -15,22 +12,13 @@ import {
 } from 'native-base'
 import React, { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
-import {
-  AuthScreenNavigationProp,
-  MainScreenNavigationProp,
-  RootScreenNavigationProp,
-} from '../../../AppContainer'
+import { RootScreenNavigationProp } from '../../../AppContainer'
 import {
   auth,
   fetchGroupIDByUID,
 } from '../../../repository/firebase/firebase.utils'
 import { setCurrentUser } from '../../redux/user/user.actions'
 import { validateLogin } from './login-form.utils'
-
-type LoginOrSignupNavigationProp = CompositeNavigationProp<
-  MainScreenNavigationProp,
-  AuthScreenNavigationProp
->
 
 const LoginForm: React.FC = () => {
   const [email, setEmail] = useState('')

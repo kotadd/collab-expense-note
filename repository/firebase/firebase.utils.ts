@@ -2,7 +2,6 @@ import firebase from 'firebase/app'
 import 'firebase/auth'
 import 'firebase/firestore'
 import { UserListProps } from '../../src/redux/types'
-import { ModalProps } from './payments/payment-types'
 
 const config = {
   apiKey: 'AIzaSyDxYGmo8Y9WQIBJ-oemrLr8MrnYUHGZa8Y',
@@ -81,29 +80,6 @@ export const fetchGroupUsers: (
   })
 
   return userList
-}
-
-export const createPaymentsData: (
-  userAuth: firebase.User,
-  props: ModalProps
-) => Promise<
-  | firebase.firestore.DocumentReference<firebase.firestore.DocumentData>
-  | undefined
-> = async (userAuth: firebase.User, props: ModalProps) => {
-  if (!userAuth) return
-  const profileSnapshot = await firestore
-    .doc(`public-profiles/${userAuth.uid}`)
-    .get()
-  const groupID = await profileSnapshot.get('groupID')
-
-  const payment = {
-    ...props,
-    _updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
-    _createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-    user: `user/${userAuth.uid}`,
-  }
-
-  return await firestore.collection(`groups/${groupID}/payments`).add(payment)
 }
 
 export default firebase

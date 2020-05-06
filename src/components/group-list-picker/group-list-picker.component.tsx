@@ -1,7 +1,7 @@
 import { Icon, Item, Picker } from 'native-base'
 import * as React from 'react'
 import { ReactElement } from 'react'
-import GroupListHeader from '../group-list-header/group-list-header.component'
+import SelectListHeader from '../group-list-header/group-list-header.component'
 
 type GroupListPickerProps = {
   selectedUserName: string
@@ -26,7 +26,9 @@ const GroupListPicker: React.FC<GroupListPickerProps> = ({
         placeholderIconColor="#007aff"
         selectedValue={selectedUserName}
         onValueChange={onValueChange}
-        renderHeader={(backAction): ReactElement => GroupListHeader(backAction)}
+        renderHeader={(backAction): ReactElement =>
+          SelectListHeader(backAction, '同じグループのメンバー')
+        }
       >
         {pickerItems}
       </Picker>

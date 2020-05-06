@@ -1,6 +1,6 @@
 import firebase from 'firebase/app'
 import { fetchGroupIDByUID, firestore } from '../firebase.utils'
-import { PaymentProps, PaymentType } from './payment-types'
+import { PaymentProps, PaymentType, ModalProps } from './payment-types'
 
 export const setCurrentPayments: (
   uid: string,
@@ -66,4 +66,40 @@ export const setASpecificPayment: (
     .get()
 
   return paymentSnapshot.data() as PaymentType
+}
+
+export const createPaymentsData: (
+  userAuth: firebase.User,
+  props: ModalProps,
+  paymentID?: string
+) => Promise<
+  | firebase.firestore.DocumentReference<firebase.firestore.DocumentData>
+  | undefined
+> = async (userAuth, props, paymentID) => {
+  if (!userAuth) return
+  const profileSnapshot = await firestore
+    .doc(`public-profiles/${userAuth.uid}`)
+    .get()
+  const groupID = await profileSnapshot.get('groupID')
+
+  if (paymentID) {
+    const paymentRef = firestore.doc(`groups/${groupID}/payments/${paymentID}`)
+    const paymentSnapshot = await paymentRef.get()
+    if (paymentSnapshot.exists) {
+      const payment = {
+        ...paymentSnapshot.data(),
+        ...props,
+      }
+      console.log(`edit payment: ${payment}`)
+    }
+    return undefined
+  } else {
+    const payment = {
+      ...props,
+      _updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+      _createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+      user: `user/${userAuth.uid}`,
+    }
+    return await firestore.collection(`groups/${groupID}/payments`).add(payment)
+  }
 }

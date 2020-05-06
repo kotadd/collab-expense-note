@@ -12,11 +12,11 @@ import {
 } from 'native-base'
 import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
-import { AddInfoScreenNavigationProp } from '../../../AppContainer'
+import { AuthScreenNavigationProp } from '../../../AppContainer'
 import { createNewUser } from './signup-form.utils'
 
 const SignupForm: React.FC = () => {
-  const navigation = useNavigation<AddInfoScreenNavigationProp>()
+  const navigation = useNavigation<AuthScreenNavigationProp>()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
