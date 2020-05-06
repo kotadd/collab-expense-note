@@ -31,6 +31,7 @@ const CreatePaymentForm: React.FC = () => {
     year: 'numeric',
     month: 'short',
     day: 'numeric',
+    weekday: 'short',
   }
 
   const [collected, setCollected] = useState(false)

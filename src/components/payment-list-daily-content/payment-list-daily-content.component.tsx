@@ -22,7 +22,7 @@ const PaymentListDailyContent: React.FC<ContentProps> = ({
     day: 'numeric',
     weekday: 'short',
   })
-  const day = date.replace(/.*月/, '').toString()
+  const day = date.replace(/.*?月/, '').toString()
 
   const paymentID = payment.id
   return (
