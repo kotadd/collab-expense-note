@@ -70,36 +70,55 @@ export const setASpecificPayment: (
 
 export const createPaymentsData: (
   userAuth: firebase.User,
-  props: ModalProps,
-  paymentID?: string
+  props: ModalProps
 ) => Promise<
   | firebase.firestore.DocumentReference<firebase.firestore.DocumentData>
   | undefined
-> = async (userAuth, props, paymentID) => {
+> = async (userAuth, props) => {
   if (!userAuth) return
   const profileSnapshot = await firestore
     .doc(`public-profiles/${userAuth.uid}`)
     .get()
   const groupID = await profileSnapshot.get('groupID')
 
-  if (paymentID) {
-    const paymentRef = firestore.doc(`groups/${groupID}/payments/${paymentID}`)
-    const paymentSnapshot = await paymentRef.get()
-    if (paymentSnapshot.exists) {
-      const payment = {
-        ...paymentSnapshot.data(),
-        ...props,
-      }
-      console.log(`edit payment: ${payment}`)
-    }
-    return undefined
-  } else {
-    const payment = {
-      ...props,
-      _updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
-      _createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-      user: `user/${userAuth.uid}`,
-    }
-    return await firestore.collection(`groups/${groupID}/payments`).add(payment)
+  const payment = {
+    ...props,
+    _updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+    _createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+    user: `user/${userAuth.uid}`,
   }
+  const result = await firestore
+    .collection(`groups/${groupID}/payments`)
+    .add(payment)
+  return result
+}
+
+export const editPaymentsData: (
+  userAuth: firebase.User,
+  props: ModalProps,
+  paymentID: string
+) => Promise<PaymentType> = async (userAuth, props, paymentID) => {
+  if (!userAuth) return
+  const profileSnapshot = await firestore
+    .doc(`public-profiles/${userAuth.uid}`)
+    .get()
+  const groupID = await profileSnapshot.get('groupID')
+
+  const paymentRef = firestore.doc(`groups/${groupID}/payments/${paymentID}`)
+  const paymentSnapshot = await paymentRef.get()
+
+  if (!paymentSnapshot.exists) return
+
+  const updateFields = {
+    ...props,
+    _updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+  }
+  await paymentRef.update(updateFields)
+
+  const payment = {
+    ...updateFields,
+    ...paymentSnapshot.get('_createdAt'),
+  }
+
+  return payment
 }

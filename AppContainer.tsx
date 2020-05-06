@@ -7,21 +7,18 @@ import { Button, Icon, Text } from 'native-base'
 import * as React from 'react'
 import { ReactElement } from 'react'
 import { enableScreens } from 'react-native-screens'
+import { PaymentType } from './repository/firebase/payments/payment-types'
 import HeaderLeftLogoutButton from './src/components/header/header-left-logout-button.component'
 import HeaderRightCreateButton from './src/components/header/header-right-create-button.component'
 import AddInfoScreen from './src/screens/add-info-screen/add-info.screen'
 import CreateGroupScreen from './src/screens/create-group-screen/create-group.screen'
 import CreateNewScreen from './src/screens/create-new-screen/create-new-screen'
+import EditPaymentScreen from './src/screens/edit-payment-screen/edit-payment-screen'
 import LoginScreen from './src/screens/loginscreen/loginscreen'
 import PaymentListDailyScreen from './src/screens/payment-list-daily-screen/payment-list-daily-screen'
 import PaymentListDetailScreen from './src/screens/payment-list-detail-screen/payment-list-detail-screen'
 import PaymentListMonthlyScreen from './src/screens/payment-list-monthly-screen/payment-list-monthly-screen'
 import SignupScreen from './src/screens/signupscreen/signupscreen'
-import {
-  ModalProps,
-  PaymentType,
-} from './repository/firebase/payments/payment-types'
-import EditPaymentScreen from './src/screens/edit-payment-screen/edit-payment-screen'
 
 export type MainStackParamList = {
   Monthly: undefined

@@ -20,7 +20,7 @@ import {
   MainScreenNavigationProp,
   ModalStackParamList,
 } from '../../../AppContainer'
-import { createPaymentsData } from '../../../repository/firebase/payments/payment-repository'
+import { editPaymentsData } from '../../../repository/firebase/payments/payment-repository'
 import { ModalProps } from '../../../repository/firebase/payments/payment-types'
 import { currentUserSelector } from '../../redux/user/user.selector'
 import DatePicker from '../datepicker/datepicker-component'
@@ -40,8 +40,6 @@ const EditPaymentForm: React.FC = () => {
     day: 'numeric',
   }
 
-  console.log(`payment: ${JSON.stringify(payment, null, ' ')}`)
-
   const [collected, setCollected] = useState(payment.collected)
   const [purchaseDate, setPurchaseDate] = useState(
     payment.purchaseDate.toDate()
@@ -50,6 +48,7 @@ const EditPaymentForm: React.FC = () => {
   const [purchaseMemo, setPurchaseMemo] = useState(payment.purchaseMemo)
   const [show, setShow] = useState(false)
   const [shopName, setShopName] = useState(payment.shopName)
+
   const [privateAmount, setPrivateAmount] = useState(payment.privateAmount)
   const [usage, setUsage] = useState(payment.usage)
 
@@ -67,7 +66,6 @@ const EditPaymentForm: React.FC = () => {
     setShopName(value)
     setShow(false)
   }
-
   const changeUsage: (value: string) => void = (value) => {
     setUsage(value)
     setShow(false)
@@ -85,19 +83,20 @@ const EditPaymentForm: React.FC = () => {
     }
 
     try {
-      const paymentData = await createPaymentsData(
-        currentUser,
-        state,
-        paymentID
-      )
+      const paymentData = await editPaymentsData(currentUser, state, paymentID)
       if (paymentData) {
         Toast.show({
-          text: 'データが修正されました',
+          text: 'データが更新されました',
           type: 'success',
         })
-
-        navigation.goBack()
+      } else {
+        Toast.show({
+          text: 'データの更新に失敗しました',
+          type: 'danger',
+        })
       }
+
+      navigation.goBack()
     } catch (e) {
       console.log(`failed to edit data: ${e}`)
     }
@@ -123,6 +122,7 @@ const EditPaymentForm: React.FC = () => {
         title="店舗"
         placeholder="購入したお店を選択して下さい"
         items={OPTIONS.SHOP_OPTIONS}
+        item={shopName}
         onChange={changeShop}
       />
       <PickerInput
@@ -130,6 +130,7 @@ const EditPaymentForm: React.FC = () => {
         title="用途"
         placeholder="購入した用途を選択して下さい"
         items={OPTIONS.SITUATION_OPTIONS}
+        item={usage}
         onChange={changeUsage}
       />
       <Item fixedLabel>
