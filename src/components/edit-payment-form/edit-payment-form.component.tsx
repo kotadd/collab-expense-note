@@ -95,7 +95,6 @@ const EditPaymentForm: React.FC = () => {
           yearMonth: purchaseDate
             .toLocaleDateString('ja-JP', dateOption)
             .replace(/(\d\d|\d)日.*/, ''),
-          updatedAt: new Date().toString(),
         })
       } else {
         Toast.show({

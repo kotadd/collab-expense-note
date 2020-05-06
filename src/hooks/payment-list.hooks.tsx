@@ -43,18 +43,16 @@ export function useCurrentPayments(uid: string): PaymentProps[] | undefined {
 
 export function useSpecificMonthPayments(
   uid: string,
-  yearMonth: string,
-  updatedAt?: string
+  yearMonth: string
 ): PaymentProps[] | undefined {
   const [payments, setPayments] = useState<PaymentProps[]>()
 
   useEffect(() => {
     const fetchPaymentsData = async (): Promise<void> => {
-      const payments = await setSpecificMonthPayments(uid, yearMonth)
-      setPayments(payments)
+      await setSpecificMonthPayments(uid, yearMonth, setPayments)
     }
     fetchPaymentsData()
-  }, [uid, yearMonth, updatedAt])
+  }, [uid, yearMonth])
 
   return payments
 }
@@ -67,7 +65,6 @@ export function useASpecificPayment(
 
   useEffect(() => {
     const fetchPaymentsData = async (): Promise<void> => {
-      console.log(`called`)
       const payment = await setASpecificPayment(uid, paymentID)
       setPayment(payment)
     }

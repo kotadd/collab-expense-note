@@ -27,10 +27,9 @@ export const setCurrentPayments: (
 
 export const setSpecificMonthPayments: (
   uid: string,
-  yearMonth: string
-) => Promise<
-  firebase.firestore.QueryDocumentSnapshot<firebase.firestore.DocumentData>[]
-> = async (uid, yearMonth) => {
+  yearMonth: string,
+  setPayments: React.Dispatch<React.SetStateAction<PaymentProps[] | undefined>>
+) => Promise<() => void> = async (uid, yearMonth, setPayments) => {
   const groupID = await fetchGroupIDByUID(uid)
 
   const yearMonthArr = yearMonth.split('年')
@@ -49,9 +48,17 @@ export const setSpecificMonthPayments: (
     .where('purchaseDate', '<', endTimestamp)
     .orderBy('purchaseDate', 'desc')
 
-  const payments = await query.get()
+  const unsubscribedPayments = query.onSnapshot(
+    (querySnapshot) => {
+      setPayments(querySnapshot.docs)
+    },
+    () => {
+      // FirebaseError: Missing or insufficient permissions になるため握り潰す
+      // console.log(error)
+    }
+  )
 
-  return payments.docs
+  return unsubscribedPayments
 }
 
 export const setASpecificPayment: (
@@ -64,6 +71,12 @@ export const setASpecificPayment: (
     .collection(`groups/${groupID}/payments`)
     .doc(paymentID)
     .get()
+
+  // console.log(`paymentID: ${paymentID}`)
+  // console.log(` groupID: ${groupID}`)
+  console.log(
+    `paymentSnapshot: ${JSON.stringify(paymentSnapshot.data(), null, ' ')}`
+  )
 
   return paymentSnapshot.data() as PaymentType
 }

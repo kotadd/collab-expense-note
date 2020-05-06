@@ -29,7 +29,6 @@ const LoginForm: React.FC = () => {
 
   useEffect(() => {
     auth.onAuthStateChanged(async (userAuth) => {
-      // console.log(`userAuth: ${JSON.stringify(userAuth, null, ' ')}`)
       if (!userAuth) return
       const groupID = await fetchGroupIDByUID(userAuth.uid)
       if (groupID) {

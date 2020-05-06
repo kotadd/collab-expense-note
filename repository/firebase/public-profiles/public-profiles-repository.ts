@@ -11,22 +11,20 @@ export const createPublicProfiles: (
   const userRef = firestore.doc(`public-profiles/${userAuth.uid}`)
   const userSnapshot = await userRef.get()
 
-  if (!userSnapshot.exists) {
-    const _createdAt = firebase.firestore.FieldValue.serverTimestamp()
-    const _updatedAt = _createdAt
-    try {
-      await userRef.set({
-        _createdAt,
-        _updatedAt,
-      })
-    } catch (error) {
-      console.log('ユーザーの作成に失敗しました', error.message)
-    }
-  } else {
+  if (userSnapshot.exists) {
     return Toast.show({
       text: 'このユーザーはすでに存在します',
       type: 'danger',
     })
+  }
+
+  try {
+    await userRef.set({
+      _createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+      _updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+    })
+  } catch (error) {
+    console.log('ユーザーの作成に失敗しました', error.message)
   }
 
   return userRef
