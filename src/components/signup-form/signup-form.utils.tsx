@@ -3,7 +3,7 @@ import { Dispatch } from 'redux'
 import { auth } from '../../../repository/firebase/firebase.utils'
 import { createPublicProfiles } from '../../../repository/firebase/public-profiles/public-profiles-repository'
 import { setCurrentUser } from '../../redux/user/user.actions'
-import { AddInfoScreenNavigationProp } from '../../../AppContainer'
+import { AuthScreenNavigationProp } from '../../../AppContainer'
 
 const isValidPassword: (
   password: string,
@@ -24,7 +24,7 @@ export const createNewUser: (
   password: string,
   confirmPassword: string,
   dispatch: Dispatch,
-  navigation: AddInfoScreenNavigationProp
+  navigation: AuthScreenNavigationProp
 ) => Promise<void> = async (
   email,
   password,

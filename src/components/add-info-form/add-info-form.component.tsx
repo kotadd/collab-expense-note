@@ -12,19 +12,20 @@ import {
   Text,
 } from 'native-base'
 import React, { useEffect, useState } from 'react'
-import { MainScreenNavigationProp } from '../../../AppContainer'
+import {
+  MainScreenNavigationProp,
+  RootScreenNavigationProp,
+} from '../../../AppContainer'
 import { fetchAllGroupData } from '../../../repository/firebase/groups/group-repository'
 import { addGroupInfo } from './add-info-form.utils'
+import { useNavigation } from '@react-navigation/native'
+import { useSelector } from 'react-redux'
+import { currentUserSelector } from '../../redux/user/user.selector'
 
-type AddInfoProps = {
-  navigation: MainScreenNavigationProp
-  currentUser: firebase.User
-}
+const AddInfoForm: React.FC = () => {
+  const navigation = useNavigation<RootScreenNavigationProp>()
+  const currentUser = useSelector(currentUserSelector)
 
-const AddInfoForm: React.FC<AddInfoProps> = ({
-  navigation,
-  currentUser,
-}: AddInfoProps) => {
   const [name, setName] = useState('')
   const [selectedGroupId, setSelectedGroupId] = useState('')
   const [pickerItemDom, setPickerItemDom] = useState([] as JSX.Element[])
@@ -63,7 +64,12 @@ const AddInfoForm: React.FC<AddInfoProps> = ({
     <Content>
       <Form>
         <Item floatingLabel>
-          <Icon type="FontAwesome" active name="user" />
+          <Icon
+            type="FontAwesome"
+            active
+            name="user"
+            style={{ marginRight: 8 }}
+          />
           <Label>表示するあなたの名前を入力してください</Label>
           <Input
             defaultValue=""
@@ -80,7 +86,7 @@ const AddInfoForm: React.FC<AddInfoProps> = ({
           />
           <Picker
             mode="dropdown"
-            style={{ width: undefined }}
+            style={{ width: undefined, marginLeft: -16 }}
             placeholder="参加するグループを選択してください"
             placeholderStyle={{ color: '#bfc6ea' }}
             placeholderIconColor="#007aff"

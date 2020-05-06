@@ -1,15 +1,19 @@
 import { Toast } from 'native-base'
-import { MainScreenNavigationProp } from '../../../AppContainer'
+import { RootScreenNavigationProp } from '../../../AppContainer'
 import { addDetailToProfile } from '../../../repository/firebase/public-profiles/public-profiles-repository'
 
 export const addGroupInfo: (
-  name: string,
+  displayName: string,
   selectedGroupId: string,
   currentUser: firebase.User,
-  navigation: MainScreenNavigationProp
-) => void = async (name, selectedGroupId, currentUser, navigation) => {
+  navigation: RootScreenNavigationProp
+) => void = async (displayName, selectedGroupId, currentUser, navigation) => {
   try {
-    const result = await addDetailToProfile(currentUser, selectedGroupId, name)
+    const result = await addDetailToProfile(
+      currentUser,
+      selectedGroupId,
+      displayName
+    )
 
     if (!result) {
       return Toast.show({
@@ -17,7 +21,9 @@ export const addGroupInfo: (
         type: 'danger',
       })
     }
-    navigation.navigate('Monthly')
+    navigation.navigate('Main', {
+      screen: 'Monthly',
+    })
   } catch (error) {
     return Toast.show({
       text: 'ユーザーの情報を追加するのに失敗しました。',
