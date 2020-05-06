@@ -145,7 +145,7 @@ const EditPaymentForm: React.FC = () => {
         <Input
           keyboardType="numeric"
           maxLength={6}
-          style={{ textAlign: 'right', lineHeight: 18, marginRight: 24 }}
+          style={{ textAlign: 'right', lineHeight: 18, marginRight: 10 }}
           value={groupAmount.toString()}
           onChangeText={(text): void => {
             setGroupAmount(parseInt(text) | 0)
@@ -167,7 +167,7 @@ const EditPaymentForm: React.FC = () => {
         <Input
           keyboardType="numeric"
           maxLength={6}
-          style={{ textAlign: 'right', lineHeight: 18, marginRight: 24 }}
+          style={{ textAlign: 'right', lineHeight: 18, marginRight: 10 }}
           value={privateAmount.toString()}
           onChangeText={(text): void => {
             setPrivateAmount(parseInt(text) | 0)

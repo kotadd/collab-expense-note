@@ -74,7 +74,7 @@ const SignupForm: React.FC = () => {
       {togglePassword ? (
         <Item floatingLabel last>
           <Icon active name="lock" />
-          <Label>パスワード</Label>
+          <Label>パスワードの再確認</Label>
           <Input
             secureTextEntry={false}
             defaultValue=""

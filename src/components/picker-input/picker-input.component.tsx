@@ -47,7 +47,7 @@ const PickerInput: React.FC<PickerInputProps> = ({
         <Label>{title}：</Label>
         <Picker
           mode="dropdown"
-          iosIcon={<Icon name="arrow-down" />}
+          iosIcon={<Icon name="arrow-down" style={{ marginLeft: 0 }} />}
           style={{ width: undefined, marginRight: -12 }}
           placeholder={placeholder}
           placeholderStyle={{ color: '#bfc6ea' }}

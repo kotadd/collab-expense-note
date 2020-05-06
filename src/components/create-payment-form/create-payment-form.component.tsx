@@ -122,7 +122,7 @@ const CreatePaymentForm: React.FC = () => {
         <Input
           keyboardType="numeric"
           maxLength={6}
-          style={{ textAlign: 'right', lineHeight: 18 }}
+          style={{ textAlign: 'right', lineHeight: 18, marginRight: 10 }}
           onChangeText={(text): void => {
             setGroupAmount(parseInt(text) | 0)
             setShow(false)
@@ -143,7 +143,7 @@ const CreatePaymentForm: React.FC = () => {
         <Input
           keyboardType="numeric"
           maxLength={6}
-          style={{ textAlign: 'right', lineHeight: 18 }}
+          style={{ textAlign: 'right', lineHeight: 18, marginRight: 10 }}
           onChangeText={(text): void => {
             setPrivateAmount(parseInt(text) | 0)
             setShow(false)
