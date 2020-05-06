@@ -124,7 +124,7 @@ const CreatePaymentForm: React.FC = () => {
           maxLength={6}
           style={{ textAlign: 'right', lineHeight: 18 }}
           onChangeText={(text): void => {
-            setGroupAmount(parseInt(text))
+            setGroupAmount(parseInt(text) | 0)
             setShow(false)
           }}
         />
@@ -145,7 +145,7 @@ const CreatePaymentForm: React.FC = () => {
           maxLength={6}
           style={{ textAlign: 'right', lineHeight: 18 }}
           onChangeText={(text): void => {
-            setPrivateAmount(parseInt(text))
+            setPrivateAmount(parseInt(text) | 0)
             setShow(false)
           }}
         />

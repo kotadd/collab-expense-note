@@ -22,7 +22,7 @@ import SignupScreen from './src/screens/signupscreen/signupscreen'
 
 export type MainStackParamList = {
   Monthly: undefined
-  Daily: { yearMonth: string }
+  Daily: { yearMonth: string; updatedAt?: string }
   Detail: { yearMonth: string; day: string; paymentID: string }
 }
 

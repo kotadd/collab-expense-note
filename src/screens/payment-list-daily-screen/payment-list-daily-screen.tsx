@@ -38,11 +38,11 @@ const PaymentListDailyScreen: React.FC = () => {
 
   const navigation = useNavigation<MainScreenNavigationProp>()
   const route = useRoute<DailyScreenRouteProp>()
-  const { yearMonth } = route.params
+  const { yearMonth, updatedAt } = route.params
 
   navigation.setOptions({ headerTitle: yearMonth })
 
-  const payments = useSpecificMonthPayments(targetUserID, yearMonth)
+  const payments = useSpecificMonthPayments(targetUserID, yearMonth, updatedAt)
 
   const paymentListDailyContent = payments ? (
     payments.map((payment) => {

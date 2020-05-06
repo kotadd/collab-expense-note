@@ -10,7 +10,7 @@ type PickerInputProps = {
     type: string
     label: string
   }[]
-  item: string
+  item?: string
   onChange: (value: string) => void
 }
 
@@ -48,7 +48,7 @@ const PickerInput: React.FC<PickerInputProps> = ({
         <Picker
           mode="dropdown"
           iosIcon={<Icon name="arrow-down" />}
-          style={{ width: undefined }}
+          style={{ width: undefined, marginRight: -12 }}
           placeholder={placeholder}
           placeholderStyle={{ color: '#bfc6ea' }}
           placeholderIconColor="#007aff"

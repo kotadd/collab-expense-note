@@ -38,6 +38,7 @@ const EditPaymentForm: React.FC = () => {
     year: 'numeric',
     month: 'short',
     day: 'numeric',
+    weekday: 'short',
   }
 
   const [collected, setCollected] = useState(payment.collected)
@@ -89,14 +90,20 @@ const EditPaymentForm: React.FC = () => {
           text: 'データが更新されました',
           type: 'success',
         })
+
+        navigation.navigate('Daily', {
+          yearMonth: purchaseDate
+            .toLocaleDateString('ja-JP', dateOption)
+            .replace(/(\d\d|\d)日.*/, ''),
+          updatedAt: new Date().toString(),
+        })
       } else {
         Toast.show({
           text: 'データの更新に失敗しました',
           type: 'danger',
         })
+        navigation.goBack()
       }
-
-      navigation.goBack()
     } catch (e) {
       console.log(`failed to edit data: ${e}`)
     }
@@ -138,12 +145,12 @@ const EditPaymentForm: React.FC = () => {
         <Input
           keyboardType="numeric"
           maxLength={6}
-          style={{ textAlign: 'right', lineHeight: 18 }}
+          style={{ textAlign: 'right', lineHeight: 18, marginRight: 24 }}
           value={groupAmount.toString()}
           onChangeText={(text): void => {
-            setGroupAmount(parseInt(text))
-            setShow(false)
+            setGroupAmount(parseInt(text) | 0)
           }}
+          onFocus={() => setShow(false)}
         />
         <Text
           style={{
@@ -160,12 +167,12 @@ const EditPaymentForm: React.FC = () => {
         <Input
           keyboardType="numeric"
           maxLength={6}
-          style={{ textAlign: 'right', lineHeight: 18 }}
+          style={{ textAlign: 'right', lineHeight: 18, marginRight: 24 }}
           value={privateAmount.toString()}
           onChangeText={(text): void => {
-            setPrivateAmount(parseInt(text))
-            setShow(false)
+            setPrivateAmount(parseInt(text) | 0)
           }}
+          onFocus={() => setShow(false)}
         />
         <Text style={{ color: '#575757', paddingRight: 5, fontSize: 17 }}>
           円
@@ -182,6 +189,7 @@ const EditPaymentForm: React.FC = () => {
           marginLeft: 16,
           backgroundColor: '#f8fbfd',
         }}
+        onFocus={() => setShow(false)}
       />
       <ListItem onPress={(): void => setCollected(!collected)}>
         <CheckBox

@@ -12,7 +12,6 @@ import {
   PaymentType,
 } from '../../repository/firebase/payments/payment-types'
 import { UserListProps } from '../redux/types'
-import { useFocusEffect } from '@react-navigation/native'
 
 export function useGroupUserList(currentUser: firebase.User): UserListProps {
   const [userList, setUserList] = useState([{ id: '', name: '' }])
@@ -44,7 +43,8 @@ export function useCurrentPayments(uid: string): PaymentProps[] | undefined {
 
 export function useSpecificMonthPayments(
   uid: string,
-  yearMonth: string
+  yearMonth: string,
+  updatedAt?: string
 ): PaymentProps[] | undefined {
   const [payments, setPayments] = useState<PaymentProps[]>()
 
@@ -54,7 +54,7 @@ export function useSpecificMonthPayments(
       setPayments(payments)
     }
     fetchPaymentsData()
-  }, [uid, yearMonth])
+  }, [uid, yearMonth, updatedAt])
 
   return payments
 }
@@ -65,13 +65,14 @@ export function useASpecificPayment(
 ): PaymentType | undefined {
   const [payment, setPayment] = useState<PaymentType>()
 
-  useFocusEffect(() => {
+  useEffect(() => {
     const fetchPaymentsData = async (): Promise<void> => {
+      console.log(`called`)
       const payment = await setASpecificPayment(uid, paymentID)
       setPayment(payment)
     }
     fetchPaymentsData()
-  })
+  }, [uid, paymentID])
 
   return payment
 }
