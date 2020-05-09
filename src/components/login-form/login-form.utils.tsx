@@ -15,7 +15,7 @@ export const navigateFromLoginScreen: (
   if (groupID) {
     navigation.navigate('Main', { screen: 'Monthly' })
   } else {
-    navigation.navigate('Auth', { screen: 'Group' })
+    navigation.navigate('Auth', { screen: 'JoinGroup' })
   }
 }
 
@@ -26,19 +26,28 @@ export const validateLogin: (
   navigation: RootScreenNavigationProp
 ) => Promise<void | null> = async (email, password, dispatch, navigation) => {
   if (!email || !password) return null
-  const credentialedUser = await auth.signInWithEmailAndPassword(
-    email,
-    password
-  )
-  const userAuth = credentialedUser.user
-  if (userAuth) {
-    dispatch(setCurrentUser(userAuth))
-    navigateFromLoginScreen(userAuth, navigation)
-  } else {
-    dispatch(setCurrentUser({}))
-    Toast.show({
-      text: 'ログイン情報が正しくありません',
-      type: 'danger',
-    })
+  try {
+    const credentialedUser = await auth.signInWithEmailAndPassword(
+      email,
+      password
+    )
+
+    const userAuth = credentialedUser.user
+    if (userAuth) {
+      dispatch(setCurrentUser(userAuth))
+      navigateFromLoginScreen(userAuth, navigation)
+    }
+  } catch (error) {
+    if (
+      error.message.match(
+        /There is no user record corresponding to this identifier. The user may have been deleted./
+      )
+    ) {
+      dispatch(setCurrentUser({}))
+      Toast.show({
+        text: 'ログイン情報が正しくありません',
+        type: 'danger',
+      })
+    }
   }
 }

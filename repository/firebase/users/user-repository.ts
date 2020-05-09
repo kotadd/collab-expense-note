@@ -29,14 +29,13 @@ export const createUser: (
   return userRef
 }
 
-export const addDetailToProfile: (
+export const addDetailToUser: (
   userAuth: firebase.User,
   groupID: string,
   displayName: string
-) => Promise<
-  | firebase.firestore.DocumentReference<firebase.firestore.DocumentData>
-  | undefined
-> = async (userAuth, groupID, displayName) => {
+) => Promise<void | firebase.firestore.DocumentReference<
+  firebase.firestore.DocumentData
+>> = async (userAuth, groupID, displayName) => {
   if (!userAuth) return
 
   const profileRef = firestore.doc(`users/${userAuth.uid}`)
@@ -52,9 +51,12 @@ export const addDetailToProfile: (
         _updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
       })
       userAuth.updateProfile({ displayName })
-      await auth.updateCurrentUser(userAuth)
+      return await auth.updateCurrentUser(userAuth)
     } catch (error) {
-      console.log('error creating user', error.message)
+      Toast.show({
+        text: 'ユーザーの情報を追加するのに失敗しました。',
+        type: 'danger',
+      })
     }
   }
 

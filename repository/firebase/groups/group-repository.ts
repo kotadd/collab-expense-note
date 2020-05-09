@@ -1,36 +1,29 @@
 import firebase from 'firebase/app'
 import { firestore } from '../firebase.utils'
+import { addDetailToUser } from '../users/user-repository'
+import { RootScreenNavigationProp } from '../../../AppContainer'
 
-export const fetchAllGroupData: () => Promise<
-  firebase.firestore.QueryDocumentSnapshot<firebase.firestore.DocumentData>[]
-> = async () => {
-  const groupCollectionRef = firestore.collection('groups')
-  const groupCollectionSnapshot = await groupCollectionRef.get()
-  return groupCollectionSnapshot.docs
-}
-
-export const isNewGroupName: (name: string) => Promise<boolean> = async (
-  name
+export const isCorrectGroup: (groupID: string) => Promise<boolean> = async (
+  groupID: string
 ) => {
-  const groupCollectionSnapshot = await firestore.collection('groups').get()
-  const result = groupCollectionSnapshot.docs.map((group) => {
-    if (name === group.data().name) return true
-  })
+  const groupSnapshot = await firestore.collection('groups').doc(groupID).get()
 
-  if (!result) return false
-  return true
+  return groupSnapshot.exists ? true : false
 }
 
-export const createGroup: (
-  name: string
-) => Promise<
-  firebase.firestore.DocumentReference<firebase.firestore.DocumentData>
-> = async (name) => {
+export const createNewGroup: (
+  userAuth: firebase.User,
+  displayName: string,
+  groupName: string,
+  navigation: RootScreenNavigationProp
+) => Promise<void> = async (userAuth, displayName, groupName, navigation) => {
   const group = {
     _createdAt: firebase.firestore.FieldValue.serverTimestamp(),
     _updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
-    name,
+    groupName,
   }
-  const result = await firestore.collection(`groups/`).add(group)
-  return result
+  const newGroup = await firestore.collection(`groups`).add(group)
+  const result = addDetailToUser(userAuth, newGroup.id, displayName)
+  if (!result) return
+  navigation.navigate('Main', { screen: 'Monthly' })
 }

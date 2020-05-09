@@ -1,3 +1,4 @@
+import { useNavigation } from '@react-navigation/native'
 import {
   Button,
   Col,
@@ -8,15 +9,12 @@ import {
   Item,
   Label,
   Text,
-  Toast,
 } from 'native-base'
-import React, { useState, useEffect } from 'react'
-import { Dispatch } from 'redux'
+import React, { useEffect, useState } from 'react'
+import { useDispatch } from 'react-redux'
 import { RootScreenNavigationProp } from '../../../AppContainer'
 import { auth } from '../../../repository/firebase/firebase.utils'
 import { setCurrentUser } from '../../redux/user/user.actions'
-import { useDispatch } from 'react-redux'
-import { useNavigation } from '@react-navigation/native'
 import { navigateFromLoginScreen, validateLogin } from './login-form.utils'
 
 const LoginForm: React.FC = () => {

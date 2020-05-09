@@ -40,7 +40,7 @@ export const createNewUser: (
     if (user) {
       await createUser(user)
       dispatch(setCurrentUser(user))
-      navigation.navigate('AddInfo')
+      navigation.navigate('JoinGroup')
     } else {
       dispatch(setCurrentUser({}))
       return Toast.show({

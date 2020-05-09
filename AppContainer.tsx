@@ -10,10 +10,10 @@ import { enableScreens } from 'react-native-screens'
 import { PaymentType } from './repository/firebase/payments/payment-types'
 import HeaderLeftLogoutButton from './src/components/header/header-left-logout-button.component'
 import HeaderRightCreateButton from './src/components/header/header-right-create-button.component'
-import AddInfoScreen from './src/screens/add-info-screen/add-info.screen'
 import CreateGroupScreen from './src/screens/create-group-screen/create-group.screen'
 import CreateNewScreen from './src/screens/create-new-screen/create-new.screen'
 import EditPaymentScreen from './src/screens/edit-payment-screen/edit-payment.screen'
+import JoinGroupScreen from './src/screens/join-group-screen/join-group.screen'
 import LoginScreen from './src/screens/login-screen/login.screen'
 import PaymentListDailyScreen from './src/screens/payment-list-daily-screen/payment-list-daily.screen'
 import PaymentListDetailScreen from './src/screens/payment-list-detail-screen/payment-list-detail.screen'
@@ -29,8 +29,8 @@ export type MainStackParamList = {
 export type AuthStackParamList = {
   Login: undefined
   Signup: undefined
-  AddInfo: undefined
-  Group: undefined
+  CreateGroup: undefined
+  JoinGroup: undefined
 }
 
 export type ModalStackParamList = {
@@ -54,7 +54,9 @@ export type RootStackParamList = {
       from?: 'monthly' | 'daily'
     }
   }
-  Auth: { screen?: 'Login' | 'Signup' | 'AddInfo' | 'Group' }
+  Auth: {
+    screen?: 'Login' | 'Signup' | 'CreateGroup' | 'JoinGroup'
+  }
 }
 
 export type MainScreenNavigationProp =
@@ -65,8 +67,8 @@ export type MainScreenNavigationProp =
 export type AuthScreenNavigationProp =
   | StackNavigationProp<AuthStackParamList, 'Login'>
   | StackNavigationProp<AuthStackParamList, 'Signup'>
-  | StackNavigationProp<AuthStackParamList, 'AddInfo'>
-  | StackNavigationProp<AuthStackParamList, 'Group'>
+  | StackNavigationProp<AuthStackParamList, 'CreateGroup'>
+  | StackNavigationProp<AuthStackParamList, 'JoinGroup'>
 
 export type ModalScreenNavigationProp =
   | StackNavigationProp<ModalStackParamList, 'CreateNew'>
@@ -144,14 +146,17 @@ const AuthStackScreen: React.FC = () => (
       options={{ title: '登録する' }}
     />
     <AuthStack.Screen
-      name="AddInfo"
-      component={AddInfoScreen}
-      options={{ title: '情報の追加' }}
+      name="CreateGroup"
+      component={CreateGroupScreen}
+      options={{
+        headerBackTitle: '戻る',
+        headerTitle: 'グループの作成',
+      }}
     />
     <AuthStack.Screen
-      name="Group"
-      component={CreateGroupScreen}
-      options={{ title: 'グループの作成' }}
+      name="JoinGroup"
+      component={JoinGroupScreen}
+      options={{ title: 'グループに参加' }}
     />
   </AuthStack.Navigator>
 )
