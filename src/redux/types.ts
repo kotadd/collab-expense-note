@@ -1,5 +1,5 @@
 import { User } from 'firebase'
-import { UserType } from '../../repository/firebase/public-profiles/public-profiles-types'
+import { UserType } from '../../repository/firebase/users/user-types'
 
 export type UserReduxTypes = {
   currentUser: User

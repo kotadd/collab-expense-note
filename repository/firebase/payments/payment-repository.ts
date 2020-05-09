@@ -12,7 +12,7 @@ export const setCurrentPayments: (
   const query = selectedUserID
     ? firestore
         .collection(`groups/${groupID}/payments`)
-        .where('user', '==', `user/${selectedUserID}`)
+        .where('user', '==', `users/${selectedUserID}`)
         .orderBy('purchaseDate', 'desc')
     : firestore
         .collection(`groups/${groupID}/payments`)
@@ -97,12 +97,6 @@ export const setASpecificPayment: (
     .doc(paymentID)
     .get()
 
-  // console.log(`paymentID: ${paymentID}`)
-  // console.log(` groupID: ${groupID}`)
-  console.log(
-    `paymentSnapshot: ${JSON.stringify(paymentSnapshot.data(), null, ' ')}`
-  )
-
   return paymentSnapshot.data() as PaymentType
 }
 
@@ -114,9 +108,7 @@ export const createPaymentsData: (
   | undefined
 > = async (userAuth, props) => {
   if (!userAuth) return
-  const profileSnapshot = await firestore
-    .doc(`public-profiles/${userAuth.uid}`)
-    .get()
+  const profileSnapshot = await firestore.doc(`users/${userAuth.uid}`).get()
   const groupID = await profileSnapshot.get('groupID')
 
   const payment = {
@@ -137,9 +129,7 @@ export const editPaymentsData: (
   paymentID: string
 ) => Promise<PaymentType> = async (userAuth, props, paymentID) => {
   if (!userAuth) return
-  const profileSnapshot = await firestore
-    .doc(`public-profiles/${userAuth.uid}`)
-    .get()
+  const profileSnapshot = await firestore.doc(`users/${userAuth.uid}`).get()
   const groupID = await profileSnapshot.get('groupID')
 
   const paymentRef = firestore.doc(`groups/${groupID}/payments/${paymentID}`)

@@ -9,29 +9,28 @@ export const fetchAllGroupData: () => Promise<
   return groupCollectionSnapshot.docs
 }
 
-export const createAccountAndGroup: (
-  name: string
-) => Promise<null | undefined> = async (name) => {
-  const accountsRef = firestore.collection('accounts').doc()
-  const groupsRef = firestore.collection('groups').doc()
-  try {
-    const _updatedAt = firebase.firestore.FieldValue.serverTimestamp()
-    const _createdAt = _updatedAt
-    accountsRef.set({
-      _createdAt,
-      _updatedAt,
-    })
-    groupsRef.set({
-      _createdAt,
-      _updatedAt,
-      name,
-      accountID: accountsRef.id,
-      userIDs: [],
-    })
-    return
-  } catch (error) {
-    console.log('error creating user', error.message)
-  }
+export const isNewGroupName: (name: string) => Promise<boolean> = async (
+  name
+) => {
+  const groupCollectionSnapshot = await firestore.collection('groups').get()
+  const result = groupCollectionSnapshot.docs.map((group) => {
+    if (name === group.data().name) return true
+  })
 
-  return null
+  if (!result) return false
+  return true
+}
+
+export const createGroup: (
+  name: string
+) => Promise<
+  firebase.firestore.DocumentReference<firebase.firestore.DocumentData>
+> = async (name) => {
+  const group = {
+    _createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+    _updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+    name,
+  }
+  const result = await firestore.collection(`groups/`).add(group)
+  return result
 }

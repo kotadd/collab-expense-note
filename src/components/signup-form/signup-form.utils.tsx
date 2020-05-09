@@ -1,7 +1,7 @@
 import { Toast } from 'native-base'
 import { Dispatch } from 'redux'
 import { auth } from '../../../repository/firebase/firebase.utils'
-import { createPublicProfiles } from '../../../repository/firebase/public-profiles/public-profiles-repository'
+import { createUser } from '../../../repository/firebase/users/user-repository'
 import { setCurrentUser } from '../../redux/user/user.actions'
 import { AuthScreenNavigationProp } from '../../../AppContainer'
 
@@ -38,7 +38,7 @@ export const createNewUser: (
     const { user } = await auth.createUserWithEmailAndPassword(email, password)
 
     if (user) {
-      await createPublicProfiles(user)
+      await createUser(user)
       dispatch(setCurrentUser(user))
       navigation.navigate('AddInfo')
     } else {
@@ -61,5 +61,16 @@ export const createNewUser: (
         type: 'danger',
       })
     }
+    if (
+      error.message.match(
+        /The email address is already in use by another account./
+      )
+    ) {
+      return Toast.show({
+        text: 'そのメールアドレスはすでに利用されています',
+        type: 'danger',
+      })
+    }
+    console.log(error)
   }
 }

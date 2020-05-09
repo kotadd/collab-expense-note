@@ -12,13 +12,13 @@ import HeaderLeftLogoutButton from './src/components/header/header-left-logout-b
 import HeaderRightCreateButton from './src/components/header/header-right-create-button.component'
 import AddInfoScreen from './src/screens/add-info-screen/add-info.screen'
 import CreateGroupScreen from './src/screens/create-group-screen/create-group.screen'
-import CreateNewScreen from './src/screens/create-new-screen/create-new-screen'
-import EditPaymentScreen from './src/screens/edit-payment-screen/edit-payment-screen'
-import LoginScreen from './src/screens/loginscreen/loginscreen'
-import PaymentListDailyScreen from './src/screens/payment-list-daily-screen/payment-list-daily-screen'
-import PaymentListDetailScreen from './src/screens/payment-list-detail-screen/payment-list-detail-screen'
-import PaymentListMonthlyScreen from './src/screens/payment-list-monthly-screen/payment-list-monthly-screen'
-import SignupScreen from './src/screens/signupscreen/signupscreen'
+import CreateNewScreen from './src/screens/create-new-screen/create-new.screen'
+import EditPaymentScreen from './src/screens/edit-payment-screen/edit-payment.screen'
+import LoginScreen from './src/screens/login-screen/login.screen'
+import PaymentListDailyScreen from './src/screens/payment-list-daily-screen/payment-list-daily.screen'
+import PaymentListDetailScreen from './src/screens/payment-list-detail-screen/payment-list-detail.screen'
+import PaymentListMonthlyScreen from './src/screens/payment-list-monthly-screen/payment-list-monthly.screen'
+import SignupScreen from './src/screens/signup-screen/signup.screen'
 
 export type MainStackParamList = {
   Monthly: undefined
@@ -30,9 +30,6 @@ export type AuthStackParamList = {
   Login: undefined
   Signup: undefined
   AddInfo: undefined
-}
-
-export type GroupStackParamList = {
   Group: undefined
 }
 
@@ -57,8 +54,7 @@ export type RootStackParamList = {
       from?: 'monthly' | 'daily'
     }
   }
-  Auth: { screen?: 'Login' | 'Signup' | 'AddInfo' }
-  Group: { screen: 'Group' }
+  Auth: { screen?: 'Login' | 'Signup' | 'AddInfo' | 'Group' }
 }
 
 export type MainScreenNavigationProp =
@@ -66,15 +62,11 @@ export type MainScreenNavigationProp =
   | StackNavigationProp<MainStackParamList, 'Daily'>
   | StackNavigationProp<MainStackParamList, 'Detail'>
 
-export type GroupScreenNavigationProp = StackNavigationProp<
-  GroupStackParamList,
-  'Group'
->
-
 export type AuthScreenNavigationProp =
   | StackNavigationProp<AuthStackParamList, 'Login'>
   | StackNavigationProp<AuthStackParamList, 'Signup'>
   | StackNavigationProp<AuthStackParamList, 'AddInfo'>
+  | StackNavigationProp<AuthStackParamList, 'Group'>
 
 export type ModalScreenNavigationProp =
   | StackNavigationProp<ModalStackParamList, 'CreateNew'>
@@ -84,11 +76,9 @@ export type RootScreenNavigationProp =
   | StackNavigationProp<RootStackParamList, 'Main'>
   | StackNavigationProp<RootStackParamList, 'Modal'>
   | StackNavigationProp<RootStackParamList, 'Auth'>
-  | StackNavigationProp<RootStackParamList, 'Group'>
 
 const MainStack = createStackNavigator<MainStackParamList>()
 const AuthStack = createStackNavigator<AuthStackParamList>()
-const GroupStack = createStackNavigator<GroupStackParamList>()
 const ModalStack = createStackNavigator<ModalStackParamList>()
 const RootStack = createStackNavigator<RootStackParamList>()
 
@@ -158,17 +148,12 @@ const AuthStackScreen: React.FC = () => (
       component={AddInfoScreen}
       options={{ title: '情報の追加' }}
     />
-  </AuthStack.Navigator>
-)
-
-const GroupStackScreen: React.FC = () => (
-  <GroupStack.Navigator>
-    <GroupStack.Screen
+    <AuthStack.Screen
       name="Group"
       component={CreateGroupScreen}
       options={{ title: 'グループの作成' }}
     />
-  </GroupStack.Navigator>
+  </AuthStack.Navigator>
 )
 
 const ModalStackScreen: React.FC = () => {
@@ -222,7 +207,6 @@ const ModalStackScreen: React.FC = () => {
 const RootStackScreen: React.FC = () => (
   <RootStack.Navigator mode="modal" initialRouteName="Auth" headerMode="none">
     <RootStack.Screen name="Auth" component={AuthStackScreen} />
-    <RootStack.Screen name="Group" component={GroupStackScreen} />
     <RootStack.Screen name="Main" component={MainStackScreen} />
     <RootStack.Screen name="Modal" component={ModalStackScreen} />
   </RootStack.Navigator>

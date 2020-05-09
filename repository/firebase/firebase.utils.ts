@@ -37,15 +37,13 @@ export const timestampToLocaleDate: (
 export async function fetchGroupIDByUserAuth(
   userAuth: firebase.User
 ): Promise<string> {
-  const profileSnapshot = await firestore
-    .doc(`public-profiles/${userAuth.uid}`)
-    .get()
+  const profileSnapshot = await firestore.doc(`users/${userAuth.uid}`).get()
 
   return (await profileSnapshot.get('groupID')) as string
 }
 
 export async function fetchGroupIDByUID(uid: string): Promise<string> {
-  const profileSnapshot = await firestore.doc(`public-profiles/${uid}`).get()
+  const profileSnapshot = await firestore.doc(`users/${uid}`).get()
 
   return (await profileSnapshot.get('groupID')) as string
 }
@@ -53,13 +51,13 @@ export async function fetchGroupIDByUID(uid: string): Promise<string> {
 export const loginUser: (
   email: string,
   password: string
-) => Promise<firebase.auth.UserCredential | undefined> = async (
-  email,
-  password
-) => {
-  if (!email || !password) return
-  const userAuth = auth.signInWithEmailAndPassword(email, password)
-  return userAuth
+) => Promise<firebase.User | null> = async (email, password) => {
+  if (!email || !password) return null
+  const credentialedUser = await auth.signInWithEmailAndPassword(
+    email,
+    password
+  )
+  return credentialedUser.user
 }
 
 export const fetchGroupUsers: (
@@ -68,7 +66,7 @@ export const fetchGroupUsers: (
   const groupID = await fetchGroupIDByUserAuth(userAuth)
 
   const profileSnapshots = await firestore
-    .collection('public-profiles')
+    .collection('users')
     .where('groupID', '==', groupID)
     .get()
 

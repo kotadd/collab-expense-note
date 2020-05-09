@@ -1,6 +1,6 @@
 import { Toast } from 'native-base'
 import { RootScreenNavigationProp } from '../../../AppContainer'
-import { addDetailToProfile } from '../../../repository/firebase/public-profiles/public-profiles-repository'
+import { addDetailToProfile } from '../../../repository/firebase/users/user-repository'
 
 export const addGroupInfo: (
   displayName: string,

@@ -1,15 +1,15 @@
 import { Toast } from 'native-base'
-import { RootScreenNavigationProp } from '../../AppContainer'
+import { AuthScreenNavigationProp } from '../../AppContainer'
 import { auth } from '../../repository/firebase/firebase.utils'
 import { setCurrentUser } from '../redux/user/user.actions'
 
 export async function logOut(
-  navigation: RootScreenNavigationProp
+  navigation: AuthScreenNavigationProp
 ): Promise<void> {
   try {
     await auth.signOut()
     setCurrentUser({})
-    navigation.navigate('Auth')
+    navigation.navigate('Login')
     Toast.show({
       text: 'ログアウトしました',
       type: 'success',

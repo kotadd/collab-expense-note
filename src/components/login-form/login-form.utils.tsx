@@ -1,22 +1,42 @@
 import { Toast } from 'native-base'
 import { Dispatch } from 'redux'
 import { RootScreenNavigationProp } from '../../../AppContainer'
-import { loginUser } from '../../../repository/firebase/firebase.utils'
+import {
+  auth,
+  fetchGroupIDByUID,
+} from '../../../repository/firebase/firebase.utils'
 import { setCurrentUser } from '../../redux/user/user.actions'
+
+export const navigateFromLoginScreen: (
+  userAuth: firebase.User,
+  navigation: RootScreenNavigationProp
+) => Promise<void> = async (userAuth, navigation) => {
+  const groupID = await fetchGroupIDByUID(userAuth.uid)
+  if (groupID) {
+    navigation.navigate('Main', { screen: 'Monthly' })
+  } else {
+    navigation.navigate('Auth', { screen: 'Group' })
+  }
+}
 
 export const validateLogin: (
   email: string,
   password: string,
   dispatch: Dispatch,
   navigation: RootScreenNavigationProp
-) => Promise<void> = async (email, password, dispatch, navigation) => {
-  const userAuth = await loginUser(email, password)
-  if (userAuth && userAuth.user) {
-    dispatch(setCurrentUser(userAuth.user))
-    navigation.navigate('Main', { screen: 'Monthly' })
+) => Promise<void | null> = async (email, password, dispatch, navigation) => {
+  if (!email || !password) return null
+  const credentialedUser = await auth.signInWithEmailAndPassword(
+    email,
+    password
+  )
+  const userAuth = credentialedUser.user
+  if (userAuth) {
+    dispatch(setCurrentUser(userAuth))
+    navigateFromLoginScreen(userAuth, navigation)
   } else {
     dispatch(setCurrentUser({}))
-    return Toast.show({
+    Toast.show({
       text: 'ログイン情報が正しくありません',
       type: 'danger',
     })

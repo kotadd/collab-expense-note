@@ -12,36 +12,22 @@ import {
   Toast,
 } from 'native-base'
 import React, { useState } from 'react'
-import { createAccountAndGroup } from '../../../repository/firebase/firebase.utils'
-import { fetchAllGroupData } from '../../../repository/firebase/groups/group-repository'
+import {
+  createGroup,
+  isNewGroupName,
+} from '../../../repository/firebase/groups/group-repository'
+
+const createNewGroup: (name: string) => void = (name) => {
+  isNewGroupName(name)
+    ? createGroup(name)
+    : Toast.show({
+        text: 'このグループ名はすでに登録されています',
+        type: 'danger',
+      })
+}
 
 const CreateGroupForm: React.FC = () => {
   const [name, setName] = useState('')
-  const [isNewGroup, setIsNewGroup] = useState(true)
-
-  const createNewGroup: (name: string) => Promise<void | null> = async (
-    name
-  ) => {
-    try {
-      const groups = await fetchAllGroupData()
-      groups.forEach((group) => {
-        if (name === group.data().name) {
-          return setIsNewGroup(false)
-        }
-      })
-
-      if (!isNewGroup) {
-        return Toast.show({
-          text: 'このグループ名はすでに登録されています',
-          type: 'danger',
-        })
-      }
-
-      return await createAccountAndGroup(name)
-    } catch (error) {
-      console.error(error)
-    }
-  }
 
   return (
     <Content>
@@ -58,11 +44,7 @@ const CreateGroupForm: React.FC = () => {
         <Grid>
           <Col style={{ height: 40 }}></Col>
         </Grid>
-        <Button
-          block
-          dark
-          onPress={(): Promise<void | null> => createNewGroup(name)}
-        >
+        <Button block dark onPress={(): void => createNewGroup(name)}>
           <Text> 登録する </Text>
         </Button>
       </Form>

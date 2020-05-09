@@ -70,7 +70,6 @@ const SignupForm: React.FC = () => {
           />
         </Item>
       )}
-
       {togglePassword ? (
         <Item floatingLabel last>
           <Icon active name="lock" />
@@ -106,7 +105,6 @@ const SignupForm: React.FC = () => {
           />
         </Item>
       )}
-
       <Grid>
         <Col style={{ height: 40 }}></Col>
       </Grid>

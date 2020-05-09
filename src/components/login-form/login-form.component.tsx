@@ -1,4 +1,3 @@
-import { useNavigation } from '@react-navigation/native'
 import {
   Button,
   Col,
@@ -9,32 +8,30 @@ import {
   Item,
   Label,
   Text,
+  Toast,
 } from 'native-base'
-import React, { useEffect, useState } from 'react'
-import { useDispatch } from 'react-redux'
+import React, { useState, useEffect } from 'react'
+import { Dispatch } from 'redux'
 import { RootScreenNavigationProp } from '../../../AppContainer'
-import {
-  auth,
-  fetchGroupIDByUID,
-} from '../../../repository/firebase/firebase.utils'
+import { auth } from '../../../repository/firebase/firebase.utils'
 import { setCurrentUser } from '../../redux/user/user.actions'
-import { validateLogin } from './login-form.utils'
+import { useDispatch } from 'react-redux'
+import { useNavigation } from '@react-navigation/native'
+import { navigateFromLoginScreen, validateLogin } from './login-form.utils'
 
 const LoginForm: React.FC = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [togglePassword, setTogglePassword] = useState(false)
+
   const dispatch = useDispatch()
   const navigation = useNavigation<RootScreenNavigationProp>()
 
   useEffect(() => {
     auth.onAuthStateChanged(async (userAuth) => {
       if (!userAuth) return
-      const groupID = await fetchGroupIDByUID(userAuth.uid)
-      if (groupID) {
-        dispatch(setCurrentUser(userAuth))
-        navigation.navigate('Main', { screen: 'Monthly' })
-      }
+      dispatch(setCurrentUser(userAuth))
+      navigateFromLoginScreen(userAuth, navigation)
     })
   }, [dispatch, navigation])
 
@@ -90,7 +87,7 @@ const LoginForm: React.FC = () => {
       <Button
         block
         dark
-        onPress={(): Promise<void> =>
+        onPress={(): Promise<void | null> =>
           validateLogin(email, password, dispatch, navigation)
         }
       >
