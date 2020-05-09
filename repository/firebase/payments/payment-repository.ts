@@ -4,13 +4,19 @@ import { PaymentProps, PaymentType, ModalProps } from './payment-types'
 
 export const setCurrentPayments: (
   uid: string,
-  setPayments: React.Dispatch<React.SetStateAction<PaymentProps[] | undefined>>
-) => Promise<() => void> = async (uid, setPayments) => {
+  setPayments: React.Dispatch<React.SetStateAction<PaymentProps[] | undefined>>,
+  selectedUserID?: string
+) => Promise<() => void> = async (uid, setPayments, selectedUserID) => {
   const groupID = await fetchGroupIDByUID(uid)
 
-  const query = firestore
-    .collection(`groups/${groupID}/payments`)
-    .orderBy('purchaseDate', 'desc')
+  const query = selectedUserID
+    ? firestore
+        .collection(`groups/${groupID}/payments`)
+        .where('user', '==', `user/${selectedUserID}`)
+        .orderBy('purchaseDate', 'desc')
+    : firestore
+        .collection(`groups/${groupID}/payments`)
+        .orderBy('purchaseDate', 'desc')
 
   const unsubscribedPayments = query.onSnapshot(
     (querySnapshot) => {
@@ -22,14 +28,23 @@ export const setCurrentPayments: (
     }
   )
 
+  const paymentSnapshots = await query.get()
+  if (paymentSnapshots.size === 0) setPayments(undefined)
+
   return unsubscribedPayments
 }
 
 export const setSpecificMonthPayments: (
   uid: string,
   yearMonth: string,
-  setPayments: React.Dispatch<React.SetStateAction<PaymentProps[] | undefined>>
-) => Promise<() => void> = async (uid, yearMonth, setPayments) => {
+  setPayments: React.Dispatch<React.SetStateAction<PaymentProps[] | undefined>>,
+  selectedUserID?: string
+) => Promise<() => void> = async (
+  uid,
+  yearMonth,
+  setPayments,
+  selectedUserID
+) => {
   const groupID = await fetchGroupIDByUID(uid)
 
   const yearMonthArr = yearMonth.split('年')
@@ -42,11 +57,18 @@ export const setSpecificMonthPayments: (
   const startTimestamp = firebase.firestore.Timestamp.fromDate(startDate)
   const endTimestamp = firebase.firestore.Timestamp.fromDate(endDate)
 
-  const query = firestore
-    .collection(`groups/${groupID}/payments`)
-    .where('purchaseDate', '>=', startTimestamp)
-    .where('purchaseDate', '<', endTimestamp)
-    .orderBy('purchaseDate', 'desc')
+  const query = selectedUserID
+    ? firestore
+        .collection(`groups/${groupID}/payments`)
+        .where('user', '==', `user/${selectedUserID}`)
+        .where('purchaseDate', '>=', startTimestamp)
+        .where('purchaseDate', '<', endTimestamp)
+        .orderBy('purchaseDate', 'desc')
+    : firestore
+        .collection(`groups/${groupID}/payments`)
+        .where('purchaseDate', '>=', startTimestamp)
+        .where('purchaseDate', '<', endTimestamp)
+        .orderBy('purchaseDate', 'desc')
 
   const unsubscribedPayments = query.onSnapshot(
     (querySnapshot) => {
@@ -57,6 +79,9 @@ export const setSpecificMonthPayments: (
       // console.log(error)
     }
   )
+
+  const paymentSnapshots = await query.get()
+  if (paymentSnapshots.size === 0) setPayments(undefined)
 
   return unsubscribedPayments
 }

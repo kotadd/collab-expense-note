@@ -3,7 +3,6 @@ import React from 'react'
 import { useSelector } from 'react-redux'
 import PaymentListMonthlyContent from '../../components/payment-list-monthly-content/payment-list-monthly-content.component'
 import PaymentListMonthlyHeader from '../../components/payment-list-monthly-header/payment-list-monthly-header.component'
-import { calcMonthlyTotalPayments } from './payment-list-monthly.utils'
 import ToggleMember from '../../components/toggle-member/toggle-member.component'
 import {
   useCurrentPayments,
@@ -14,33 +13,25 @@ import {
   currentUserSelector,
   selectedUserSelector,
 } from '../../redux/user/user.selector'
+import {
+  calcMonthlyTotalPayments,
+  isAllSelected,
+} from './payment-list-monthly.utils'
 
 const PaymentListMonthlyScreen: React.FC = () => {
   const currentUser = useSelector(currentUserSelector)
   const selectedUserName = useSelector(selectedUserSelector)
   const userList = useGroupUserList(currentUser)
 
-  let targetUserID = '-1'
-
-  if (selectedUserName === 'all-items') {
-    targetUserID = currentUser.uid
-  } else {
-    const user = userList.find((user) => user.name === selectedUserName)
-    if (user) {
-      targetUserID = user.id
-    }
-  }
-
-  const payments = useCurrentPayments(targetUserID)
-
   useToast(currentUser)
 
+  const selectedUserID = isAllSelected(selectedUserName)
+    ? ''
+    : userList.find((user) => user.name === selectedUserName)?.id
+
+  const payments = useCurrentPayments(currentUser.uid, selectedUserID)
+
   const paymentsMap = calcMonthlyTotalPayments(payments)
-
-  if (!paymentsMap) {
-    return <></>
-  }
-
   const paymentListMonthlyContent = []
   const paymentsArr = Object.entries(paymentsMap)
   for (let i = 0; i < paymentsArr.length; i += 2) {

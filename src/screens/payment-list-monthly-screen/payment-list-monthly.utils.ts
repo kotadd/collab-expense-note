@@ -45,3 +45,7 @@ export function calcMonthlyTotalPayments(
   )
   return paymentsMap
 }
+
+export function isAllSelected(item: string): boolean {
+  return item === 'all-items'
+}

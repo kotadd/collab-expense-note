@@ -1,7 +1,7 @@
 import { Icon, Item, Picker } from 'native-base'
 import * as React from 'react'
 import { ReactElement } from 'react'
-import SelectListHeader from '../group-list-header/group-list-header.component'
+import SelectListHeader from '../select-list-header/select-list-header.component'
 
 type GroupListPickerProps = {
   selectedUserName: string

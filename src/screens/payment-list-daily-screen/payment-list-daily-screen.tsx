@@ -17,6 +17,7 @@ import {
   currentUserSelector,
   selectedUserSelector,
 } from '../../redux/user/user.selector'
+import { isAllSelected } from '../payment-list-monthly-screen/payment-list-monthly.utils'
 
 type DailyScreenRouteProp = RouteProp<MainStackParamList, 'Daily'>
 
@@ -25,16 +26,9 @@ const PaymentListDailyScreen: React.FC = () => {
   const selectedUserName = useSelector(selectedUserSelector)
   const userList = useGroupUserList(currentUser)
 
-  let targetUserID = '-1'
-
-  if (selectedUserName === 'all-items') {
-    targetUserID = currentUser.uid
-  } else {
-    const user = userList.find((user) => user.name === selectedUserName)
-    if (user) {
-      targetUserID = user.id
-    }
-  }
+  const selectedUserID = isAllSelected(selectedUserName)
+    ? ''
+    : userList.find((user) => user.name === selectedUserName)?.id
 
   const navigation = useNavigation<MainScreenNavigationProp>()
   const route = useRoute<DailyScreenRouteProp>()
@@ -42,7 +36,11 @@ const PaymentListDailyScreen: React.FC = () => {
 
   navigation.setOptions({ headerTitle: yearMonth })
 
-  const payments = useSpecificMonthPayments(targetUserID, yearMonth)
+  const payments = useSpecificMonthPayments(
+    currentUser.uid,
+    yearMonth,
+    selectedUserID
+  )
 
   const paymentListDailyContent = payments ? (
     payments.map((payment) => {

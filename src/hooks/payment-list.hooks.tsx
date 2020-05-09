@@ -28,31 +28,40 @@ export function useGroupUserList(currentUser: firebase.User): UserListProps {
   return userList
 }
 
-export function useCurrentPayments(uid: string): PaymentProps[] | undefined {
+export function useCurrentPayments(
+  uid: string,
+  selectedUserID?: string
+): PaymentProps[] | undefined {
   const [payments, setPayments] = useState<PaymentProps[]>()
 
   useEffect(() => {
     const fetchPaymentsData = async (): Promise<void> => {
-      await setCurrentPayments(uid, setPayments)
+      await setCurrentPayments(uid, setPayments, selectedUserID)
     }
     fetchPaymentsData()
-  }, [uid])
+  }, [uid, selectedUserID])
 
   return payments
 }
 
 export function useSpecificMonthPayments(
   uid: string,
-  yearMonth: string
+  yearMonth: string,
+  selectedUserID?: string
 ): PaymentProps[] | undefined {
   const [payments, setPayments] = useState<PaymentProps[]>()
 
   useEffect(() => {
     const fetchPaymentsData = async (): Promise<void> => {
-      await setSpecificMonthPayments(uid, yearMonth, setPayments)
+      await setSpecificMonthPayments(
+        uid,
+        yearMonth,
+        setPayments,
+        selectedUserID
+      )
     }
     fetchPaymentsData()
-  }, [uid, yearMonth])
+  }, [uid, yearMonth, selectedUserID])
 
   return payments
 }

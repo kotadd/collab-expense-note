@@ -1,6 +1,6 @@
 import { Form, Icon, Item, Label, Picker } from 'native-base'
 import React, { useState, ReactElement } from 'react'
-import SelectListHeader from '../group-list-header/group-list-header.component'
+import SelectListHeader from '../select-list-header/select-list-header.component'
 
 type PickerInputProps = {
   title: string
