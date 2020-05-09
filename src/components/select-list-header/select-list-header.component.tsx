@@ -2,9 +2,10 @@ import * as React from 'react'
 import { Header, Left, Icon, Button, Title, Right, Body } from 'native-base'
 import { ReactElement } from 'react'
 
-const GroupListHeader: (
-  backAction: (() => void) | undefined
-) => ReactElement = (backAction) => (
+const SelectListHeader: (
+  backAction: (() => void) | undefined,
+  title: string
+) => ReactElement = (backAction, title) => (
   <Header>
     <Left>
       <Button transparent onPress={backAction}>
@@ -12,10 +13,10 @@ const GroupListHeader: (
       </Button>
     </Left>
     <Body style={{ flex: 3 }}>
-      <Title>同じグループのメンバー</Title>
+      <Title>{title}</Title>
     </Body>
     <Right />
   </Header>
 )
 
-export default GroupListHeader
+export default SelectListHeader

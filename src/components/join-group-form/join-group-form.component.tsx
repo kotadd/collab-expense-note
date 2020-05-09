@@ -14,16 +14,15 @@ import {
 import React, { useState } from 'react'
 import { useSelector } from 'react-redux'
 import { RootScreenNavigationProp } from '../../../AppContainer'
-import { createNewGroup } from '../../../repository/firebase/groups/group-repository'
 import { currentUserSelector } from '../../redux/user/user.selector'
+import { joinGroup } from './join-group.utils'
 
-const CreateGroupForm: React.FC = () => {
-  const [groupName, setGroupName] = useState('')
+const JoinGroupForm: React.FC = () => {
   const [displayName, setDisplayName] = useState('')
-
+  const [groupID, setGroupID] = useState('')
+  const navigation = useNavigation<RootScreenNavigationProp>()
   const currentUser = useSelector(currentUserSelector)
 
-  const navigation = useNavigation<RootScreenNavigationProp>()
   return (
     <Content>
       <Form>
@@ -43,11 +42,11 @@ const CreateGroupForm: React.FC = () => {
         </Item>
         <Item floatingLabel>
           <Icon type="FontAwesome" active name="users" />
-          <Label>作成するグループ名を入力してください</Label>
+          <Label>参加するグループのIDを入力してください</Label>
           <Input
             defaultValue=""
-            onChangeText={(text): void => setGroupName(text)}
-            value={groupName}
+            onChangeText={(text): void => setGroupID(text)}
+            value={groupID}
           />
         </Item>
         <Grid>
@@ -56,23 +55,23 @@ const CreateGroupForm: React.FC = () => {
         <Button
           block
           dark
-          onPress={(): Promise<void> =>
-            createNewGroup(currentUser, displayName, groupName, navigation)
+          onPress={(): void =>
+            joinGroup(currentUser, displayName, groupID, navigation)
           }
         >
-          <Text> 登録する </Text>
+          <Text> 参加する </Text>
         </Button>
         <Button
           transparent
           onPress={(): void =>
-            navigation.navigate('Auth', { screen: 'JoinGroup' })
+            navigation.navigate('Auth', { screen: 'CreateGroup' })
           }
         >
-          <Text>すでにあるグループに参加しますか？</Text>
+          <Text>新しくグループを作成しますか？</Text>
         </Button>
       </Form>
     </Content>
   )
 }
 
-export default CreateGroupForm
+export default JoinGroupForm

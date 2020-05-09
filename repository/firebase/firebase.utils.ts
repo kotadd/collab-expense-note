@@ -2,7 +2,6 @@ import firebase from 'firebase/app'
 import 'firebase/auth'
 import 'firebase/firestore'
 import { UserListProps } from '../../src/redux/types'
-import { ModalProps } from './payments/payment-types'
 
 const config = {
   apiKey: 'AIzaSyDxYGmo8Y9WQIBJ-oemrLr8MrnYUHGZa8Y',
@@ -38,29 +37,27 @@ export const timestampToLocaleDate: (
 export async function fetchGroupIDByUserAuth(
   userAuth: firebase.User
 ): Promise<string> {
-  const profileSnapshot = await firestore
-    .doc(`public-profiles/${userAuth.uid}`)
-    .get()
+  const profileSnapshot = await firestore.doc(`users/${userAuth.uid}`).get()
 
-  return await profileSnapshot.get('groupID')
+  return (await profileSnapshot.get('groupID')) as string
 }
 
 export async function fetchGroupIDByUID(uid: string): Promise<string> {
-  const profileSnapshot = await firestore.doc(`public-profiles/${uid}`).get()
+  const profileSnapshot = await firestore.doc(`users/${uid}`).get()
 
-  return await profileSnapshot.get('groupID')
+  return (await profileSnapshot.get('groupID')) as string
 }
 
 export const loginUser: (
   email: string,
   password: string
-) => Promise<firebase.auth.UserCredential | undefined> = async (
-  email,
-  password
-) => {
-  if (!email || !password) return
-  const userAuth = auth.signInWithEmailAndPassword(email, password)
-  return userAuth
+) => Promise<firebase.User | null> = async (email, password) => {
+  if (!email || !password) return null
+  const credentialedUser = await auth.signInWithEmailAndPassword(
+    email,
+    password
+  )
+  return credentialedUser.user
 }
 
 export const fetchGroupUsers: (
@@ -69,7 +66,7 @@ export const fetchGroupUsers: (
   const groupID = await fetchGroupIDByUserAuth(userAuth)
 
   const profileSnapshots = await firestore
-    .collection('public-profiles')
+    .collection('users')
     .where('groupID', '==', groupID)
     .get()
 
@@ -81,29 +78,6 @@ export const fetchGroupUsers: (
   })
 
   return userList
-}
-
-export const createPaymentsData: (
-  userAuth: firebase.User,
-  props: ModalProps
-) => Promise<
-  | firebase.firestore.DocumentReference<firebase.firestore.DocumentData>
-  | undefined
-> = async (userAuth: firebase.User, props: ModalProps) => {
-  if (!userAuth) return
-  const profileSnapshot = await firestore
-    .doc(`public-profiles/${userAuth.uid}`)
-    .get()
-  const groupID = await profileSnapshot.get('groupID')
-
-  const payment = {
-    ...props,
-    _updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
-    _createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-    user: `user/${userAuth.uid}`,
-  }
-
-  return await firestore.collection(`groups/${groupID}/payments`).add(payment)
 }
 
 export default firebase

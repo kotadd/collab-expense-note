@@ -9,7 +9,7 @@ export async function logOut(
   try {
     await auth.signOut()
     setCurrentUser({})
-    navigation.navigate('Auth')
+    navigation.navigate('Login')
     Toast.show({
       text: 'ログアウトしました',
       type: 'success',

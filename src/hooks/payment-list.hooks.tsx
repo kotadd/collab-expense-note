@@ -3,10 +3,14 @@ import { useEffect, useState } from 'react'
 import { Keyboard } from 'react-native'
 import { fetchGroupUsers } from '../../repository/firebase/firebase.utils'
 import {
-  fetchSpecificMonthPayments,
+  setSpecificMonthPayments,
   setCurrentPayments,
+  setASpecificPayment,
 } from '../../repository/firebase/payments/payment-repository'
-import { PaymentProps } from '../../repository/firebase/payments/payment-types'
+import {
+  PaymentProps,
+  PaymentType,
+} from '../../repository/firebase/payments/payment-types'
 import { UserListProps } from '../redux/types'
 
 export function useGroupUserList(currentUser: firebase.User): UserListProps {
@@ -25,35 +29,58 @@ export function useGroupUserList(currentUser: firebase.User): UserListProps {
 }
 
 export function useCurrentPayments(
-  selectedUser: string
+  uid: string,
+  selectedUserID?: string
 ): PaymentProps[] | undefined {
   const [payments, setPayments] = useState<PaymentProps[]>()
 
   useEffect(() => {
     const fetchPaymentsData = async (): Promise<void> => {
-      await setCurrentPayments(selectedUser, setPayments)
+      await setCurrentPayments(uid, setPayments, selectedUserID)
     }
     fetchPaymentsData()
-  }, [selectedUser])
+  }, [uid, selectedUserID])
 
   return payments
 }
 
 export function useSpecificMonthPayments(
-  currentUser: firebase.User,
-  yearMonth: string
+  uid: string,
+  yearMonth: string,
+  selectedUserID?: string
 ): PaymentProps[] | undefined {
   const [payments, setPayments] = useState<PaymentProps[]>()
 
   useEffect(() => {
     const fetchPaymentsData = async (): Promise<void> => {
-      const payments = await fetchSpecificMonthPayments(currentUser, yearMonth)
-      setPayments(payments)
+      await setSpecificMonthPayments(
+        uid,
+        yearMonth,
+        setPayments,
+        selectedUserID
+      )
     }
     fetchPaymentsData()
-  }, [currentUser, yearMonth])
+  }, [uid, yearMonth, selectedUserID])
 
   return payments
+}
+
+export function useASpecificPayment(
+  uid: string,
+  paymentID: string
+): PaymentType | undefined {
+  const [payment, setPayment] = useState<PaymentType>()
+
+  useEffect(() => {
+    const fetchPaymentsData = async (): Promise<void> => {
+      const payment = await setASpecificPayment(uid, paymentID)
+      setPayment(payment)
+    }
+    fetchPaymentsData()
+  }, [uid, paymentID])
+
+  return payment
 }
 
 export function useToast(currentUser: firebase.User): void {

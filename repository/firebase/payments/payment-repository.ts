@@ -1,20 +1,22 @@
 import firebase from 'firebase/app'
-import {
-  fetchGroupIDByUID,
-  fetchGroupIDByUserAuth,
-  firestore,
-} from '../firebase.utils'
-import { PaymentProps } from './payment-types'
+import { fetchGroupIDByUID, firestore } from '../firebase.utils'
+import { PaymentProps, PaymentType, ModalProps } from './payment-types'
 
 export const setCurrentPayments: (
-  selectedUser: string,
-  setPayments: React.Dispatch<React.SetStateAction<PaymentProps[] | undefined>>
-) => Promise<() => void> = async (selectedUser, setPayments) => {
-  const groupID = await fetchGroupIDByUID(selectedUser)
+  uid: string,
+  setPayments: React.Dispatch<React.SetStateAction<PaymentProps[] | undefined>>,
+  selectedUserID?: string
+) => Promise<() => void> = async (uid, setPayments, selectedUserID) => {
+  const groupID = await fetchGroupIDByUID(uid)
 
-  const query = firestore
-    .collection(`groups/${groupID}/payments`)
-    .orderBy('purchaseDate', 'desc')
+  const query = selectedUserID
+    ? firestore
+        .collection(`groups/${groupID}/payments`)
+        .where('user', '==', `users/${selectedUserID}`)
+        .orderBy('purchaseDate', 'desc')
+    : firestore
+        .collection(`groups/${groupID}/payments`)
+        .orderBy('purchaseDate', 'desc')
 
   const unsubscribedPayments = query.onSnapshot(
     (querySnapshot) => {
@@ -26,16 +28,24 @@ export const setCurrentPayments: (
     }
   )
 
+  const paymentSnapshots = await query.get()
+  if (paymentSnapshots.size === 0) setPayments(undefined)
+
   return unsubscribedPayments
 }
 
-export const fetchSpecificMonthPayments: (
-  userAuth: firebase.User,
-  yearMonth: string
-) => Promise<
-  firebase.firestore.QueryDocumentSnapshot<firebase.firestore.DocumentData>[]
-> = async (userAuth: firebase.User, yearMonth: string) => {
-  const groupID = await fetchGroupIDByUserAuth(userAuth)
+export const setSpecificMonthPayments: (
+  uid: string,
+  yearMonth: string,
+  setPayments: React.Dispatch<React.SetStateAction<PaymentProps[] | undefined>>,
+  selectedUserID?: string
+) => Promise<() => void> = async (
+  uid,
+  yearMonth,
+  setPayments,
+  selectedUserID
+) => {
+  const groupID = await fetchGroupIDByUID(uid)
 
   const yearMonthArr = yearMonth.split('年')
   const year = parseInt(yearMonthArr[0])
@@ -47,17 +57,96 @@ export const fetchSpecificMonthPayments: (
   const startTimestamp = firebase.firestore.Timestamp.fromDate(startDate)
   const endTimestamp = firebase.firestore.Timestamp.fromDate(endDate)
 
-  const query = firestore
+  const query = selectedUserID
+    ? firestore
+        .collection(`groups/${groupID}/payments`)
+        .where('user', '==', `user/${selectedUserID}`)
+        .where('purchaseDate', '>=', startTimestamp)
+        .where('purchaseDate', '<', endTimestamp)
+        .orderBy('purchaseDate', 'desc')
+    : firestore
+        .collection(`groups/${groupID}/payments`)
+        .where('purchaseDate', '>=', startTimestamp)
+        .where('purchaseDate', '<', endTimestamp)
+        .orderBy('purchaseDate', 'desc')
+
+  const unsubscribedPayments = query.onSnapshot(
+    (querySnapshot) => {
+      setPayments(querySnapshot.docs)
+    },
+    () => {
+      // FirebaseError: Missing or insufficient permissions になるため握り潰す
+      // console.log(error)
+    }
+  )
+
+  const paymentSnapshots = await query.get()
+  if (paymentSnapshots.size === 0) setPayments(undefined)
+
+  return unsubscribedPayments
+}
+
+export const setASpecificPayment: (
+  uid: string,
+  paymentID: string
+) => Promise<PaymentType> = async (uid, paymentID) => {
+  const groupID = await fetchGroupIDByUID(uid)
+
+  const paymentSnapshot = await firestore
     .collection(`groups/${groupID}/payments`)
-    .where('purchaseDate', '>=', startTimestamp)
-    .where('purchaseDate', '<', endTimestamp)
-    .orderBy('purchaseDate', 'desc')
+    .doc(paymentID)
+    .get()
 
-  const payments = await query.get()
+  return paymentSnapshot.data() as PaymentType
+}
 
-  // query.onSnapshot((querySnapshot) => {
-  //   setPayments(querySnapshot.docs)
-  // })
+export const createPaymentsData: (
+  userAuth: firebase.User,
+  props: ModalProps
+) => Promise<
+  | firebase.firestore.DocumentReference<firebase.firestore.DocumentData>
+  | undefined
+> = async (userAuth, props) => {
+  if (!userAuth) return
+  const profileSnapshot = await firestore.doc(`users/${userAuth.uid}`).get()
+  const groupID = await profileSnapshot.get('groupID')
 
-  return payments.docs
+  const payment = {
+    ...props,
+    _updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+    _createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+    user: `user/${userAuth.uid}`,
+  }
+  const result = await firestore
+    .collection(`groups/${groupID}/payments`)
+    .add(payment)
+  return result
+}
+
+export const editPaymentsData: (
+  userAuth: firebase.User,
+  props: ModalProps,
+  paymentID: string
+) => Promise<PaymentType> = async (userAuth, props, paymentID) => {
+  if (!userAuth) return
+  const profileSnapshot = await firestore.doc(`users/${userAuth.uid}`).get()
+  const groupID = await profileSnapshot.get('groupID')
+
+  const paymentRef = firestore.doc(`groups/${groupID}/payments/${paymentID}`)
+  const paymentSnapshot = await paymentRef.get()
+
+  if (!paymentSnapshot.exists) return
+
+  const updateFields = {
+    ...props,
+    _updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+  }
+  await paymentRef.update(updateFields)
+
+  const payment = {
+    ...updateFields,
+    ...paymentSnapshot.get('_createdAt'),
+  }
+
+  return payment
 }

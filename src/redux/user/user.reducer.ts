@@ -1,14 +1,13 @@
 import { SetCurrentUserAction, SetSelectedUserAction } from './user.actions'
-import { SelectedUserProps, ALL_ITEMS_STATE } from './user.types'
 
 export type UserReduxProps = Readonly<{
   currentUser: firebase.User | {}
-  selectedUser: SelectedUserProps
+  selectedUserName: string
 }>
 
 const initialState = {
   currentUser: {},
-  selectedUser: ALL_ITEMS_STATE,
+  selectedUserName: 'all-items',
 }
 
 type Action = SetCurrentUserAction | SetSelectedUserAction
@@ -23,7 +22,7 @@ const userReducer = (state = initialState, action: Action): UserReduxProps => {
     case 'SET_SELECTED_USER':
       return {
         ...state,
-        selectedUser: action.payload,
+        selectedUserName: action.payload,
       }
     default:
       return state

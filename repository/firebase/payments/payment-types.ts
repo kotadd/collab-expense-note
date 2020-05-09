@@ -1,10 +1,10 @@
 export type PaymentType = {
-  _createdAt: firebase.firestore.FieldValue
-  _updatedAt: firebase.firestore.FieldValue
+  _createdAt: firebase.firestore.Timestamp
+  _updatedAt: firebase.firestore.Timestamp
   collected: boolean
   groupAmount: number
   privateAmount: number
-  purchaseDate: firebase.firestore.FieldValue
+  purchaseDate: firebase.firestore.Timestamp
   purchaseMemo: string
   shopName: string | 'その他'
   usage: string | 'その他'
