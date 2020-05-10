@@ -1,4 +1,9 @@
-import { useNavigation } from '@react-navigation/native'
+import {
+  BottomTabNavigationProp,
+  createBottomTabNavigator,
+  BottomTabNavigationOptions,
+} from '@react-navigation/bottom-tabs'
+import { NavigationContainer, useNavigation } from '@react-navigation/native'
 import {
   createStackNavigator,
   StackNavigationProp,
@@ -18,12 +23,65 @@ import LoginScreen from './src/screens/login-screen/login.screen'
 import PaymentListDailyScreen from './src/screens/payment-list-daily-screen/payment-list-daily.screen'
 import PaymentListDetailScreen from './src/screens/payment-list-detail-screen/payment-list-detail.screen'
 import PaymentListMonthlyScreen from './src/screens/payment-list-monthly-screen/payment-list-monthly.screen'
+import ProfileScreen from './src/screens/profile-screen/profile.screen'
 import SignupScreen from './src/screens/signup-screen/signup.screen'
+import TabBarIcons from './src/components/tab-bar-icons/tab-bar-icons.component'
 
 export type MainStackParamList = {
   Monthly: undefined
   Daily: { yearMonth: string }
   Detail: { yearMonth: string; day: string; paymentID: string }
+}
+
+type MainParams = {
+  screen: 'Monthly' | 'Daily' | 'Detail'
+  params?: {
+    yearMonth?: string
+    day?: string
+    paymentID?: string
+  }
+}
+
+export type ModalStackParamList = {
+  CreateNew: { from: 'monthly' | 'daily' }
+  Edit: { payment: PaymentType; paymentID: string }
+}
+
+type ModalParams = {
+  screen: 'CreateNew' | 'Edit'
+  params: {
+    from?: 'monthly' | 'daily'
+    payment?: PaymentType
+    paymentID?: string
+  }
+}
+
+export type HomeStackParamList = {
+  Main: MainParams
+  Modal: ModalParams
+}
+
+type HomeParams = {
+  screen: 'Main' | 'Modal'
+  params: MainParams | ModalParams
+}
+
+type ProfileParams = {
+  screen: 'Profile'
+}
+
+export type ProfileStackParamList = {
+  Profile: ProfileParams
+}
+
+export type HomeTabsParamList = {
+  Home: HomeParams
+  Profile: ProfileParams
+}
+
+type HomeTabsParams = {
+  screen: 'Home' | 'Profile'
+  params: HomeParams | ProfileParams
 }
 
 export type AuthStackParamList = {
@@ -33,30 +91,13 @@ export type AuthStackParamList = {
   JoinGroup: undefined
 }
 
-export type ModalStackParamList = {
-  CreateNew: { from: 'monthly' | 'daily' }
-  Edit: { payment: PaymentType; paymentID: string }
+type AuthParams = {
+  screen: 'Login' | 'Signup' | 'CreateGroup' | 'JoinGroup'
 }
 
 export type RootStackParamList = {
-  Main: {
-    screen?: 'Monthly' | 'Daily' | 'Detail'
-    params?: {
-      yearMonth?: string
-      day?: string
-      paymentID?: string
-      payment?: PaymentType
-    }
-  }
-  Modal: {
-    screen?: 'CreateNew' | 'Edit'
-    params?: {
-      from?: 'monthly' | 'daily'
-    }
-  }
-  Auth: {
-    screen?: 'Login' | 'Signup' | 'CreateGroup' | 'JoinGroup'
-  }
+  Auth: AuthParams
+  HomeTabs: HomeTabsParams
 }
 
 export type MainScreenNavigationProp =
@@ -74,14 +115,24 @@ export type ModalScreenNavigationProp =
   | StackNavigationProp<ModalStackParamList, 'CreateNew'>
   | StackNavigationProp<ModalStackParamList, 'Edit'>
 
+export type HomeScreenNavigationProp =
+  | StackNavigationProp<HomeStackParamList, 'Main'>
+  | StackNavigationProp<HomeStackParamList, 'Modal'>
+
+export type HomeTabsNavigationProp =
+  | BottomTabNavigationProp<HomeTabsParamList, 'Home'>
+  | BottomTabNavigationProp<HomeTabsParamList, 'Profile'>
+
 export type RootScreenNavigationProp =
-  | StackNavigationProp<RootStackParamList, 'Main'>
-  | StackNavigationProp<RootStackParamList, 'Modal'>
   | StackNavigationProp<RootStackParamList, 'Auth'>
+  | StackNavigationProp<RootStackParamList, 'HomeTabs'>
 
 const MainStack = createStackNavigator<MainStackParamList>()
 const AuthStack = createStackNavigator<AuthStackParamList>()
 const ModalStack = createStackNavigator<ModalStackParamList>()
+const HomeStack = createStackNavigator<HomeStackParamList>()
+const ProfileStack = createStackNavigator<ProfileStackParamList>()
+const RootTab = createBottomTabNavigator<HomeTabsParamList>()
 const RootStack = createStackNavigator<RootStackParamList>()
 
 const MainStackScreen: React.FC = () => {
@@ -143,7 +194,7 @@ const AuthStackScreen: React.FC = () => (
     <AuthStack.Screen
       name="Signup"
       component={SignupScreen}
-      options={{ title: '登録する' }}
+      options={{ title: 'アカウント作成' }}
     />
     <AuthStack.Screen
       name="CreateGroup"
@@ -156,7 +207,10 @@ const AuthStackScreen: React.FC = () => (
     <AuthStack.Screen
       name="JoinGroup"
       component={JoinGroupScreen}
-      options={{ title: 'グループに参加' }}
+      options={{
+        headerBackTitle: '戻る',
+        headerTitle: 'グループに参加',
+      }}
     />
   </AuthStack.Navigator>
 )
@@ -209,15 +263,72 @@ const ModalStackScreen: React.FC = () => {
   )
 }
 
+const HomeStackScreen: React.FC = () => (
+  <HomeStack.Navigator mode="modal" headerMode="none">
+    <HomeStack.Screen name="Main" component={MainStackScreen} />
+    <HomeStack.Screen name="Modal" component={ModalStackScreen} />
+  </HomeStack.Navigator>
+)
+
+const ProfileStackScreen: React.FC = () => {
+  const navigation = useNavigation<RootScreenNavigationProp>()
+
+  return (
+    <ProfileStack.Navigator>
+      <ProfileStack.Screen
+        name="Profile"
+        component={ProfileScreen}
+        options={{
+          title: 'プロフィール',
+          headerLeft: (): ReactElement => {
+            const leftButton = (
+              <HeaderLeftLogoutButton navigation={navigation} />
+            )
+            return leftButton
+          },
+        }}
+      />
+    </ProfileStack.Navigator>
+  )
+}
+
+const HomeTabs: React.FC = () => (
+  <RootTab.Navigator
+    screenOptions={({ route }): BottomTabNavigationOptions => ({
+      tabBarIcon: ({ focused, color, size }): ReactElement => {
+        const icons = (
+          <TabBarIcons
+            route={route}
+            focused={focused}
+            color={color}
+            size={size}
+          />
+        )
+        return icons
+      },
+    })}
+    tabBarOptions={{
+      activeTintColor: 'blue',
+      inactiveTintColor: 'gray',
+    }}
+  >
+    <RootTab.Screen name="Home" component={HomeStackScreen} />
+    <RootTab.Screen name="Profile" component={ProfileStackScreen} />
+  </RootTab.Navigator>
+)
+
 const RootStackScreen: React.FC = () => (
   <RootStack.Navigator mode="modal" initialRouteName="Auth" headerMode="none">
     <RootStack.Screen name="Auth" component={AuthStackScreen} />
-    <RootStack.Screen name="Main" component={MainStackScreen} />
-    <RootStack.Screen name="Modal" component={ModalStackScreen} />
+    <RootStack.Screen name="HomeTabs" component={HomeTabs} />
   </RootStack.Navigator>
 )
 
-const AppContainer: React.FC = () => <RootStackScreen />
+const AppContainer: React.FC = () => (
+  <NavigationContainer>
+    <RootStackScreen />
+  </NavigationContainer>
+)
 
 enableScreens()
 

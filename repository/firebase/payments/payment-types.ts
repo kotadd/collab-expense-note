@@ -1,13 +1,15 @@
 export type PaymentType = {
   _createdAt: firebase.firestore.Timestamp
+  _createdBy: string
   _updatedAt: firebase.firestore.Timestamp
+  _updatedBy?: firebase.firestore.Timestamp
   collected: boolean
   groupAmount: number
   privateAmount: number
   purchaseDate: firebase.firestore.Timestamp
   purchaseMemo: string
-  shopName: string | 'その他'
-  usage: string | 'その他'
+  shopName: string
+  usage: string
   user: firebase.firestore.DocumentReference
 }
 

@@ -13,7 +13,15 @@ export const navigateFromLoginScreen: (
 ) => Promise<void> = async (userAuth, navigation) => {
   const groupID = await fetchGroupIDByUID(userAuth.uid)
   if (groupID) {
-    navigation.navigate('Main', { screen: 'Monthly' })
+    navigation.navigate('HomeTabs', {
+      screen: 'Home',
+      params: {
+        screen: 'Main',
+        params: {
+          screen: 'Monthly',
+        },
+      },
+    })
   } else {
     navigation.navigate('Auth', { screen: 'JoinGroup' })
   }
@@ -38,16 +46,10 @@ export const validateLogin: (
       navigateFromLoginScreen(userAuth, navigation)
     }
   } catch (error) {
-    if (
-      error.message.match(
-        /There is no user record corresponding to this identifier. The user may have been deleted./
-      )
-    ) {
-      dispatch(setCurrentUser({}))
-      Toast.show({
-        text: 'ログイン情報が正しくありません',
-        type: 'danger',
-      })
-    }
+    dispatch(setCurrentUser({}))
+    Toast.show({
+      text: 'ログイン情報が正しくありません',
+      type: 'danger',
+    })
   }
 }

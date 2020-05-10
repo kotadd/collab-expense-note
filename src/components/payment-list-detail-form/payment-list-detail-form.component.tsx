@@ -24,15 +24,10 @@ const PaymentListDetailForm: React.FC<PaymentForm> = ({
 }: PaymentForm) => (
   <Form style={{ marginRight: 16 }}>
     <Item fixedLabel>
-      <Label>日付：</Label>
+      <Label>購入日：</Label>
       <Input
         disabled={disabled}
-        value={timestampToLocaleDate(payment.purchaseDate, 'ja-JP', {
-          year: 'numeric',
-          month: 'short',
-          day: 'numeric',
-          weekday: 'short',
-        })}
+        value={timestampToLocaleDate(payment.purchaseDate, 'ja-JP')}
         style={{ textAlign: 'right', lineHeight: 18 }}
       />
     </Item>
@@ -78,6 +73,32 @@ const PaymentListDetailForm: React.FC<PaymentForm> = ({
         {payment.privateAmount} 円
       </Text>
     </Item>
+    <Item fixedLabel style={{ height: 40 }}>
+      <Label>作成日時：</Label>
+      <Text style={{ color: '#575757' }}>
+        {timestampToLocaleDate(payment._createdAt, 'ja-JP', 'hour')}
+      </Text>
+    </Item>
+    <Item fixedLabel style={{ height: 40 }}>
+      <Label>作成者：</Label>
+      <Text style={{ color: '#575757' }}>{payment._createdBy}</Text>
+    </Item>
+    {payment._updatedBy ? (
+      <>
+        <Item fixedLabel style={{ height: 40 }}>
+          <Label>更新日時：</Label>
+          <Text style={{ color: '#575757' }}>
+            {timestampToLocaleDate(payment._updatedAt, 'ja-JP', 'hour')}
+          </Text>
+        </Item>
+        <Item fixedLabel style={{ height: 40 }}>
+          <Label>更新者：</Label>
+          <Text style={{ color: '#575757' }}>{payment._updatedBy}</Text>
+        </Item>
+      </>
+    ) : (
+      <></>
+    )}
     <Textarea
       disabled={disabled}
       rowSpan={3}

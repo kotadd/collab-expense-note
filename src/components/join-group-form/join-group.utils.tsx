@@ -18,14 +18,19 @@ export const joinGroup: (
   }
 
   const result = await addDetailToUser(userAuth, groupID, displayName)
-
   if (!result) {
     return Toast.show({
       text: 'ユーザー情報が不明です',
       type: 'danger',
     })
   }
-  navigation.navigate('Main', {
-    screen: 'Monthly',
+  navigation.navigate('HomeTabs', {
+    screen: 'Home',
+    params: {
+      screen: 'Main',
+      params: {
+        screen: 'Monthly',
+      },
+    },
   })
 }

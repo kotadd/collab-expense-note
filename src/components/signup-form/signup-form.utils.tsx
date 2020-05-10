@@ -41,9 +41,13 @@ export const createNewUser: (
       await createUser(user)
       dispatch(setCurrentUser(user))
       navigation.navigate('JoinGroup')
+      Toast.show({
+        text: 'アカウントを作成しました',
+        type: 'success',
+      })
     } else {
       dispatch(setCurrentUser({}))
-      return Toast.show({
+      Toast.show({
         text: '正しく登録できませんでした',
         type: 'danger',
       })

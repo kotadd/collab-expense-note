@@ -39,11 +39,11 @@ export const addDetailToUser: (
   if (!userAuth) return
 
   const profileRef = firestore.doc(`users/${userAuth.uid}`)
-  const profileSnapshot = await profileRef.get()
+  const userSnapshot = await profileRef.get()
 
   const groupSnapshot = await firestore.doc(`groups/${groupID}`).get()
 
-  if (profileSnapshot.exists && groupSnapshot.exists) {
+  if (userSnapshot.exists && groupSnapshot.exists) {
     try {
       await profileRef.update({
         displayName,
@@ -51,7 +51,7 @@ export const addDetailToUser: (
         _updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
       })
       userAuth.updateProfile({ displayName })
-      return await auth.updateCurrentUser(userAuth)
+      await auth.updateCurrentUser(userAuth)
     } catch (error) {
       Toast.show({
         text: 'ユーザーの情報を追加するのに失敗しました。',

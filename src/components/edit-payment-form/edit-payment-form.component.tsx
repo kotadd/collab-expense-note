@@ -113,7 +113,7 @@ const EditPaymentForm: React.FC = () => {
   return (
     <Form style={{ marginRight: 16 }}>
       <Item fixedLabel>
-        <Label>日付：</Label>
+        <Label>購入日：</Label>
         <Button transparent onPress={(): void => setShow(true)}>
           <Text style={{ fontSize: 16 }}>
             {displayDate.toLocaleDateString('ja-JP', dateOption) ||
@@ -149,7 +149,7 @@ const EditPaymentForm: React.FC = () => {
           onChangeText={(text): void => {
             setGroupAmount(parseInt(text) | 0)
           }}
-          onFocus={() => setShow(false)}
+          onFocus={(): void => setShow(false)}
         />
         <Text
           style={{
@@ -171,7 +171,7 @@ const EditPaymentForm: React.FC = () => {
           onChangeText={(text): void => {
             setPrivateAmount(parseInt(text) | 0)
           }}
-          onFocus={() => setShow(false)}
+          onFocus={(): void => setShow(false)}
         />
         <Text style={{ color: '#575757', paddingRight: 5, fontSize: 17 }}>
           円
@@ -188,7 +188,7 @@ const EditPaymentForm: React.FC = () => {
           marginLeft: 16,
           backgroundColor: '#f8fbfd',
         }}
-        onFocus={() => setShow(false)}
+        onFocus={(): void => setShow(false)}
       />
       <ListItem onPress={(): void => setCollected(!collected)}>
         <CheckBox
