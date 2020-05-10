@@ -9,20 +9,24 @@ firebase.initializeApp(config)
 export const auth = firebase.auth()
 export const firestore = firebase.firestore()
 
-type DateOptionProps = {
-  year: string
-  month: string
-  day: string
-  weekday?: string
-  hour?: string
-}
-
 export const timestampToLocaleDate: (
   timestamp: firebase.firestore.Timestamp,
   locale: string,
-  dateOptions: DateOptionProps
-) => string = (timestamp, locale, dateOptions) => {
-  return timestamp.toDate().toLocaleDateString(locale, dateOptions)
+  hour?: string
+) => string = (timestamp, locale, hour) => {
+  const defaultOptions = {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric',
+    weekday: 'short',
+  }
+
+  return hour
+    ? timestamp.toDate().toLocaleDateString(locale, {
+        ...defaultOptions,
+        hour: 'numeric',
+      })
+    : timestamp.toDate().toLocaleDateString(locale, defaultOptions)
 }
 
 export async function fetchGroupIDByUID(uid: string): Promise<string> {

@@ -13,13 +13,7 @@ export function calcMonthlyTotalPayments(
     (accumulator: AccumulatorType, payment: PaymentProps) => {
       const currentDate = timestampToLocaleDate(
         payment.get('purchaseDate'),
-        'ja-JP',
-        {
-          year: 'numeric',
-          month: 'short',
-          day: 'numeric',
-          weekday: 'short',
-        }
+        'ja-JP'
       )
       const yearMonth = currentDate.replace(/(\d\d|\d)日.*/, '')
 

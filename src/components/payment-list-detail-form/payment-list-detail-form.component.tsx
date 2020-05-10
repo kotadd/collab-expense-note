@@ -27,12 +27,7 @@ const PaymentListDetailForm: React.FC<PaymentForm> = ({
       <Label>購入日：</Label>
       <Input
         disabled={disabled}
-        value={timestampToLocaleDate(payment.purchaseDate, 'ja-JP', {
-          year: 'numeric',
-          month: 'short',
-          day: 'numeric',
-          weekday: 'short',
-        })}
+        value={timestampToLocaleDate(payment.purchaseDate, 'ja-JP')}
         style={{ textAlign: 'right', lineHeight: 18 }}
       />
     </Item>
@@ -81,13 +76,7 @@ const PaymentListDetailForm: React.FC<PaymentForm> = ({
     <Item fixedLabel style={{ height: 40 }}>
       <Label>作成日時：</Label>
       <Text style={{ color: '#575757' }}>
-        {timestampToLocaleDate(payment._createdAt, 'ja-JP', {
-          year: 'numeric',
-          month: 'short',
-          day: 'numeric',
-          weekday: 'short',
-          hour: 'numeric',
-        })}
+        {timestampToLocaleDate(payment._createdAt, 'ja-JP', 'hour')}
       </Text>
     </Item>
     <Item fixedLabel style={{ height: 40 }}>
@@ -99,13 +88,7 @@ const PaymentListDetailForm: React.FC<PaymentForm> = ({
         <Item fixedLabel style={{ height: 40 }}>
           <Label>更新日時：</Label>
           <Text style={{ color: '#575757' }}>
-            {timestampToLocaleDate(payment._updatedAt, 'ja-JP', {
-              weekday: 'short',
-              year: 'numeric',
-              month: 'short',
-              day: 'numeric',
-              hour: 'numeric',
-            })}
+            {timestampToLocaleDate(payment._updatedAt, 'ja-JP', 'hour')}
           </Text>
         </Item>
         <Item fixedLabel style={{ height: 40 }}>

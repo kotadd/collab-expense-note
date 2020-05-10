@@ -16,12 +16,7 @@ const PaymentListDailyContent: React.FC<ContentProps> = ({
   payment,
   yearMonth,
 }: ContentProps) => {
-  const date = timestampToLocaleDate(payment.get('purchaseDate'), 'ja-JP', {
-    year: 'numeric',
-    month: 'short',
-    day: 'numeric',
-    weekday: 'short',
-  })
+  const date = timestampToLocaleDate(payment.get('purchaseDate'), 'ja-JP')
   const day = date.replace(/.*?月/, '').toString()
 
   const paymentID = payment.id
