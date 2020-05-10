@@ -38,16 +38,10 @@ export const validateLogin: (
       navigateFromLoginScreen(userAuth, navigation)
     }
   } catch (error) {
-    if (
-      error.message.match(
-        /There is no user record corresponding to this identifier. The user may have been deleted./
-      )
-    ) {
-      dispatch(setCurrentUser({}))
-      Toast.show({
-        text: 'ログイン情報が正しくありません',
-        type: 'danger',
-      })
-    }
+    dispatch(setCurrentUser({}))
+    Toast.show({
+      text: 'ログイン情報が正しくありません',
+      type: 'danger',
+    })
   }
 }

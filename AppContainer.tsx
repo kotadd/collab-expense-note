@@ -143,7 +143,7 @@ const AuthStackScreen: React.FC = () => (
     <AuthStack.Screen
       name="Signup"
       component={SignupScreen}
-      options={{ title: '登録する' }}
+      options={{ title: 'アカウント作成' }}
     />
     <AuthStack.Screen
       name="CreateGroup"
@@ -156,7 +156,10 @@ const AuthStackScreen: React.FC = () => (
     <AuthStack.Screen
       name="JoinGroup"
       component={JoinGroupScreen}
-      options={{ title: 'グループに参加' }}
+      options={{
+        headerBackTitle: '戻る',
+        headerTitle: 'グループに参加',
+      }}
     />
   </AuthStack.Navigator>
 )

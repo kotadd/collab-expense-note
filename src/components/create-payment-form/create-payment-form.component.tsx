@@ -94,7 +94,7 @@ const CreatePaymentForm: React.FC = () => {
   return (
     <Form style={{ marginRight: 16 }}>
       <Item fixedLabel>
-        <Label>日付：</Label>
+        <Label>購入日：</Label>
         <Button transparent onPress={(): void => setShow(true)}>
           <Text style={{ fontSize: 16 }}>
             {displayDate.toLocaleDateString('ja-JP', dateOption) ||

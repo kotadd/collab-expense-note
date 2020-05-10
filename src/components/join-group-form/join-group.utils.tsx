@@ -18,7 +18,6 @@ export const joinGroup: (
   }
 
   const result = await addDetailToUser(userAuth, groupID, displayName)
-
   if (!result) {
     return Toast.show({
       text: 'ユーザー情報が不明です',
