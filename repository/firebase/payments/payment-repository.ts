@@ -132,7 +132,8 @@ export const editPaymentsData: (
 ) => Promise<PaymentType> = async (userAuth, props, paymentID) => {
   if (!userAuth) return
   const userSnapshot = await firestore.doc(`users/${userAuth.uid}`).get()
-  const groupID = await userSnapshot.get('groupID')
+  const groupID: string = await userSnapshot.get('groupID')
+  const displayName: string = await userSnapshot.get('displayName')
 
   const paymentRef = firestore.doc(`groups/${groupID}/payments/${paymentID}`)
   const paymentSnapshot = await paymentRef.get()
@@ -142,6 +143,7 @@ export const editPaymentsData: (
   const updateFields = {
     ...props,
     _updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+    _updatedBy: displayName,
   }
   await paymentRef.update(updateFields)
 

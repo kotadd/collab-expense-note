@@ -14,6 +14,7 @@ type DateOptionProps = {
   month: string
   day: string
   weekday?: string
+  hour?: string
 }
 
 export const timestampToLocaleDate: (

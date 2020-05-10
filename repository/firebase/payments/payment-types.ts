@@ -2,6 +2,7 @@ export type PaymentType = {
   _createdAt: firebase.firestore.Timestamp
   _createdBy: string
   _updatedAt: firebase.firestore.Timestamp
+  _updatedBy?: firebase.firestore.Timestamp
   collected: boolean
   groupAmount: number
   privateAmount: number
