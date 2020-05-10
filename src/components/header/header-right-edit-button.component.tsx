@@ -1,10 +1,10 @@
 import * as React from 'react'
 import { Button } from 'react-native'
-import { RootScreenNavigationProp } from '../../../AppContainer'
+import { HomeScreenNavigationProp } from '../../../AppContainer'
 import { PaymentType } from '../../../repository/firebase/payments/payment-types'
 
 type EditProps = {
-  navigation: RootScreenNavigationProp
+  navigation: HomeScreenNavigationProp
   payment: PaymentType
   paymentID: string
 }

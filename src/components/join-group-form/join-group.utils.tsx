@@ -24,7 +24,13 @@ export const joinGroup: (
       type: 'danger',
     })
   }
-  navigation.navigate('Main', {
-    screen: 'Monthly',
+  navigation.navigate('HomeTabs', {
+    screen: 'Home',
+    params: {
+      screen: 'Main',
+      params: {
+        screen: 'Monthly',
+      },
+    },
   })
 }

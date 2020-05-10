@@ -1,7 +1,7 @@
 import { useNavigation } from '@react-navigation/native'
 import { Body, CardItem, Left, Right, Text } from 'native-base'
 import React from 'react'
-import { DailyScreenNavigationProp } from '../../../AppContainer'
+import { MainScreenNavigationProp } from '../../../AppContainer'
 
 type ContentType = {
   yearMonth: string
@@ -14,7 +14,7 @@ const PaymentListMonthlyContent: React.FC<ContentType> = ({
   totalVal,
   uncollectedVal,
 }: ContentType) => {
-  const navigation = useNavigation<DailyScreenNavigationProp>()
+  const navigation = useNavigation<MainScreenNavigationProp>()
 
   return (
     <CardItem

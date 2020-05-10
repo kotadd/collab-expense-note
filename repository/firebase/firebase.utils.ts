@@ -31,9 +31,7 @@ export const timestampToLocaleDate: (
 
 export async function fetchGroupIDByUID(uid: string): Promise<string> {
   const userSnapshot = await firestore.doc(`users/${uid}`).get()
-  const groupID: string = await userSnapshot.get('groupID')
-
-  return groupID
+  return userSnapshot.get('groupID') as string
 }
 
 export const loginUser: (

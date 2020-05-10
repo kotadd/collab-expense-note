@@ -12,12 +12,18 @@ const HeaderRightCreateButton: React.FC<CreateNewProps> = ({
   from,
 }: CreateNewProps) => (
   <Button
-    title="➕"
+    title="記録する"
     onPress={(): void =>
-      navigation.navigate('Modal', {
-        screen: 'CreateNew',
+      navigation.navigate('HomeTabs', {
+        screen: 'Home',
         params: {
-          from,
+          screen: 'Modal',
+          params: {
+            screen: 'CreateNew',
+            params: {
+              from,
+            },
+          },
         },
       })
     }

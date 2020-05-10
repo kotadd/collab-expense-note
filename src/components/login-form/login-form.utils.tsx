@@ -13,7 +13,15 @@ export const navigateFromLoginScreen: (
 ) => Promise<void> = async (userAuth, navigation) => {
   const groupID = await fetchGroupIDByUID(userAuth.uid)
   if (groupID) {
-    navigation.navigate('Main', { screen: 'Monthly' })
+    navigation.navigate('HomeTabs', {
+      screen: 'Home',
+      params: {
+        screen: 'Main',
+        params: {
+          screen: 'Monthly',
+        },
+      },
+    })
   } else {
     navigation.navigate('Auth', { screen: 'JoinGroup' })
   }
