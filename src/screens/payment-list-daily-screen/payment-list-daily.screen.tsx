@@ -26,7 +26,7 @@ const PaymentListDailyScreen: React.FC = () => {
   const currentUser = useSelector(currentUserSelector)
   const currentGroupID = useSelector(currentGroupIDSelector)
   const selectedUserName = useSelector(selectedUserSelector)
-  const userList = useGroupUserList(currentUser)
+  const userList = useGroupUserList(currentUser, currentGroupID)
 
   const selectedUserID = isAllSelected(selectedUserName)
     ? ''

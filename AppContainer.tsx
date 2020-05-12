@@ -1,7 +1,7 @@
 import {
+  BottomTabNavigationOptions,
   BottomTabNavigationProp,
   createBottomTabNavigator,
-  BottomTabNavigationOptions,
 } from '@react-navigation/bottom-tabs'
 import { NavigationContainer, useNavigation } from '@react-navigation/native'
 import {
@@ -15,6 +15,7 @@ import { enableScreens } from 'react-native-screens'
 import { PaymentType } from './repository/firebase/payments/payment-types'
 import HeaderLeftLogoutButton from './src/components/header/header-left-logout-button.component'
 import HeaderRightCreateButton from './src/components/header/header-right-create-button.component'
+import TabBarIcons from './src/components/tab-bar-icons/tab-bar-icons.component'
 import CreateGroupScreen from './src/screens/create-group-screen/create-group.screen'
 import CreateNewScreen from './src/screens/create-new-screen/create-new.screen'
 import EditPaymentScreen from './src/screens/edit-payment-screen/edit-payment.screen'
@@ -25,8 +26,6 @@ import PaymentListDetailScreen from './src/screens/payment-list-detail-screen/pa
 import PaymentListMonthlyScreen from './src/screens/payment-list-monthly-screen/payment-list-monthly.screen'
 import ProfileScreen from './src/screens/profile-screen/profile.screen'
 import SignupScreen from './src/screens/signup-screen/signup.screen'
-import TabBarIcons from './src/components/tab-bar-icons/tab-bar-icons.component'
-import { useDispatch } from 'react-redux'
 
 export type MainStackParamList = {
   Monthly: undefined

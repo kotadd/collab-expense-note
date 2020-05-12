@@ -64,6 +64,13 @@ const CreatePaymentForm: React.FC = () => {
   }
 
   const handleSubmit: () => void = async () => {
+    console.log(`groupAmount: ${groupAmount}`)
+    if (groupAmount <= 0) {
+      return Toast.show({
+        text: '負担額を入力してください',
+        type: 'danger',
+      })
+    }
     const state: ModalProps = {
       collected,
       groupAmount,
