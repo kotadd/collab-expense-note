@@ -26,6 +26,7 @@ import PaymentListMonthlyScreen from './src/screens/payment-list-monthly-screen/
 import ProfileScreen from './src/screens/profile-screen/profile.screen'
 import SignupScreen from './src/screens/signup-screen/signup.screen'
 import TabBarIcons from './src/components/tab-bar-icons/tab-bar-icons.component'
+import { useDispatch } from 'react-redux'
 
 export type MainStackParamList = {
   Monthly: undefined
