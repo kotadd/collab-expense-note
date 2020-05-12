@@ -18,7 +18,7 @@ export const setCurrentPayments: (
   const query = selectedUserID
     ? firestore
         .collection(`groups/${groupID}/payments`)
-        .where('user', '==', `users/${selectedUserID}`)
+        .where('user', '==', `user/${selectedUserID}`)
         .orderBy('purchaseDate', 'desc')
     : firestore
         .collection(`groups/${groupID}/payments`)
