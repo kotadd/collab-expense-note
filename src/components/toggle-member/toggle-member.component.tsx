@@ -1,8 +1,12 @@
 import React from 'react'
 import { Picker } from 'react-native'
 import { useDispatch } from 'react-redux'
+import { Dispatch } from 'redux'
 import { UserListProps } from '../../redux/types'
-import { setSelectedUser } from '../../redux/user/user.actions'
+import {
+  setSelectedUser,
+  SetSelectedUserAction,
+} from '../../redux/user/user.actions'
 import { ALL_ITEMS_STATE } from '../../redux/user/user.types'
 import GroupListPicker from '../group-list-picker/group-list-picker.component'
 
@@ -15,7 +19,7 @@ const ToggleMember: React.FC<ToggleMemberProps> = ({
   userList,
   selectedUserName,
 }: ToggleMemberProps) => {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch<Dispatch<SetSelectedUserAction>>()
 
   const pickerItems = [
     <Picker.Item

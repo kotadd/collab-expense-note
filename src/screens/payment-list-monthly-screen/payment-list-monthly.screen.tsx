@@ -12,6 +12,7 @@ import {
 import {
   currentUserSelector,
   selectedUserSelector,
+  currentGroupIDSelector,
 } from '../../redux/user/user.selector'
 import {
   calcMonthlyTotalPayments,
@@ -20,8 +21,9 @@ import {
 
 const PaymentListMonthlyScreen: React.FC = () => {
   const currentUser = useSelector(currentUserSelector)
+  const currentGroupID = useSelector(currentGroupIDSelector)
   const selectedUserName = useSelector(selectedUserSelector)
-  const userList = useGroupUserList(currentUser)
+  const userList = useGroupUserList(currentUser, currentGroupID)
 
   useToast(currentUser)
 
@@ -29,7 +31,11 @@ const PaymentListMonthlyScreen: React.FC = () => {
     ? ''
     : userList.find((user) => user.name === selectedUserName)?.id
 
-  const payments = useCurrentPayments(currentUser.uid, selectedUserID)
+  const payments = useCurrentPayments(
+    currentUser.uid,
+    currentGroupID,
+    selectedUserID
+  )
 
   const paymentsMap = calcMonthlyTotalPayments(payments)
   const paymentListMonthlyContent = []

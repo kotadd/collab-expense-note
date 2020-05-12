@@ -14,6 +14,8 @@ import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { AuthScreenNavigationProp } from '../../../AppContainer'
 import { createNewUser } from './signup-form.utils'
+import { SetCurrentUserAction } from '../../redux/user/user.actions'
+import { Dispatch } from 'redux'
 
 const SignupForm: React.FC = () => {
   const navigation = useNavigation<AuthScreenNavigationProp>()
@@ -22,7 +24,7 @@ const SignupForm: React.FC = () => {
   const [confirmPassword, setConfirmPassword] = useState('')
   const [togglePassword, setTogglePassword] = useState(false)
 
-  const dispatch = useDispatch()
+  const dispatch = useDispatch<Dispatch<SetCurrentUserAction>>()
 
   return (
     <Form>

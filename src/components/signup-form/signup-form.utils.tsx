@@ -2,7 +2,10 @@ import { Toast } from 'native-base'
 import { Dispatch } from 'redux'
 import { auth } from '../../../repository/firebase/firebase.utils'
 import { createUser } from '../../../repository/firebase/users/user-repository'
-import { setCurrentUser } from '../../redux/user/user.actions'
+import {
+  setCurrentUser,
+  SetCurrentUserAction,
+} from '../../redux/user/user.actions'
 import { AuthScreenNavigationProp } from '../../../AppContainer'
 
 const isValidPassword: (
@@ -23,7 +26,7 @@ export const createNewUser: (
   email: string,
   password: string,
   confirmPassword: string,
-  dispatch: Dispatch,
+  dispatch: Dispatch<SetCurrentUserAction>,
   navigation: AuthScreenNavigationProp
 ) => Promise<void> = async (
   email,

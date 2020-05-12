@@ -16,6 +16,7 @@ import {
 import {
   currentUserSelector,
   selectedUserSelector,
+  currentGroupIDSelector,
 } from '../../redux/user/user.selector'
 import { isAllSelected } from '../payment-list-monthly-screen/payment-list-monthly.utils'
 
@@ -23,6 +24,7 @@ type DailyScreenRouteProp = RouteProp<MainStackParamList, 'Daily'>
 
 const PaymentListDailyScreen: React.FC = () => {
   const currentUser = useSelector(currentUserSelector)
+  const currentGroupID = useSelector(currentGroupIDSelector)
   const selectedUserName = useSelector(selectedUserSelector)
   const userList = useGroupUserList(currentUser)
 
@@ -38,6 +40,7 @@ const PaymentListDailyScreen: React.FC = () => {
 
   const payments = useSpecificMonthPayments(
     currentUser.uid,
+    currentGroupID,
     yearMonth,
     selectedUserID
   )

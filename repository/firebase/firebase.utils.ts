@@ -46,24 +46,4 @@ export const loginUser: (
   return credentialedUser.user
 }
 
-export const fetchGroupUsers: (
-  userAuth: firebase.User
-) => Promise<UserListProps> = async (userAuth) => {
-  const groupID = await fetchGroupIDByUID(userAuth.uid)
-
-  const userSnapshots = await firestore
-    .collection('users')
-    .where('groupID', '==', groupID)
-    .get()
-
-  const userList = userSnapshots.docs.map((userSnapshot) => {
-    return {
-      id: userSnapshot.id,
-      name: userSnapshot.get('displayName'),
-    }
-  })
-
-  return userList
-}
-
 export default firebase

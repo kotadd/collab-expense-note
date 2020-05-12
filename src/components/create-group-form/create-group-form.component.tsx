@@ -12,10 +12,12 @@ import {
   Text,
 } from 'native-base'
 import React, { useState } from 'react'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import { RootScreenNavigationProp } from '../../../AppContainer'
 import { createNewGroup } from '../../../repository/firebase/groups/group-repository'
 import { currentUserSelector } from '../../redux/user/user.selector'
+import { SetCurrentGroupIDAction } from '../../redux/user/user.actions'
+import { Dispatch } from 'redux'
 
 const CreateGroupForm: React.FC = () => {
   const [groupName, setGroupName] = useState('')
@@ -24,6 +26,8 @@ const CreateGroupForm: React.FC = () => {
   const currentUser = useSelector(currentUserSelector)
 
   const navigation = useNavigation<RootScreenNavigationProp>()
+  const dispatch = useDispatch<Dispatch<SetCurrentGroupIDAction>>()
+
   return (
     <Content>
       <Form>
@@ -57,7 +61,13 @@ const CreateGroupForm: React.FC = () => {
           block
           dark
           onPress={(): Promise<void> =>
-            createNewGroup(currentUser, displayName, groupName, navigation)
+            createNewGroup(
+              currentUser,
+              displayName,
+              groupName,
+              navigation,
+              dispatch
+            )
           }
         >
           <Text> 登録する </Text>

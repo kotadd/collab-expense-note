@@ -1,6 +1,7 @@
 import firebase from 'firebase/app'
 import { Toast } from 'native-base'
-import { auth, firestore } from '../firebase.utils'
+import { auth, firestore, fetchGroupIDByUID } from '../firebase.utils'
+import { UserListProps } from '../../../src/redux/types'
 
 export const createUser: (
   userAuth: firebase.User
@@ -61,4 +62,27 @@ export const addDetailToUser: (
   }
 
   return profileRef
+}
+
+export const fetchGroupUsers: (
+  userAuth: firebase.User,
+  currentGroupID: string
+) => Promise<UserListProps> = async (userAuth, currentGroupID) => {
+  const groupID = currentGroupID
+    ? currentGroupID
+    : await fetchGroupIDByUID(userAuth.uid)
+
+  const userSnapshots = await firestore
+    .collection('users')
+    .where('groupID', '==', groupID)
+    .get()
+
+  const userList = userSnapshots.docs.map((userSnapshot) => {
+    return {
+      id: userSnapshot.id,
+      name: userSnapshot.get('displayName'),
+    }
+  })
+
+  return userList
 }
