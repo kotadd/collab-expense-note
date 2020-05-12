@@ -1,11 +1,12 @@
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native'
 import { Container, Content } from 'native-base'
-import React from 'react'
+import React, { ReactElement } from 'react'
 import { useSelector } from 'react-redux'
 import {
   MainStackParamList,
-  MainScreenNavigationProp,
+  RootScreenNavigationProp,
 } from '../../../AppContainer'
+import HeaderRightCreateButton from '../../components/header/header-right-create-button.component'
 import PaymentListDailyContent from '../../components/payment-list-daily-content/payment-list-daily-content.component'
 import PaymentListDailyHeader from '../../components/payment-list-daily-header/payment-list-daily-header.component'
 import ToggleMember from '../../components/toggle-member/toggle-member.component'
@@ -14,9 +15,9 @@ import {
   useSpecificMonthPayments,
 } from '../../hooks/payment-list.hooks'
 import {
+  currentGroupIDSelector,
   currentUserSelector,
   selectedUserSelector,
-  currentGroupIDSelector,
 } from '../../redux/user/user.selector'
 import { isAllSelected } from '../payment-list-monthly-screen/payment-list-monthly.utils'
 
@@ -26,17 +27,29 @@ const PaymentListDailyScreen: React.FC = () => {
   const currentUser = useSelector(currentUserSelector)
   const currentGroupID = useSelector(currentGroupIDSelector)
   const selectedUserName = useSelector(selectedUserSelector)
-  const userList = useGroupUserList(currentUser)
+  const userList = useGroupUserList(currentUser, currentGroupID)
 
   const selectedUserID = isAllSelected(selectedUserName)
     ? ''
     : userList.find((user) => user.name === selectedUserName)?.id
 
-  const navigation = useNavigation<MainScreenNavigationProp>()
+  const navigation = useNavigation<RootScreenNavigationProp>()
   const route = useRoute<DailyScreenRouteProp>()
   const { yearMonth } = route.params
 
-  navigation.setOptions({ headerTitle: yearMonth })
+  navigation.setOptions({
+    headerTitle: yearMonth,
+    headerRight: (): ReactElement => {
+      const rightButton = (
+        <HeaderRightCreateButton
+          navigation={navigation}
+          from="daily"
+          yearMonth={yearMonth}
+        />
+      )
+      return rightButton
+    },
+  })
 
   const payments = useSpecificMonthPayments(
     currentUser.uid,

@@ -1,12 +1,12 @@
 import { Body, CardItem, Left, Right, Text } from 'native-base'
 import React from 'react'
-import { MainScreenNavigationProp } from '../../../AppContainer'
+import { RootScreenNavigationProp } from '../../../AppContainer'
 import { timestampToLocaleDate } from '../../../repository/firebase/firebase.utils'
 import { PaymentProps } from '../../../repository/firebase/payments/payment-types'
 import CollectionCheck from '../collection-check/collection-check.component'
 
 type ContentProps = {
-  navigation: MainScreenNavigationProp
+  navigation: RootScreenNavigationProp
   payment: PaymentProps
   yearMonth: string
 }
@@ -26,10 +26,19 @@ const PaymentListDailyContent: React.FC<ContentProps> = ({
       button
       key={paymentID}
       onPress={(): void => {
-        navigation.navigate('Detail', {
-          yearMonth,
-          day,
-          paymentID,
+        navigation.navigate('HomeTabs', {
+          screen: 'Home',
+          params: {
+            screen: 'Main',
+            params: {
+              screen: 'Detail',
+              params: {
+                yearMonth,
+                day,
+                paymentID,
+              },
+            },
+          },
         })
       }}
     >

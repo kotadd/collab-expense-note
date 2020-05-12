@@ -26,7 +26,7 @@ export function useGroupUserList(
       setUserList(userList)
     }
     fetchGroupUserList()
-  }, [currentUser])
+  }, [currentUser, currentGroupID])
 
   return userList
 }
