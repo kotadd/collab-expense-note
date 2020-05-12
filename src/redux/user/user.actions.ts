@@ -1,8 +1,11 @@
-import { User } from 'firebase'
-
 export type SetCurrentUserAction = {
   type: 'SET_CURRENT_USER'
-  payload: User | {}
+  payload: firebase.User | {}
+}
+
+export type SetCurrentGroupIDAction = {
+  type: 'SET_CURRENT_GROUP_ID'
+  payload: string
 }
 
 export type SetSelectedUserAction = {
@@ -10,9 +13,18 @@ export type SetSelectedUserAction = {
   payload: string
 }
 
-export const setCurrentUser = (user: User | {}): SetCurrentUserAction => ({
+export const setCurrentUser = (
+  user: firebase.User | {}
+): SetCurrentUserAction => ({
   type: 'SET_CURRENT_USER',
   payload: user,
+})
+
+export const setCurrentGroupID = (
+  groupID: string
+): SetCurrentGroupIDAction => ({
+  type: 'SET_CURRENT_GROUP_ID',
+  payload: groupID,
 })
 
 export const setSelectedUser = (userName: string): SetSelectedUserAction => ({

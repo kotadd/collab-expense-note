@@ -1,6 +1,7 @@
 export type ReduxCurrentUserProps = {
   user: {
     currentUser: firebase.User
+    groupID: string
   }
 }
 
@@ -8,7 +9,6 @@ export type ReduxSelectedUserProps = {
   user: {
     selectedUserName: string
   }
-  selectedUserName: string
 }
 
 export const ALL_ITEMS_STATE = {
