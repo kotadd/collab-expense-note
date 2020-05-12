@@ -2,19 +2,25 @@ import { Form, Input, Item, Label } from 'native-base'
 import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { fetchGroupIDByUID } from '../../../repository/firebase/firebase.utils'
-import { currentUserSelector } from '../../redux/user/user.selector'
+import {
+  currentGroupIDSelector,
+  currentUserSelector,
+} from '../../redux/user/user.selector'
 
 const ProfileForm: React.FC = () => {
   const [groupID, setGroupID] = useState('')
   const currentUser = useSelector(currentUserSelector)
+  const currentGroupID = useSelector(currentGroupIDSelector)
 
   useEffect(() => {
     const fetchGroupID: () => Promise<void> = async () => {
-      const groupID = await fetchGroupIDByUID(currentUser.uid)
+      const groupID = currentGroupID
+        ? currentGroupID
+        : await fetchGroupIDByUID(currentUser.uid)
       setGroupID(groupID)
     }
     fetchGroupID()
-  }, [currentUser.uid])
+  }, [currentUser.uid, currentGroupID])
 
   return (
     <Form>

@@ -4,10 +4,16 @@ import { PaymentProps, PaymentType, ModalProps } from './payment-types'
 
 export const setCurrentPayments: (
   uid: string,
+  currentGroupID: string,
   setPayments: React.Dispatch<React.SetStateAction<PaymentProps[] | undefined>>,
   selectedUserID?: string
-) => Promise<() => void> = async (uid, setPayments, selectedUserID) => {
-  const groupID = await fetchGroupIDByUID(uid)
+) => Promise<() => void> = async (
+  uid,
+  currentGroupID,
+  setPayments,
+  selectedUserID
+) => {
+  const groupID = currentGroupID ? currentGroupID : await fetchGroupIDByUID(uid)
 
   const query = selectedUserID
     ? firestore
@@ -36,16 +42,18 @@ export const setCurrentPayments: (
 
 export const setSpecificMonthPayments: (
   uid: string,
+  currentGroupID: string,
   yearMonth: string,
   setPayments: React.Dispatch<React.SetStateAction<PaymentProps[] | undefined>>,
   selectedUserID?: string
 ) => Promise<() => void> = async (
   uid,
+  currentGroupID,
   yearMonth,
   setPayments,
   selectedUserID
 ) => {
-  const groupID = await fetchGroupIDByUID(uid)
+  const groupID = currentGroupID ? currentGroupID : await fetchGroupIDByUID(uid)
 
   const yearMonthArr = yearMonth.split('年')
   const year = parseInt(yearMonthArr[0])
@@ -88,9 +96,10 @@ export const setSpecificMonthPayments: (
 
 export const setASpecificPayment: (
   uid: string,
+  currentGroupID: string,
   paymentID: string
-) => Promise<PaymentType> = async (uid, paymentID) => {
-  const groupID = await fetchGroupIDByUID(uid)
+) => Promise<PaymentType> = async (uid, currentGroupID, paymentID) => {
+  const groupID = currentGroupID ? currentGroupID : await fetchGroupIDByUID(uid)
 
   const paymentSnapshot = await firestore
     .collection(`groups/${groupID}/payments`)

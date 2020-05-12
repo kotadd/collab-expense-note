@@ -1,16 +1,25 @@
-import { SetCurrentUserAction, SetSelectedUserAction } from './user.actions'
+import {
+  SetCurrentUserAction,
+  SetSelectedUserAction,
+  SetCurrentGroupIDAction,
+} from './user.actions'
 
 export type UserReduxProps = Readonly<{
   currentUser: firebase.User | {}
+  currentGroupID: string
   selectedUserName: string
 }>
 
 const initialState = {
   currentUser: {},
+  currentGroupID: '',
   selectedUserName: 'all-items',
 }
 
-type Action = SetCurrentUserAction | SetSelectedUserAction
+type Action =
+  | SetCurrentUserAction
+  | SetCurrentGroupIDAction
+  | SetSelectedUserAction
 
 const userReducer = (state = initialState, action: Action): UserReduxProps => {
   switch (action.type) {
@@ -18,6 +27,11 @@ const userReducer = (state = initialState, action: Action): UserReduxProps => {
       return {
         ...state,
         currentUser: action.payload,
+      }
+    case 'SET_CURRENT_GROUP_ID':
+      return {
+        ...state,
+        currentGroupID: action.payload,
       }
     case 'SET_SELECTED_USER':
       return {

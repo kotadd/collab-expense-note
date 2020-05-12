@@ -29,7 +29,7 @@ const LoginForm: React.FC = () => {
     auth.onAuthStateChanged(async (userAuth) => {
       if (!userAuth) return
       dispatch(setCurrentUser(userAuth))
-      navigateFromLoginScreen(userAuth, navigation)
+      navigateFromLoginScreen(userAuth, navigation, dispatch)
     })
   }, [dispatch, navigation])
 

@@ -1,7 +1,6 @@
 import { Toast } from 'native-base'
 import { useEffect, useState } from 'react'
 import { Keyboard } from 'react-native'
-import { fetchGroupUsers } from '../../repository/firebase/firebase.utils'
 import {
   setSpecificMonthPayments,
   setCurrentPayments,
@@ -12,13 +11,17 @@ import {
   PaymentType,
 } from '../../repository/firebase/payments/payment-types'
 import { UserListProps } from '../redux/types'
+import { fetchGroupUsers } from '../../repository/firebase/users/user-repository'
 
-export function useGroupUserList(currentUser: firebase.User): UserListProps {
+export function useGroupUserList(
+  currentUser: firebase.User,
+  currentGroupID: string
+): UserListProps {
   const [userList, setUserList] = useState([{ id: '', name: '' }])
 
   useEffect(() => {
     const fetchGroupUserList: () => void = async () => {
-      const userList = await fetchGroupUsers(currentUser)
+      const userList = await fetchGroupUsers(currentUser, currentGroupID)
       if (!userList) return
       setUserList(userList)
     }
@@ -30,22 +33,24 @@ export function useGroupUserList(currentUser: firebase.User): UserListProps {
 
 export function useCurrentPayments(
   uid: string,
+  currentGroupID: string,
   selectedUserID?: string
 ): PaymentProps[] | undefined {
   const [payments, setPayments] = useState<PaymentProps[]>()
 
   useEffect(() => {
     const fetchPaymentsData = async (): Promise<void> => {
-      await setCurrentPayments(uid, setPayments, selectedUserID)
+      await setCurrentPayments(uid, currentGroupID, setPayments, selectedUserID)
     }
     fetchPaymentsData()
-  }, [uid, selectedUserID])
+  }, [uid, currentGroupID, selectedUserID])
 
   return payments
 }
 
 export function useSpecificMonthPayments(
   uid: string,
+  currentGroupID: string,
   yearMonth: string,
   selectedUserID?: string
 ): PaymentProps[] | undefined {
@@ -55,30 +60,32 @@ export function useSpecificMonthPayments(
     const fetchPaymentsData = async (): Promise<void> => {
       await setSpecificMonthPayments(
         uid,
+        currentGroupID,
         yearMonth,
         setPayments,
         selectedUserID
       )
     }
     fetchPaymentsData()
-  }, [uid, yearMonth, selectedUserID])
+  }, [uid, currentGroupID, yearMonth, selectedUserID])
 
   return payments
 }
 
 export function useASpecificPayment(
   uid: string,
+  currentGroupID: string,
   paymentID: string
 ): PaymentType | undefined {
   const [payment, setPayment] = useState<PaymentType>()
 
   useEffect(() => {
     const fetchPaymentsData = async (): Promise<void> => {
-      const payment = await setASpecificPayment(uid, paymentID)
+      const payment = await setASpecificPayment(uid, currentGroupID, paymentID)
       setPayment(payment)
     }
     fetchPaymentsData()
-  }, [uid, paymentID])
+  }, [uid, currentGroupID, paymentID])
 
   return payment
 }

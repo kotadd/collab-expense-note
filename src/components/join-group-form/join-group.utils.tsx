@@ -1,14 +1,20 @@
 import { Toast } from 'native-base'
+import { Dispatch } from 'redux'
 import { RootScreenNavigationProp } from '../../../AppContainer'
 import { isCorrectGroup } from '../../../repository/firebase/groups/group-repository'
 import { addDetailToUser } from '../../../repository/firebase/users/user-repository'
+import {
+  setCurrentGroupID,
+  SetCurrentGroupIDAction,
+} from '../../redux/user/user.actions'
 
 export const joinGroup: (
   userAuth: firebase.User,
   displayName: string,
   groupID: string,
-  navigation: RootScreenNavigationProp
-) => void = async (userAuth, displayName, groupID, navigation) => {
+  navigation: RootScreenNavigationProp,
+  dispatch: Dispatch<SetCurrentGroupIDAction>
+) => void = async (userAuth, displayName, groupID, navigation, dispatch) => {
   const isCorrectGroupID = await isCorrectGroup(groupID)
   if (!isCorrectGroupID) {
     return Toast.show({
@@ -24,6 +30,9 @@ export const joinGroup: (
       type: 'danger',
     })
   }
+
+  dispatch(setCurrentGroupID(groupID))
+
   navigation.navigate('HomeTabs', {
     screen: 'Home',
     params: {

@@ -5,14 +5,19 @@ import {
   auth,
   fetchGroupIDByUID,
 } from '../../../repository/firebase/firebase.utils'
-import { setCurrentUser } from '../../redux/user/user.actions'
+import {
+  setCurrentUser,
+  setCurrentGroupID,
+} from '../../redux/user/user.actions'
 
 export const navigateFromLoginScreen: (
   userAuth: firebase.User,
-  navigation: RootScreenNavigationProp
-) => Promise<void> = async (userAuth, navigation) => {
+  navigation: RootScreenNavigationProp,
+  dispatch: Dispatch
+) => Promise<void> = async (userAuth, navigation, dispatch) => {
   const groupID = await fetchGroupIDByUID(userAuth.uid)
   if (groupID) {
+    dispatch(setCurrentGroupID(groupID))
     navigation.navigate('HomeTabs', {
       screen: 'Home',
       params: {
@@ -43,7 +48,7 @@ export const validateLogin: (
     const userAuth = credentialedUser.user
     if (userAuth) {
       dispatch(setCurrentUser(userAuth))
-      navigateFromLoginScreen(userAuth, navigation)
+      navigateFromLoginScreen(userAuth, navigation, dispatch)
     }
   } catch (error) {
     dispatch(setCurrentUser({}))

@@ -12,16 +12,19 @@ import {
   Text,
 } from 'native-base'
 import React, { useState } from 'react'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import { RootScreenNavigationProp } from '../../../AppContainer'
 import { currentUserSelector } from '../../redux/user/user.selector'
 import { joinGroup } from './join-group.utils'
+import { Dispatch } from 'redux'
+import { SetCurrentGroupIDAction } from '../../redux/user/user.actions'
 
 const JoinGroupForm: React.FC = () => {
   const [displayName, setDisplayName] = useState('')
   const [groupID, setGroupID] = useState('')
   const navigation = useNavigation<RootScreenNavigationProp>()
   const currentUser = useSelector(currentUserSelector)
+  const dispatch = useDispatch<Dispatch<SetCurrentGroupIDAction>>()
 
   return (
     <Content>
@@ -56,7 +59,7 @@ const JoinGroupForm: React.FC = () => {
           block
           dark
           onPress={(): void =>
-            joinGroup(currentUser, displayName, groupID, navigation)
+            joinGroup(currentUser, displayName, groupID, navigation, dispatch)
           }
         >
           <Text> 参加する </Text>
