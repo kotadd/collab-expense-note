@@ -5,11 +5,13 @@ import { RootScreenNavigationProp } from '../../../AppContainer'
 type CreateNewProps = {
   navigation: RootScreenNavigationProp
   from: 'monthly' | 'daily'
+  yearMonth?: string
 }
 
 const HeaderRightCreateButton: React.FC<CreateNewProps> = ({
   navigation,
   from,
+  yearMonth,
 }: CreateNewProps) => (
   <Button
     title="記録する"
@@ -22,6 +24,7 @@ const HeaderRightCreateButton: React.FC<CreateNewProps> = ({
             screen: 'CreateNew',
             params: {
               from,
+              yearMonth,
             },
           },
         },

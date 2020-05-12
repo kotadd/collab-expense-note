@@ -1,4 +1,4 @@
-import { useNavigation } from '@react-navigation/native'
+import { useNavigation, useRoute, RouteProp } from '@react-navigation/native'
 import {
   Body,
   Button,
@@ -16,7 +16,11 @@ import {
 import React, { useState } from 'react'
 import { Platform, Text } from 'react-native'
 import { useSelector } from 'react-redux'
-import { MainScreenNavigationProp } from '../../../AppContainer'
+import {
+  MainScreenNavigationProp,
+  MainStackParamList,
+  ModalStackParamList,
+} from '../../../AppContainer'
 import { ModalProps } from '../../../repository/firebase/payments/payment-types'
 import DatePicker from '../../components/datepicker/datepicker-component'
 import PickerInput from '../../components/picker-input/picker-input.component'
@@ -24,8 +28,12 @@ import OPTIONS from '../../components/picker-input/picker-options'
 import { currentUserSelector } from '../../redux/user/user.selector'
 import { createPaymentsData } from '../../../repository/firebase/payments/payment-repository'
 
+type ModalScreenRouteProp = RouteProp<ModalStackParamList, 'CreateNew'>
+
 const CreatePaymentForm: React.FC = () => {
   const currentUser = useSelector(currentUserSelector)
+  const route = useRoute<ModalScreenRouteProp>()
+  const { from, yearMonth } = route.params
 
   const dateOption = {
     year: 'numeric',
@@ -89,7 +97,13 @@ const CreatePaymentForm: React.FC = () => {
           type: 'success',
         })
 
-        navigation.navigate('Monthly')
+        if (from === 'daily' && yearMonth) {
+          navigation.navigate('Daily', {
+            yearMonth,
+          })
+        } else {
+          navigation.navigate('Monthly')
+        }
       }
     } catch (e) {
       console.log(`failed to create data: ${e}`)

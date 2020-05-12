@@ -43,7 +43,7 @@ type MainParams = {
 }
 
 export type ModalStackParamList = {
-  CreateNew: { from: 'monthly' | 'daily' }
+  CreateNew: { from: 'monthly' | 'daily'; yearMonth?: string }
   Edit: { payment: PaymentType; paymentID: string }
 }
 
@@ -51,6 +51,7 @@ type ModalParams = {
   screen: 'CreateNew' | 'Edit'
   params: {
     from?: 'monthly' | 'daily'
+    yearMonth?: string
     payment?: PaymentType
     paymentID?: string
   }
