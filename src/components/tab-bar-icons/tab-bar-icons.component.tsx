@@ -1,5 +1,5 @@
 import React from 'react'
-import { Ionicons } from '@expo/vector-icons'
+import { MaterialCommunityIcons } from '@expo/vector-icons'
 import { RouteProp } from '@react-navigation/native'
 import { HomeTabsParamList } from '../../../AppContainer'
 
@@ -18,14 +18,12 @@ const TabBarIcons: React.FC<TabBarIconProps> = ({
   let iconName = ''
 
   if (route.name === 'Profile') {
-    iconName = focused
-      ? 'ios-information-circle'
-      : 'ios-information-circle-outline'
+    iconName = focused ? 'information' : 'information-outline'
   } else if (route.name === 'Home') {
-    iconName = focused ? 'ios-list-box' : 'ios-list'
+    iconName = focused ? 'home' : 'home-outline'
   }
 
-  return <Ionicons name={iconName} size={size} color={color} />
+  return <MaterialCommunityIcons name={iconName} size={size} color={color} />
 }
 
 export default TabBarIcons
