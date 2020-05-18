@@ -1,11 +1,18 @@
 import firebase from 'firebase/app'
 import { fetchGroupIDByUID, firestore } from '../firebase.utils'
-import { PaymentProps, PaymentType, ModalProps } from './payment-types'
+import {
+  ModalProps,
+  MonthlySummaryProps,
+  PaymentProps,
+  PaymentType,
+} from './payment-types'
 
-export const setCurrentPayments: (
+export const setMonthlyPayments: (
   uid: string,
   currentGroupID: string,
-  setPayments: React.Dispatch<React.SetStateAction<PaymentProps[] | undefined>>,
+  setPayments: React.Dispatch<
+    React.SetStateAction<MonthlySummaryProps[] | undefined>
+  >,
   selectedUserID?: string
 ) => Promise<() => void> = async (
   uid,
@@ -17,16 +24,24 @@ export const setCurrentPayments: (
 
   const query = selectedUserID
     ? firestore
-        .collection(`groups/${groupID}/payments`)
-        .where('user', '==', `user/${selectedUserID}`)
-        .orderBy('purchaseDate', 'desc')
+        .collection(`groups/${groupID}/monthly-user-summaries`)
+        .where('user.ref', '==', firestore.doc(`users/${selectedUserID}`))
+        .orderBy('yearMonth', 'desc')
     : firestore
-        .collection(`groups/${groupID}/payments`)
-        .orderBy('purchaseDate', 'desc')
+        .collection(`groups/${groupID}/monthly-summaries`)
+        .orderBy('yearMonth', 'desc')
 
   const unsubscribedPayments = query.onSnapshot(
     (querySnapshot) => {
-      setPayments(querySnapshot.docs)
+      const map: MonthlySummaryProps[] = querySnapshot.docs.map((payment) => {
+        return {
+          id: payment.id,
+          groupAmount: payment.get('groupAmount'),
+          unpaidAmount: payment.get('unpaidAmount'),
+          yearMonth: payment.get('yearMonth'),
+        }
+      })
+      setPayments(map)
     },
     () => {
       // FirebaseError: Missing or insufficient permissions になるため握り潰す
@@ -68,7 +83,7 @@ export const setSpecificMonthPayments: (
   const query = selectedUserID
     ? firestore
         .collection(`groups/${groupID}/payments`)
-        .where('user', '==', `user/${selectedUserID}`)
+        .where('user.ref', '==', firestore.doc(`users/${selectedUserID}`))
         .where('purchaseDate', '>=', startTimestamp)
         .where('purchaseDate', '<', endTimestamp)
         .orderBy('purchaseDate', 'desc')
@@ -117,16 +132,20 @@ export const createPaymentsData: (
   | undefined
 > = async (userAuth, props) => {
   if (!userAuth) return
-  const userSnapshot = await firestore.doc(`users/${userAuth.uid}`).get()
+  const userRef = firestore.doc(`users/${userAuth.uid}`)
+  const userSnapshot = await userRef.get()
   const groupID: string = await userSnapshot.get('groupID')
   const displayName: string = await userSnapshot.get('displayName')
 
   const payment = {
     ...props,
-    _updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
     _createdAt: firebase.firestore.FieldValue.serverTimestamp(),
     _createdBy: displayName,
-    user: `user/${userAuth.uid}`,
+    _updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+    _updatedBy: '',
+    user: {
+      ref: userRef,
+    },
   }
   const result = await firestore
     .collection(`groups/${groupID}/payments`)

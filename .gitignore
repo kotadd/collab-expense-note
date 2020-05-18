@@ -15,3 +15,7 @@ web-report/
 
 #yarn
 yarn-error.log
+
+#firebase
+.firebaserc
+firestore.rules

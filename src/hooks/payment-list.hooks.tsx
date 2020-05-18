@@ -3,12 +3,13 @@ import { useEffect, useState } from 'react'
 import { Keyboard } from 'react-native'
 import {
   setSpecificMonthPayments,
-  setCurrentPayments,
+  setMonthlyPayments,
   setASpecificPayment,
 } from '../../repository/firebase/payments/payment-repository'
 import {
   PaymentProps,
   PaymentType,
+  MonthlySummaryProps,
 } from '../../repository/firebase/payments/payment-types'
 import { UserListProps } from '../redux/types'
 import { fetchGroupUsers } from '../../repository/firebase/users/user-repository'
@@ -31,16 +32,16 @@ export function useGroupUserList(
   return userList
 }
 
-export function useCurrentPayments(
+export function useMonthlyPayments(
   uid: string,
   currentGroupID: string,
   selectedUserID?: string
-): PaymentProps[] | undefined {
-  const [payments, setPayments] = useState<PaymentProps[]>()
+): MonthlySummaryProps[] | undefined {
+  const [payments, setPayments] = useState<MonthlySummaryProps[]>()
 
   useEffect(() => {
     const fetchPaymentsData = async (): Promise<void> => {
-      await setCurrentPayments(uid, currentGroupID, setPayments, selectedUserID)
+      await setMonthlyPayments(uid, currentGroupID, setPayments, selectedUserID)
     }
     fetchPaymentsData()
   }, [uid, currentGroupID, selectedUserID])

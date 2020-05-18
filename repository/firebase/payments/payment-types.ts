@@ -2,7 +2,7 @@ export type PaymentType = {
   _createdAt: firebase.firestore.Timestamp
   _createdBy: string
   _updatedAt: firebase.firestore.Timestamp
-  _updatedBy?: firebase.firestore.Timestamp
+  _updatedBy: firebase.firestore.Timestamp
   collected: boolean
   groupAmount: number
   privateAmount: number
@@ -10,12 +10,21 @@ export type PaymentType = {
   purchaseMemo: string
   shopName: string
   usage: string
-  user: firebase.firestore.DocumentReference
+  user: {
+    ref: firebase.firestore.DocumentReference
+  }
 }
 
 export type PaymentProps = firebase.firestore.QueryDocumentSnapshot<
   firebase.firestore.DocumentData
 >
+
+export type MonthlySummaryProps = {
+  id: string
+  groupAmount: number
+  unpaidAmount: number
+  yearMonth: string
+}
 
 export type ModalProps = {
   collected: boolean
