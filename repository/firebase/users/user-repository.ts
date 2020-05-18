@@ -39,14 +39,14 @@ export const addDetailToUser: (
 >> = async (userAuth, groupID, displayName) => {
   if (!userAuth) return
 
-  const profileRef = firestore.doc(`users/${userAuth.uid}`)
-  const userSnapshot = await profileRef.get()
+  const userRef = firestore.doc(`users/${userAuth.uid}`)
+  const userSnapshot = await userRef.get()
 
   const groupSnapshot = await firestore.doc(`groups/${groupID}`).get()
 
   if (userSnapshot.exists && groupSnapshot.exists) {
     try {
-      await profileRef.update({
+      await userRef.update({
         displayName,
         groupID,
         _updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
@@ -61,7 +61,7 @@ export const addDetailToUser: (
     }
   }
 
-  return profileRef
+  return userRef
 }
 
 export const fetchGroupUsers: (

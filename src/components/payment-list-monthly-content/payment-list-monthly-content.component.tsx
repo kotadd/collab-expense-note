@@ -5,14 +5,14 @@ import { MainScreenNavigationProp } from '../../../AppContainer'
 
 type ContentType = {
   yearMonth: string
-  totalVal: number
-  uncollectedVal: number
+  groupAmount: number
+  unpaidAmount: number
 }
 
 const PaymentListMonthlyContent: React.FC<ContentType> = ({
   yearMonth,
-  totalVal,
-  uncollectedVal,
+  groupAmount,
+  unpaidAmount,
 }: ContentType) => {
   const navigation = useNavigation<MainScreenNavigationProp>()
 
@@ -30,10 +30,10 @@ const PaymentListMonthlyContent: React.FC<ContentType> = ({
         <Text>{yearMonth}</Text>
       </Left>
       <Body>
-        <Text>{totalVal.toLocaleString()} 円</Text>
+        <Text>{groupAmount.toLocaleString()} 円</Text>
       </Body>
       <Right>
-        <Text>{uncollectedVal.toLocaleString()} 円</Text>
+        <Text>{unpaidAmount.toLocaleString()} 円</Text>
       </Right>
     </CardItem>
   )
