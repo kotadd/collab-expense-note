@@ -1,5 +1,5 @@
 import { useNavigation } from '@react-navigation/native'
-import { Body, CardItem, Left, Right, Text } from 'native-base'
+import { CardItem, Left, Text } from 'native-base'
 import React from 'react'
 import { MainScreenNavigationProp } from '../../../AppContainer'
 
@@ -15,6 +15,8 @@ const PaymentListMonthlyContent: React.FC<ContentType> = ({
   unpaidAmount,
 }: ContentType) => {
   const navigation = useNavigation<MainScreenNavigationProp>()
+  const yearMonthJa =
+    yearMonth.substr(0, 4) + '年' + Number(yearMonth.substr(-2)) + '月'
 
   return (
     <CardItem
@@ -22,19 +24,19 @@ const PaymentListMonthlyContent: React.FC<ContentType> = ({
       button
       onPress={(): void => {
         navigation.navigate('Daily', {
-          yearMonth: yearMonth,
+          yearMonth: yearMonthJa,
         })
       }}
     >
       <Left>
-        <Text>{yearMonth}</Text>
+        <Text>{yearMonthJa}</Text>
       </Left>
-      <Body>
+      <Left>
         <Text>{groupAmount.toLocaleString()} 円</Text>
-      </Body>
-      <Right>
+      </Left>
+      <Left>
         <Text>{unpaidAmount.toLocaleString()} 円</Text>
-      </Right>
+      </Left>
     </CardItem>
   )
 }

@@ -119,7 +119,7 @@ const EditPaymentForm: React.FC = () => {
   return (
     <Form style={{ marginRight: 16 }}>
       <Item fixedLabel>
-        <Label>購入日：</Label>
+        <Label>購入日</Label>
         <Button transparent onPress={(): void => setShow(true)}>
           <Text style={{ fontSize: 16 }}>
             {displayDate.toLocaleDateString('ja-JP', dateOption) ||
@@ -146,7 +146,7 @@ const EditPaymentForm: React.FC = () => {
         onChange={changeUsage}
       />
       <Item fixedLabel>
-        <Label>負担額：</Label>
+        <Label>負担額</Label>
         <Input
           keyboardType="numeric"
           maxLength={6}
@@ -168,7 +168,7 @@ const EditPaymentForm: React.FC = () => {
         </Text>
       </Item>
       <Item fixedLabel>
-        <Label>個人用：</Label>
+        <Label>個人用</Label>
         <Input
           keyboardType="numeric"
           maxLength={6}

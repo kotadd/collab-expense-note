@@ -1,5 +1,5 @@
+import { CardItem, Left, Text } from 'native-base'
 import React from 'react'
-import { CardItem, Left, Right, Text, Body } from 'native-base'
 
 const PaymentListMonthlyHeader: React.FC = () => (
   <CardItem
@@ -11,12 +11,12 @@ const PaymentListMonthlyHeader: React.FC = () => (
     <Left>
       <Text>該当年月</Text>
     </Left>
-    <Body>
+    <Left>
       <Text>支出総額</Text>
-    </Body>
-    <Right>
+    </Left>
+    <Left>
       <Text>未精算額</Text>
-    </Right>
+    </Left>
   </CardItem>
 )
 
