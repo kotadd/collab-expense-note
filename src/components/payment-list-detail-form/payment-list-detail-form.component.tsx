@@ -24,7 +24,7 @@ const PaymentListDetailForm: React.FC<PaymentForm> = ({
 }: PaymentForm) => (
   <Form style={{ marginRight: 16 }}>
     <Item fixedLabel>
-      <Label>購入日：</Label>
+      <Label>購入日</Label>
       <Input
         disabled={disabled}
         value={timestampToLocaleDate(payment.purchaseDate, 'ja-JP')}
@@ -32,7 +32,7 @@ const PaymentListDetailForm: React.FC<PaymentForm> = ({
       />
     </Item>
     <Item fixedLabel>
-      <Label>店舗：</Label>
+      <Label>店舗</Label>
       <Input
         disabled={disabled}
         value={payment.shopName}
@@ -40,7 +40,7 @@ const PaymentListDetailForm: React.FC<PaymentForm> = ({
       />
     </Item>
     <Item fixedLabel>
-      <Label>用途：</Label>
+      <Label>用途</Label>
       <Input
         disabled={disabled}
         value={payment.usage}
@@ -48,7 +48,7 @@ const PaymentListDetailForm: React.FC<PaymentForm> = ({
       />
     </Item>
     <Item fixedLabel>
-      <Label>負担額：</Label>
+      <Label>負担額</Label>
       <Input
         disabled={disabled}
         style={{ textAlign: 'right', lineHeight: 18 }}
@@ -64,7 +64,7 @@ const PaymentListDetailForm: React.FC<PaymentForm> = ({
       </Text>
     </Item>
     <Item fixedLabel>
-      <Label>個人用：</Label>
+      <Label>個人用</Label>
       <Input
         disabled={disabled}
         style={{ textAlign: 'right', lineHeight: 18 }}
@@ -74,25 +74,25 @@ const PaymentListDetailForm: React.FC<PaymentForm> = ({
       </Text>
     </Item>
     <Item fixedLabel style={{ height: 40 }}>
-      <Label>作成日時：</Label>
+      <Label>作成日時</Label>
       <Text style={{ color: '#575757' }}>
         {timestampToLocaleDate(payment._createdAt, 'ja-JP', 'hour')}
       </Text>
     </Item>
     <Item fixedLabel style={{ height: 40 }}>
-      <Label>作成者：</Label>
+      <Label>作成者</Label>
       <Text style={{ color: '#575757' }}>{payment._createdBy}</Text>
     </Item>
     {payment._updatedBy ? (
       <>
         <Item fixedLabel style={{ height: 40 }}>
-          <Label>更新日時：</Label>
+          <Label>更新日時</Label>
           <Text style={{ color: '#575757' }}>
             {timestampToLocaleDate(payment._updatedAt, 'ja-JP', 'hour')}
           </Text>
         </Item>
         <Item fixedLabel style={{ height: 40 }}>
-          <Label>更新者：</Label>
+          <Label>更新者</Label>
           <Text style={{ color: '#575757' }}>{payment._updatedBy}</Text>
         </Item>
       </>

@@ -11,15 +11,15 @@ const PaymentListDailyHeader: React.FC = () => (
     <Left>
       <Text>日付</Text>
     </Left>
-    <Body>
-      <Text>ショップ</Text>
-    </Body>
-    <Right>
+    <Left>
+      <Text>店舗</Text>
+    </Left>
+    <Left>
       <Text>家計費</Text>
-    </Right>
-    <Right>
+    </Left>
+    <Left>
       <Text>自分用</Text>
-    </Right>
+    </Left>
     <Right>
       <Text>精算済</Text>
     </Right>

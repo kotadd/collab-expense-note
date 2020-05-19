@@ -1,4 +1,4 @@
-import { Body, CardItem, Left, Right, Text } from 'native-base'
+import { Body, CardItem, Left, Text } from 'native-base'
 import React from 'react'
 import { RootScreenNavigationProp } from '../../../AppContainer'
 import { timestampToLocaleDate } from '../../../repository/firebase/firebase.utils'
@@ -45,15 +45,15 @@ const PaymentListDailyContent: React.FC<ContentProps> = ({
       <Left>
         <Text>{day}</Text>
       </Left>
-      <Body>
+      <Left>
         <Text style={{ marginTop: 4 }}>{payment.get('shopName')}</Text>
-      </Body>
-      <Right>
-        <Text>¥{payment.get('groupAmount').toLocaleString()}</Text>
-      </Right>
-      <Right>
-        <Text>¥{payment.get('privateAmount').toLocaleString()}</Text>
-      </Right>
+      </Left>
+      <Left>
+        <Text>{payment.get('groupAmount').toLocaleString()} 円</Text>
+      </Left>
+      <Left>
+        <Text>{payment.get('privateAmount').toLocaleString()} 円</Text>
+      </Left>
       <CollectionCheck collected={payment.get('collected') as boolean} />
     </CardItem>
   )

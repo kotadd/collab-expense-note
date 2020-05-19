@@ -44,7 +44,7 @@ const PickerInput: React.FC<PickerInputProps> = ({
   return (
     <Form>
       <Item picker fixedLabel>
-        <Label>{title}：</Label>
+        <Label>{title}</Label>
         <Picker
           mode="dropdown"
           iosIcon={<Icon name="arrow-down" style={{ marginLeft: 0 }} />}
