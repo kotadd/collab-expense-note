@@ -1,9 +1,14 @@
 import firebase from 'firebase/app'
 import 'firebase/auth'
 import 'firebase/firestore'
-import { config } from './firebase.config'
+import { config, prodConfig } from './firebase.config'
 
-firebase.initializeApp(config)
+console.log(`process.env.NODE_ENV: ${process.env.NODE_ENV}`)
+if (process.env.NODE_ENV === 'development') {
+  firebase.initializeApp(config)
+} else {
+  firebase.initializeApp(prodConfig)
+}
 
 export const auth = firebase.auth()
 export const firestore = firebase.firestore()

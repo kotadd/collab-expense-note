@@ -1,11 +1,25 @@
 {
   "indexes": [
     {
+      "collectionGroup": "monthly-user-summaries",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "user.ref",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "yearMonth",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
       "collectionGroup": "payments",
       "queryScope": "COLLECTION",
       "fields": [
         {
-          "fieldPath": "user",
+          "fieldPath": "user.ref",
           "order": "ASCENDING"
         },
         {
