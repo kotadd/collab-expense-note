@@ -1,4 +1,4 @@
-import { Form, Input, Item, Label } from 'native-base'
+import { Form, Icon, Input, Item, Label, Toast } from 'native-base'
 import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { fetchGroupIDByUID } from '../../../repository/firebase/firebase.utils'
@@ -6,6 +6,14 @@ import {
   currentGroupIDSelector,
   currentUserSelector,
 } from '../../redux/user/user.selector'
+import { Clipboard } from 'react-native'
+
+const copyToClipboard = (groupID: string): void => {
+  Clipboard.setString(groupID)
+  Toast.show({
+    text: 'コピーしました',
+  })
+}
 
 const ProfileForm: React.FC = () => {
   const [groupID, setGroupID] = useState('')
@@ -32,9 +40,10 @@ const ProfileForm: React.FC = () => {
         <Label>メールアドレス</Label>
         <Input value={currentUser.email?.toString()} disabled={true} />
       </Item>
-      <Item fixedLabel>
+      <Item fixedLabel onPress={(): void => copyToClipboard(groupID)}>
         <Label>グループID</Label>
         <Input value={groupID} disabled={true} />
+        <Icon type="FontAwesome" active name="clipboard" />
       </Item>
     </Form>
   )
