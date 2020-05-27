@@ -2,32 +2,33 @@ import { Toast } from 'native-base'
 import { useEffect, useState } from 'react'
 import { Keyboard } from 'react-native'
 import {
-  setSpecificMonthPayments,
-  setMonthlyPayments,
   setASpecificPayment,
+  setMonthlyPayments,
+  setSpecificMonthPayments,
 } from '../../repository/firebase/payments/payment-repository'
 import {
+  MonthlySummaryProps,
   PaymentProps,
   PaymentType,
-  MonthlySummaryProps,
 } from '../../repository/firebase/payments/payment-types'
-import { UserListProps } from '../redux/types'
-import { fetchGroupUsers } from '../../repository/firebase/users/user-repository'
+import { fetchGroupMembers } from '../../repository/firebase/groups/group-repository'
+import { MemberType } from '../redux/group/group.types'
 
 export function useGroupUserList(
+  members: MemberType[],
   currentUser: firebase.User,
   currentGroupID: string
-): UserListProps {
-  const [userList, setUserList] = useState([{ id: '', name: '' }])
+): MemberType[] | undefined {
+  const [userList, setUserList] = useState<MemberType[]>()
 
   useEffect(() => {
     const fetchGroupUserList: () => void = async () => {
-      const userList = await fetchGroupUsers(currentUser, currentGroupID)
-      if (!userList) return
-      setUserList(userList)
+      if (members) return setUserList(members)
+
+      await fetchGroupMembers(currentUser, currentGroupID, setUserList)
     }
     fetchGroupUserList()
-  }, [currentUser, currentGroupID])
+  }, [members, currentUser, currentGroupID])
 
   return userList
 }

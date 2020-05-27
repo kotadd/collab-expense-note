@@ -6,7 +6,7 @@ import SelectListHeader from '../select-list-header/select-list-header.component
 type GroupListPickerProps = {
   selectedUserName: string
   onValueChange: (selectedUserName: string) => void
-  pickerItems: JSX.Element[]
+  pickerItems: ReactElement[]
 }
 
 const GroupListPicker: React.FC<GroupListPickerProps> = ({

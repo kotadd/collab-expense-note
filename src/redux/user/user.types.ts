@@ -13,5 +13,5 @@ export type ReduxSelectedUserProps = {
 
 export const ALL_ITEMS_STATE = {
   id: '-1',
-  name: 'all-items',
+  displayName: 'all-items',
 }

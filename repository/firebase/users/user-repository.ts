@@ -1,7 +1,6 @@
 import firebase from 'firebase/app'
 import { Toast } from 'native-base'
-import { auth, firestore, fetchGroupIDByUID } from '../firebase.utils'
-import { UserListProps } from '../../../src/redux/types'
+import { auth, firestore } from '../firebase.utils'
 
 export const createUser: (
   userAuth: firebase.User
@@ -53,6 +52,12 @@ export const addDetailToUser: (
       })
       userAuth.updateProfile({ displayName })
       await auth.updateCurrentUser(userAuth)
+      await firestore.collection(`groups/${groupID}/members`).add({
+        _createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+        _updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+        id: userAuth.uid,
+        displayName,
+      })
     } catch (error) {
       Toast.show({
         text: 'ユーザーの情報を追加するのに失敗しました。',
@@ -62,27 +67,4 @@ export const addDetailToUser: (
   }
 
   return userRef
-}
-
-export const fetchGroupUsers: (
-  userAuth: firebase.User,
-  currentGroupID: string
-) => Promise<UserListProps> = async (userAuth, currentGroupID) => {
-  const groupID = currentGroupID
-    ? currentGroupID
-    : await fetchGroupIDByUID(userAuth.uid)
-
-  const userSnapshots = await firestore
-    .collection('users')
-    .where('groupID', '==', groupID)
-    .get()
-
-  const userList = userSnapshots.docs.map((userSnapshot) => {
-    return {
-      id: userSnapshot.id,
-      name: userSnapshot.get('displayName'),
-    }
-  })
-
-  return userList
 }

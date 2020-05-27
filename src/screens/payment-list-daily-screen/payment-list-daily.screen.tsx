@@ -1,7 +1,7 @@
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native'
 import { Container, Content } from 'native-base'
 import React, { ReactElement } from 'react'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import {
   MainStackParamList,
   RootScreenNavigationProp,
@@ -19,6 +19,12 @@ import {
   currentUserSelector,
   selectedUserSelector,
 } from '../../redux/user/user.selector'
+import { currentMemberSelector } from '../../redux/group/group.selector'
+import { Dispatch } from 'redux'
+import {
+  SetCurrentMemberAction,
+  setCurrentMembers,
+} from '../../redux/group/group.actions'
 
 type DailyScreenRouteProp = RouteProp<MainStackParamList, 'Daily'>
 
@@ -26,12 +32,25 @@ const PaymentListDailyScreen: React.FC = () => {
   const currentUser = useSelector(currentUserSelector)
   const currentGroupID = useSelector(currentGroupIDSelector)
   const selectedUserName = useSelector(selectedUserSelector)
-  const userList = useGroupUserList(currentUser, currentGroupID)
+  const members = useSelector(currentMemberSelector)
+  const userList = useGroupUserList(members, currentUser, currentGroupID)
 
-  const selectedUserID =
-    selectedUserName === 'all-items'
-      ? ''
-      : userList.find((user) => user.name === selectedUserName)?.id
+  const dispatch = useDispatch<Dispatch<SetCurrentMemberAction>>()
+
+  if (userList) {
+    dispatch(setCurrentMembers(userList))
+  }
+
+  const selectedUserID = ((): string => {
+    if (selectedUserName === 'all-items') {
+      return ''
+    }
+    if (!userList) {
+      return ''
+    }
+    const user = userList.find((user) => user.displayName === selectedUserName)
+    return user ? user.id : ''
+  })()
 
   const navigation = useNavigation<RootScreenNavigationProp>()
   const route = useRoute<DailyScreenRouteProp>()
@@ -78,7 +97,7 @@ const PaymentListDailyScreen: React.FC = () => {
       <Container>
         <Content>
           <ToggleMember
-            key={currentUser.uid}
+            key={'ToggleMember-daily'}
             userList={userList}
             selectedUserName={selectedUserName}
           />

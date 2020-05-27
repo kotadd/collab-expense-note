@@ -1,5 +1,6 @@
-export type GroupProps = {
+export type MemberProps = {
   _createdAt: firebase.firestore.Timestamp
   _updatedAt: firebase.firestore.Timestamp
-  name: string
+  id: string
+  displayName: string
 }

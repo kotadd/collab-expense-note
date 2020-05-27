@@ -6,8 +6,8 @@ import {
   fetchGroupIDByUID,
 } from '../../../repository/firebase/firebase.utils'
 import {
-  setCurrentUser,
   setCurrentGroupID,
+  setCurrentUser,
 } from '../../redux/user/user.actions'
 
 export const navigateFromLoginScreen: (
@@ -16,6 +16,7 @@ export const navigateFromLoginScreen: (
   dispatch: Dispatch
 ) => Promise<void> = async (userAuth, navigation, dispatch) => {
   const groupID = await fetchGroupIDByUID(userAuth.uid)
+
   if (groupID) {
     dispatch(setCurrentGroupID(groupID))
     navigation.navigate('HomeTabs', {
