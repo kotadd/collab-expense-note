@@ -23,7 +23,7 @@ export function useGroupUserList(
 
   useEffect(() => {
     const fetchGroupUserList: () => void = async () => {
-      if (members) return setUserList(members)
+      if (members.length > 0) return setUserList(members)
 
       await fetchGroupMembers(currentUser, currentGroupID, setUserList)
     }

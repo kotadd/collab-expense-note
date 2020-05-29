@@ -1,5 +1,5 @@
-import { CurrentGroupProps, MemberType } from './group.types'
+import { MemberType, ReduxCurrentGroupProps } from './group.types'
 
 export const currentMemberSelector: (
-  state: CurrentGroupProps
+  state: ReduxCurrentGroupProps
 ) => MemberType[] = (state) => state.group.members

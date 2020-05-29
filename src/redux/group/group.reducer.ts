@@ -2,9 +2,7 @@ import { SetCurrentMemberAction } from './group.actions'
 import { CurrentGroupProps } from './group.types'
 
 const initialState: CurrentGroupProps = {
-  group: {
-    members: [],
-  },
+  members: [],
 }
 
 type Action = SetCurrentMemberAction
@@ -17,9 +15,7 @@ const groupReducer = (
     case 'SET_CURRENT_MEMBERS':
       return {
         ...state,
-        group: {
-          members: action.payload,
-        },
+        members: action.payload,
       }
     default:
       return state

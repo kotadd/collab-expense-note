@@ -26,6 +26,7 @@ import PaymentListDetailScreen from './src/screens/payment-list-detail-screen/pa
 import PaymentListMonthlyScreen from './src/screens/payment-list-monthly-screen/payment-list-monthly.screen'
 import ProfileScreen from './src/screens/profile-screen/profile.screen'
 import SignupScreen from './src/screens/signup-screen/signup.screen'
+import SettingScreen from './src/screens/setting-screen/setting.screen'
 
 export type MainStackParamList = {
   Monthly: undefined
@@ -75,14 +76,23 @@ export type ProfileStackParamList = {
   Profile: ProfileParams
 }
 
+type SettingParams = {
+  screen: 'Setting'
+}
+
+export type SettingStackParamList = {
+  Setting: SettingParams
+}
+
 export type HomeTabsParamList = {
   Home: HomeParams
   Profile: ProfileParams
+  Setting: SettingParams
 }
 
 type HomeTabsParams = {
-  screen: 'Home' | 'Profile'
-  params: HomeParams | ProfileParams
+  screen: 'Home' | 'Profile' | 'Setting'
+  params: HomeParams | ProfileParams | SettingParams
 }
 
 export type AuthStackParamList = {
@@ -133,6 +143,7 @@ const AuthStack = createStackNavigator<AuthStackParamList>()
 const ModalStack = createStackNavigator<ModalStackParamList>()
 const HomeStack = createStackNavigator<HomeStackParamList>()
 const ProfileStack = createStackNavigator<ProfileStackParamList>()
+const SettingStack = createStackNavigator<SettingStackParamList>()
 const RootTab = createBottomTabNavigator<HomeTabsParamList>()
 const RootStack = createStackNavigator<RootStackParamList>()
 
@@ -293,6 +304,28 @@ const ProfileStackScreen: React.FC = () => {
   )
 }
 
+const SettingStackScreen: React.FC = () => {
+  const navigation = useNavigation<RootScreenNavigationProp>()
+
+  return (
+    <SettingStack.Navigator>
+      <SettingStack.Screen
+        name="Setting"
+        component={SettingScreen}
+        options={{
+          title: 'メンバーリスト',
+          headerLeft: (): ReactElement => {
+            const leftButton = (
+              <HeaderLeftLogoutButton navigation={navigation} />
+            )
+            return leftButton
+          },
+        }}
+      />
+    </SettingStack.Navigator>
+  )
+}
+
 const HomeTabs: React.FC = () => (
   <RootTab.Navigator
     screenOptions={({ route }): BottomTabNavigationOptions => ({
@@ -315,6 +348,7 @@ const HomeTabs: React.FC = () => (
   >
     <RootTab.Screen name="Home" component={HomeStackScreen} />
     <RootTab.Screen name="Profile" component={ProfileStackScreen} />
+    <RootTab.Screen name="Setting" component={SettingStackScreen} />
   </RootTab.Navigator>
 )
 

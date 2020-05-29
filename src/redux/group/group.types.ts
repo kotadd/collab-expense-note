@@ -1,9 +1,9 @@
 export type MemberType = Readonly<{ id: string; displayName: string }>
 
-export type MembersProps = Readonly<{
+export type CurrentGroupProps = Readonly<{
   members: MemberType[]
 }>
 
-export type CurrentGroupProps = Readonly<{
-  group: MembersProps
-}>
+export type ReduxCurrentGroupProps = {
+  group: CurrentGroupProps
+}
