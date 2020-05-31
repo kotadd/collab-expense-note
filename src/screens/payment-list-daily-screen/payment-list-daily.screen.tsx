@@ -54,16 +54,16 @@ const PaymentListDailyScreen: React.FC = () => {
 
   const navigation = useNavigation<RootScreenNavigationProp>()
   const route = useRoute<DailyScreenRouteProp>()
-  const { yearMonth } = route.params
+  const { year, month } = route.params
 
   navigation.setOptions({
-    headerTitle: yearMonth,
+    headerTitle: `${year}年${month}月`,
     headerRight: (): ReactElement => {
       const rightButton = (
         <HeaderRightCreateButton
           navigation={navigation}
           from="daily"
-          yearMonth={yearMonth}
+          yearMonth={`${year}年${month}月`}
         />
       )
       return rightButton
@@ -73,7 +73,8 @@ const PaymentListDailyScreen: React.FC = () => {
   const payments = useSpecificMonthPayments(
     currentUser.uid,
     currentGroupID,
-    yearMonth,
+    year,
+    month,
     selectedUserID
   )
 
@@ -84,7 +85,8 @@ const PaymentListDailyScreen: React.FC = () => {
           key={payment.id}
           navigation={navigation}
           payment={payment}
-          yearMonth={yearMonth}
+          year={year}
+          month={month}
         />
       )
     })
@@ -97,7 +99,7 @@ const PaymentListDailyScreen: React.FC = () => {
       <Container>
         <Content>
           <ToggleMember
-            key={'ToggleMember-daily'}
+            key={'DailyToggleMember'}
             userList={userList}
             selectedUserName={selectedUserName}
           />

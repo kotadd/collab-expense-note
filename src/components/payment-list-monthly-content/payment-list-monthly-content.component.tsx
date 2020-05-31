@@ -4,19 +4,19 @@ import React from 'react'
 import { MainScreenNavigationProp } from '../../../AppContainer'
 
 type ContentType = {
-  yearMonth: string
+  year: number
+  month: number
   groupAmount: number
-  unpaidAmount: number
+  uncollectedAmount: number
 }
 
 const PaymentListMonthlyContent: React.FC<ContentType> = ({
-  yearMonth,
+  year,
+  month,
   groupAmount,
-  unpaidAmount,
+  uncollectedAmount,
 }: ContentType) => {
   const navigation = useNavigation<MainScreenNavigationProp>()
-  const yearMonthJa =
-    yearMonth.substr(0, 4) + '年' + Number(yearMonth.substr(-2)) + '月'
 
   return (
     <CardItem
@@ -24,18 +24,19 @@ const PaymentListMonthlyContent: React.FC<ContentType> = ({
       button
       onPress={(): void => {
         navigation.navigate('Daily', {
-          yearMonth: yearMonthJa,
+          year,
+          month,
         })
       }}
     >
       <Left>
-        <Text>{yearMonthJa}</Text>
+        <Text>{`${year}年${month}月`}</Text>
       </Left>
       <Left>
         <Text>{groupAmount.toLocaleString()} 円</Text>
       </Left>
       <Left>
-        <Text>{unpaidAmount.toLocaleString()} 円</Text>
+        <Text>{uncollectedAmount.toLocaleString()} 円</Text>
       </Left>
     </CardItem>
   )

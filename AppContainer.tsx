@@ -30,13 +30,15 @@ import SettingScreen from './src/screens/setting-screen/setting.screen'
 
 export type MainStackParamList = {
   Monthly: undefined
-  Daily: { yearMonth: string }
+  Daily: { year: number; month: number }
   Detail: { yearMonth: string; day: string; paymentID: string }
 }
 
 type MainParams = {
   screen: 'Monthly' | 'Daily' | 'Detail'
   params?: {
+    year?: number
+    month?: number
     yearMonth?: string
     day?: string
     paymentID?: string
@@ -44,7 +46,7 @@ type MainParams = {
 }
 
 export type ModalStackParamList = {
-  CreateNew: { from: 'monthly' | 'daily'; yearMonth?: string }
+  CreateNew: { from: 'monthly' | 'daily'; year?: number; month?: number }
   Edit: { payment: PaymentType; paymentID: string }
 }
 
@@ -52,6 +54,8 @@ type ModalParams = {
   screen: 'CreateNew' | 'Edit'
   params: {
     from?: 'monthly' | 'daily'
+    year?: string
+    month?: string
     yearMonth?: string
     payment?: PaymentType
     paymentID?: string

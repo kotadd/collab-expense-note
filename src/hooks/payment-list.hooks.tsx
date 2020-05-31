@@ -5,14 +5,20 @@ import {
   setASpecificPayment,
   setMonthlyPayments,
   setSpecificMonthPayments,
+  setMonthlyUserPayments,
 } from '../../repository/firebase/payments/payment-repository'
 import {
   MonthlySummaryProps,
   PaymentProps,
   PaymentType,
+  MonthlyUserSummaryProps,
 } from '../../repository/firebase/payments/payment-types'
 import { fetchGroupMembers } from '../../repository/firebase/groups/group-repository'
-import { MemberType } from '../redux/group/group.types'
+import {
+  MemberType,
+  MonthlySummaryType,
+  MonthlyUserSummaryType,
+} from '../redux/group/group.types'
 
 export function useGroupUserList(
   members: MemberType[],
@@ -34,18 +40,37 @@ export function useGroupUserList(
 }
 
 export function useMonthlyPayments(
+  groupPayments: MonthlySummaryType[],
   uid: string,
-  currentGroupID: string,
-  selectedUserID?: string
+  currentGroupID: string
 ): MonthlySummaryProps[] | undefined {
   const [payments, setPayments] = useState<MonthlySummaryProps[]>()
 
   useEffect(() => {
     const fetchPaymentsData = async (): Promise<void> => {
-      await setMonthlyPayments(uid, currentGroupID, setPayments, selectedUserID)
+      if (groupPayments.length > 0) return setPayments(groupPayments)
+      await setMonthlyPayments(uid, currentGroupID, setPayments)
     }
     fetchPaymentsData()
-  }, [uid, currentGroupID, selectedUserID])
+  }, [groupPayments, uid, currentGroupID])
+
+  return payments
+}
+
+export function useMonthlyUserPayments(
+  userPayments: MonthlyUserSummaryType[],
+  uid: string,
+  currentGroupID: string
+): MonthlyUserSummaryProps[] | undefined {
+  const [payments, setPayments] = useState<MonthlyUserSummaryProps[]>()
+
+  useEffect(() => {
+    const fetchPaymentsData = async (): Promise<void> => {
+      if (userPayments.length > 0) return setPayments(userPayments)
+      await setMonthlyUserPayments(uid, currentGroupID, setPayments)
+    }
+    fetchPaymentsData()
+  }, [userPayments, uid, currentGroupID])
 
   return payments
 }
@@ -53,7 +78,8 @@ export function useMonthlyPayments(
 export function useSpecificMonthPayments(
   uid: string,
   currentGroupID: string,
-  yearMonth: string,
+  year: number,
+  month: number,
   selectedUserID?: string
 ): PaymentProps[] | undefined {
   const [payments, setPayments] = useState<PaymentProps[]>()
@@ -63,13 +89,14 @@ export function useSpecificMonthPayments(
       await setSpecificMonthPayments(
         uid,
         currentGroupID,
-        yearMonth,
+        year,
+        month,
         setPayments,
         selectedUserID
       )
     }
     fetchPaymentsData()
-  }, [uid, currentGroupID, yearMonth, selectedUserID])
+  }, [uid, currentGroupID, year, month, selectedUserID])
 
   return payments
 }

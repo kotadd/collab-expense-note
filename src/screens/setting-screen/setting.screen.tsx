@@ -5,9 +5,8 @@ import { currentMemberSelector } from '../../redux/group/group.selector'
 
 const SettingScreen: React.FC = () => {
   const members = useSelector(currentMemberSelector)
-
+  const unpaidPayments = 
   const membersDom = members.map((member) => {
-    console.log(`memberID: ${member.id}`)
     return (
       <CardItem bordered button key={member.id}>
         <Left>

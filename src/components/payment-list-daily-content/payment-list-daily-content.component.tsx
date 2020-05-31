@@ -1,4 +1,4 @@
-import { Body, CardItem, Left, Text } from 'native-base'
+import { CardItem, Left, Text } from 'native-base'
 import React from 'react'
 import { RootScreenNavigationProp } from '../../../AppContainer'
 import { timestampToLocaleDate } from '../../../repository/firebase/firebase.utils'
@@ -8,13 +8,15 @@ import CollectionCheck from '../collection-check/collection-check.component'
 type ContentProps = {
   navigation: RootScreenNavigationProp
   payment: PaymentProps
-  yearMonth: string
+  year: number
+  month: number
 }
 
 const PaymentListDailyContent: React.FC<ContentProps> = ({
   navigation,
   payment,
-  yearMonth,
+  year,
+  month,
 }: ContentProps) => {
   const date = timestampToLocaleDate(payment.get('purchaseDate'), 'ja-JP')
   const day = date.replace(/.*?月/, '').toString()
@@ -33,7 +35,7 @@ const PaymentListDailyContent: React.FC<ContentProps> = ({
             params: {
               screen: 'Detail',
               params: {
-                yearMonth,
+                yearMonth: `${year}年${month}月`,
                 day,
                 paymentID,
               },

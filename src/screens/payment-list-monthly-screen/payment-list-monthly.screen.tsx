@@ -8,16 +8,25 @@ import {
   useGroupUserList,
   useMonthlyPayments,
   useToast,
+  useMonthlyUserPayments,
 } from '../../hooks/payment-list.hooks'
 import {
   currentGroupIDSelector,
   currentUserSelector,
   selectedUserSelector,
 } from '../../redux/user/user.selector'
-import { currentMemberSelector } from '../../redux/group/group.selector'
+import {
+  currentMemberSelector,
+  currentMonthlyPaymentsSelector,
+  currentMonthlyUserPaymentsSelector,
+} from '../../redux/group/group.selector'
 import {
   SetCurrentMemberAction,
   setCurrentMembers,
+  SetMonthlySummaryAction,
+  SetMonthlyUserSummaryAction,
+  setMonthlySummaries,
+  setMonthlyUserSummaries,
 } from '../../redux/group/group.actions'
 import { Dispatch } from 'redux'
 
@@ -27,12 +36,18 @@ const PaymentListMonthlyScreen: React.FC = () => {
   const selectedUserName = useSelector(selectedUserSelector)
   const members = useSelector(currentMemberSelector)
   const userList = useGroupUserList(members, currentUser, currentGroupID)
+  const groupPayments = useSelector(currentMonthlyPaymentsSelector)
+  const userPayments = useSelector(currentMonthlyUserPaymentsSelector)
 
-  const dispatch = useDispatch<Dispatch<SetCurrentMemberAction>>()
+  const dispatch = useDispatch<
+    Dispatch<
+      | SetCurrentMemberAction
+      | SetMonthlySummaryAction
+      | SetMonthlyUserSummaryAction
+    >
+  >()
 
-  if (userList) {
-    dispatch(setCurrentMembers(userList))
-  }
+  if (userList) dispatch(setCurrentMembers(userList))
 
   useToast(currentUser)
 
@@ -48,26 +63,54 @@ const PaymentListMonthlyScreen: React.FC = () => {
   })()
 
   const monthlyPayments = useMonthlyPayments(
+    groupPayments,
     currentUser.uid,
-    currentGroupID,
-    selectedUserID
+    currentGroupID
   )
+  if (monthlyPayments) dispatch(setMonthlySummaries(monthlyPayments))
 
-  const monthlySummaries = monthlyPayments?.map((summary) => (
-    <PaymentListMonthlyContent
-      key={summary.id}
-      yearMonth={summary.yearMonth}
-      groupAmount={summary.groupAmount}
-      unpaidAmount={summary.unpaidAmount}
-    />
-  ))
+  const monthlyUserPayments = useMonthlyUserPayments(
+    userPayments,
+    currentUser.uid,
+    currentGroupID
+  )
+  if (monthlyUserPayments) {
+    dispatch(setMonthlyUserSummaries(monthlyUserPayments))
+  }
+
+  const monthlySummaries = (): JSX.Element[] | undefined => {
+    if (selectedUserID) {
+      const summaries = monthlyUserPayments?.filter(
+        (summary) => summary.uid === selectedUserID
+      )
+      return summaries?.map((summary) => (
+        <PaymentListMonthlyContent
+          key={summary.uid}
+          year={summary.year}
+          month={summary.month}
+          groupAmount={summary.paidAmount}
+          uncollectedAmount={summary.uncollectedAmount}
+        />
+      ))
+    } else {
+      return monthlyPayments?.map((summary) => (
+        <PaymentListMonthlyContent
+          key={summary.id}
+          year={summary.year}
+          month={summary.month}
+          groupAmount={summary.groupAmount}
+          uncollectedAmount={summary.uncollectedGroupAmount}
+        />
+      ))
+    }
+  }
 
   return (
     <>
       <Container>
         <Content>
           <ToggleMember
-            key={'ToggleMember-monthly'}
+            key={'MonthlyToggleMember'}
             userList={userList}
             selectedUserName={selectedUserName}
           />

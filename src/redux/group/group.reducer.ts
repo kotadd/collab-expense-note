@@ -1,11 +1,20 @@
-import { SetCurrentMemberAction } from './group.actions'
+import {
+  SetCurrentMemberAction,
+  SetMonthlySummaryAction,
+  SetMonthlyUserSummaryAction,
+} from './group.actions'
 import { CurrentGroupProps } from './group.types'
 
 const initialState: CurrentGroupProps = {
   members: [],
+  monthlySummaries: [],
+  monthlyUserSummaries: [],
 }
 
-type Action = SetCurrentMemberAction
+type Action =
+  | SetCurrentMemberAction
+  | SetMonthlySummaryAction
+  | SetMonthlyUserSummaryAction
 
 const groupReducer = (
   state = initialState,
@@ -16,6 +25,16 @@ const groupReducer = (
       return {
         ...state,
         members: action.payload,
+      }
+    case 'SET_MONTHLY_SUMMARIES':
+      return {
+        ...state,
+        monthlySummaries: action.payload,
+      }
+    case 'SET_MONTHLY_USER_SUMMARIES':
+      return {
+        ...state,
+        monthlyUserSummaries: action.payload,
       }
     default:
       return state
