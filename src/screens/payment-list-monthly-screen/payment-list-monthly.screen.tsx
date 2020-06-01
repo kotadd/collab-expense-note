@@ -51,15 +51,12 @@ const PaymentListMonthlyScreen: React.FC = () => {
 
   useToast(currentUser)
 
-  const selectedUserID = ((): string => {
-    if (selectedUserName === 'all-items') {
-      return ''
-    }
-    if (!userList) {
-      return ''
+  const selectedUserID = ((): string | null => {
+    if (selectedUserName === 'all-items' || !userList) {
+      return null
     }
     const user = userList.find((user) => user.displayName === selectedUserName)
-    return user ? user.id : ''
+    return user ? user.id : null
   })()
 
   const monthlyPayments = useMonthlyPayments(
@@ -78,7 +75,7 @@ const PaymentListMonthlyScreen: React.FC = () => {
     dispatch(setMonthlyUserSummaries(monthlyUserPayments))
   }
 
-  const monthlySummaries = (): JSX.Element[] | undefined => {
+  const monthlySummaries = ((): JSX.Element[] | undefined => {
     if (selectedUserID) {
       const summaries = monthlyUserPayments?.filter(
         (summary) => summary.uid === selectedUserID
@@ -103,7 +100,7 @@ const PaymentListMonthlyScreen: React.FC = () => {
         />
       ))
     }
-  }
+  })()
 
   return (
     <>

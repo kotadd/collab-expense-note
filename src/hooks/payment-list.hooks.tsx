@@ -80,7 +80,7 @@ export function useSpecificMonthPayments(
   currentGroupID: string,
   year: number,
   month: number,
-  selectedUserID?: string
+  selectedUserID: string | null
 ): PaymentProps[] | undefined {
   const [payments, setPayments] = useState<PaymentProps[]>()
 

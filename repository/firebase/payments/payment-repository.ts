@@ -99,7 +99,7 @@ export const setSpecificMonthPayments: (
   year: number,
   month: number,
   setPayments: React.Dispatch<React.SetStateAction<PaymentProps[] | undefined>>,
-  selectedUserID?: string
+  selectedUserID: string | null
 ) => Promise<() => void> = async (
   uid,
   currentGroupID,

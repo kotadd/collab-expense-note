@@ -41,15 +41,12 @@ const PaymentListDailyScreen: React.FC = () => {
     dispatch(setCurrentMembers(userList))
   }
 
-  const selectedUserID = ((): string => {
-    if (selectedUserName === 'all-items') {
-      return ''
-    }
-    if (!userList) {
-      return ''
+  const selectedUserID = ((): string | null => {
+    if (selectedUserName === 'all-items' || !userList) {
+      return null
     }
     const user = userList.find((user) => user.displayName === selectedUserName)
-    return user ? user.id : ''
+    return user ? user.id : null
   })()
 
   const navigation = useNavigation<RootScreenNavigationProp>()
