@@ -1,5 +1,5 @@
+import { CardItem, Left, Right, Text } from 'native-base'
 import React from 'react'
-import { Left, Right, Body, CardItem, Text } from 'native-base'
 
 const PaymentListDailyHeader: React.FC = () => (
   <CardItem

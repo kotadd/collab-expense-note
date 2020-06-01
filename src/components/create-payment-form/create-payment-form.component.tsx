@@ -1,4 +1,4 @@
-import { useNavigation, useRoute, RouteProp } from '@react-navigation/native'
+import { RouteProp, useNavigation, useRoute } from '@react-navigation/native'
 import {
   Body,
   Button,
@@ -18,15 +18,14 @@ import { Platform, Text } from 'react-native'
 import { useSelector } from 'react-redux'
 import {
   MainScreenNavigationProp,
-  MainStackParamList,
   ModalStackParamList,
 } from '../../../AppContainer'
+import { createPaymentsData } from '../../../repository/firebase/payments/payment-repository'
 import { ModalProps } from '../../../repository/firebase/payments/payment-types'
 import DatePicker from '../../components/datepicker/datepicker-component'
 import PickerInput from '../../components/picker-input/picker-input.component'
 import OPTIONS from '../../components/picker-input/picker-options'
 import { currentUserSelector } from '../../redux/user/user.selector'
-import { createPaymentsData } from '../../../repository/firebase/payments/payment-repository'
 
 type ModalScreenRouteProp = RouteProp<ModalStackParamList, 'CreateNew'>
 

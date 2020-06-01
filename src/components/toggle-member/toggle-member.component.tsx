@@ -1,4 +1,4 @@
-import React, { useState, ReactElement } from 'react'
+import React from 'react'
 import { Picker } from 'react-native'
 import { useDispatch } from 'react-redux'
 import { Dispatch } from 'redux'
