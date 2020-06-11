@@ -29,17 +29,9 @@ const PickerInput: React.FC<PickerInputProps> = ({
     return
   }
 
-  const doms = []
-
-  for (let i = 0; i < items.length; i++) {
-    doms.push(
-      <Picker.Item
-        key={items[i].key}
-        label={items[i].label}
-        value={items[i].label}
-      />
-    )
-  }
+  const doms = items.map(({ key, label }) => (
+    <Picker.Item key={key} label={label} value={label} />
+  ))
 
   return (
     <Form>
