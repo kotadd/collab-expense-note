@@ -60,7 +60,7 @@ const PaymentListDetailForm: React.FC<PaymentForm> = ({
           fontSize: 17,
         }}
       >
-        {payment.groupAmount} 円
+        {payment.groupAmount.toLocaleString()} 円
       </Text>
     </Item>
     <Item fixedLabel>
@@ -70,7 +70,7 @@ const PaymentListDetailForm: React.FC<PaymentForm> = ({
         style={{ textAlign: 'right', lineHeight: 18 }}
       />
       <Text style={{ color: '#575757', paddingRight: 5, fontSize: 17 }}>
-        {payment.privateAmount} 円
+        {payment.privateAmount.toLocaleString()} 円
       </Text>
     </Item>
     <Item fixedLabel style={{ height: 40 }}>

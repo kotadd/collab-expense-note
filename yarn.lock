@@ -2633,6 +2633,11 @@ dayjs@^1.8.15:
   resolved "http://edge.artifactory.corp.yahoo.co.jp:8000/artifactory/api/npm/apj-npm/dayjs/-/dayjs-1.8.27.tgz#a8ae63ee990af28c05c430f0e160ae835a0fbbf8"
   integrity sha1-qK5j7pkK8owFxDDw4WCug1oPu/g=
 
+dayjs@^1.8.28:
+  version "1.8.28"
+  resolved "http://edge.artifactory.corp.yahoo.co.jp:8000/artifactory/api/npm/apj-npm/dayjs/-/dayjs-1.8.28.tgz#37aa6201df483d089645cb6c8f6cef6f0c4dbc07"
+  integrity sha1-N6piAd9IPQiWRctsj2zvbwxNvAc=
+
 debounce@^1.2.0:
   version "1.2.0"
   resolved "http://edge.artifactory.corp.yahoo.co.jp:8000/artifactory/api/npm/apj-npm/debounce/-/debounce-1.2.0.tgz#44a540abc0ea9943018dc0eaa95cce87f65cd131"

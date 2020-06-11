@@ -3,6 +3,7 @@ import { fetchGroupIDByUID, firestore } from '../firebase.utils'
 import {
   ModalProps,
   MonthlySummaryProps,
+  MonthlyUserSummaryProps,
   PaymentProps,
   PaymentType,
 } from './payment-types'
@@ -12,35 +13,72 @@ export const setMonthlyPayments: (
   currentGroupID: string,
   setPayments: React.Dispatch<
     React.SetStateAction<MonthlySummaryProps[] | undefined>
-  >,
-  selectedUserID?: string
-) => Promise<() => void> = async (
-  uid,
-  currentGroupID,
-  setPayments,
-  selectedUserID
-) => {
+  >
+) => Promise<() => void> = async (uid, currentGroupID, setPayments) => {
   const groupID = currentGroupID ? currentGroupID : await fetchGroupIDByUID(uid)
 
-  const query = selectedUserID
-    ? firestore
-        .collection(`groups/${groupID}/monthly-user-summaries`)
-        .where('user.ref', '==', firestore.doc(`users/${selectedUserID}`))
-        .orderBy('yearMonth', 'desc')
-    : firestore
-        .collection(`groups/${groupID}/monthly-summaries`)
-        .orderBy('yearMonth', 'desc')
+  const query = firestore
+    .collection(`groups/${groupID}/monthly-summaries`)
+    .orderBy('year', 'desc')
+    .orderBy('month', 'desc')
 
   const unsubscribedPayments = query.onSnapshot(
     (querySnapshot) => {
-      const map: MonthlySummaryProps[] = querySnapshot.docs.map((payment) => {
+      const map: MonthlySummaryProps[] = querySnapshot.docs.map((summary) => {
         return {
-          id: payment.id,
-          groupAmount: payment.get('groupAmount'),
-          unpaidAmount: payment.get('unpaidAmount'),
-          yearMonth: payment.get('yearMonth'),
+          id: summary.id,
+          collectedGroupAmount: summary.get('collectedGroupAmount'),
+          groupAmount: summary.get('groupAmount'),
+          isCollected: summary.get('isCollected'),
+          month: summary.get('month'),
+          uncollectedGroupAmount: summary.get('uncollectedGroupAmount'),
+          year: summary.get('year'),
         }
       })
+      setPayments(map)
+    },
+    () => {
+      // FirebaseError: Missing or insufficient permissions になるため握り潰す
+      // console.log(error)
+    }
+  )
+
+  const paymentSnapshots = await query.get()
+  if (paymentSnapshots.size === 0) setPayments(undefined)
+
+  return unsubscribedPayments
+}
+
+export const setMonthlyUserPayments: (
+  uid: string,
+  currentGroupID: string,
+  setPayments: React.Dispatch<
+    React.SetStateAction<MonthlyUserSummaryProps[] | undefined>
+  >
+) => Promise<() => void> = async (uid, currentGroupID, setPayments) => {
+  const groupID = currentGroupID ? currentGroupID : await fetchGroupIDByUID(uid)
+
+  const query = firestore
+    .collection(`groups/${groupID}/monthly-user-summaries`)
+    .orderBy('year', 'desc')
+    .orderBy('month', 'desc')
+
+  const unsubscribedPayments = query.onSnapshot(
+    (querySnapshot) => {
+      const map: MonthlyUserSummaryProps[] = querySnapshot.docs.map(
+        (summary) => {
+          return {
+            id: summary.id,
+            uid: summary.get('user.id'),
+            collectedAmount: summary.get('collectedAmount'),
+            isCollected: summary.get('isCollected'),
+            month: summary.get('month'),
+            paidAmount: summary.get('paidAmount'),
+            uncollectedAmount: summary.get('uncollectedAmount'),
+            year: summary.get('year'),
+          }
+        }
+      )
       setPayments(map)
     },
     () => {
@@ -58,21 +96,19 @@ export const setMonthlyPayments: (
 export const setSpecificMonthPayments: (
   uid: string,
   currentGroupID: string,
-  yearMonth: string,
+  year: number,
+  month: number,
   setPayments: React.Dispatch<React.SetStateAction<PaymentProps[] | undefined>>,
-  selectedUserID?: string
+  selectedUserID: string | null
 ) => Promise<() => void> = async (
   uid,
   currentGroupID,
-  yearMonth,
+  year,
+  month,
   setPayments,
   selectedUserID
 ) => {
   const groupID = currentGroupID ? currentGroupID : await fetchGroupIDByUID(uid)
-
-  const yearMonthArr = yearMonth.split('年')
-  const year = parseInt(yearMonthArr[0])
-  const month = parseInt(yearMonthArr[1].split('月')[0])
 
   const startDate = new Date(year, month - 1)
   const endDate = new Date(year, month)

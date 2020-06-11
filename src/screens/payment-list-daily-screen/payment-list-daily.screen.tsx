@@ -1,7 +1,7 @@
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native'
-import { Container, Content } from 'native-base'
+import { Container, Content, Card } from 'native-base'
 import React, { ReactElement } from 'react'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import {
   MainStackParamList,
   RootScreenNavigationProp,
@@ -19,6 +19,12 @@ import {
   currentUserSelector,
   selectedUserSelector,
 } from '../../redux/user/user.selector'
+import { membersSelector } from '../../redux/group/group.selector'
+import { Dispatch } from 'redux'
+import {
+  SetCurrentMemberAction,
+  setCurrentMembers,
+} from '../../redux/group/group.actions'
 
 type DailyScreenRouteProp = RouteProp<MainStackParamList, 'Daily'>
 
@@ -26,25 +32,35 @@ const PaymentListDailyScreen: React.FC = () => {
   const currentUser = useSelector(currentUserSelector)
   const currentGroupID = useSelector(currentGroupIDSelector)
   const selectedUserName = useSelector(selectedUserSelector)
-  const userList = useGroupUserList(currentUser, currentGroupID)
+  const members = useSelector(membersSelector)
+  const userList = useGroupUserList(members, currentUser, currentGroupID)
 
-  const selectedUserID =
-    selectedUserName === 'all-items'
-      ? ''
-      : userList.find((user) => user.name === selectedUserName)?.id
+  const dispatch = useDispatch<Dispatch<SetCurrentMemberAction>>()
+
+  if (userList) {
+    dispatch(setCurrentMembers(userList))
+  }
+
+  const selectedUserID = ((): string | null => {
+    if (selectedUserName === 'all-items' || !userList) {
+      return null
+    }
+    const user = userList.find((user) => user.displayName === selectedUserName)
+    return user ? user.id : null
+  })()
 
   const navigation = useNavigation<RootScreenNavigationProp>()
   const route = useRoute<DailyScreenRouteProp>()
-  const { yearMonth } = route.params
+  const { year, month } = route.params
 
   navigation.setOptions({
-    headerTitle: yearMonth,
+    headerTitle: `${year}年${month}月`,
     headerRight: (): ReactElement => {
       const rightButton = (
         <HeaderRightCreateButton
           navigation={navigation}
           from="daily"
-          yearMonth={yearMonth}
+          yearMonth={`${year}年${month}月`}
         />
       )
       return rightButton
@@ -54,7 +70,8 @@ const PaymentListDailyScreen: React.FC = () => {
   const payments = useSpecificMonthPayments(
     currentUser.uid,
     currentGroupID,
-    yearMonth,
+    year,
+    month,
     selectedUserID
   )
 
@@ -65,7 +82,8 @@ const PaymentListDailyScreen: React.FC = () => {
           key={payment.id}
           navigation={navigation}
           payment={payment}
-          yearMonth={yearMonth}
+          year={year}
+          month={month}
         />
       )
     })
@@ -77,13 +95,15 @@ const PaymentListDailyScreen: React.FC = () => {
     <>
       <Container>
         <Content>
-          <ToggleMember
-            key={currentUser.uid}
-            userList={userList}
-            selectedUserName={selectedUserName}
-          />
-          <PaymentListDailyHeader />
-          {paymentListDailyContent}
+          <Card key="PaymentListDailyScreen">
+            <ToggleMember
+              key={'DailyToggleMember'}
+              userList={userList}
+              selectedUserName={selectedUserName}
+            />
+            <PaymentListDailyHeader />
+            {paymentListDailyContent}
+          </Card>
         </Content>
       </Container>
     </>

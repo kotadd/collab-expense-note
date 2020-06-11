@@ -2,12 +2,7 @@ import { CardItem, Left, Text } from 'native-base'
 import React from 'react'
 
 const PaymentListMonthlyHeader: React.FC = () => (
-  <CardItem
-    header
-    bordered
-    key="headerTop"
-    style={{ backgroundColor: '#dce3ea' }}
-  >
+  <CardItem header bordered key="headerTop">
     <Left>
       <Text>該当年月</Text>
     </Left>

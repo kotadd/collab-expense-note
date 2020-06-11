@@ -15,64 +15,80 @@ export const onCreatePayment = functions
     )) as admin.firestore.Timestamp
 
     const year = purchaseDate.toDate().getFullYear()
-    const thisMonth = purchaseDate.toDate().getMonth() + 1
-    const month = thisMonth < 10 ? '0' + thisMonth : thisMonth
-
-    const yearMonth = `${year}${month}`
+    const month = purchaseDate.toDate().getMonth() + 1
 
     const sumColRef = db
       .collection(`groups/${groupID}/monthly-summaries`)
-      .where('yearMonth', '==', yearMonth)
+      .where('year', '==', year)
+      .where('month', '==', month)
     const sumSnapshots = await sumColRef.get()
 
-    const userRef = snapshot.get('user.ref')
+    const userRef = snapshot.get(
+      'user.ref'
+    ) as FirebaseFirestore.QueryDocumentSnapshot<FirebaseFirestore.DocumentData>
 
     const sumUserColRef = db
       .collection(`groups/${groupID}/monthly-user-summaries`)
       .where('user.ref', '==', userRef)
-      .where('yearMonth', '==', yearMonth)
+      .where('year', '==', year)
+      .where('month', '==', month)
     const sumUserSnapshots = await sumUserColRef.get()
 
-    const collected = (await snapshot.get('collected')) as boolean
+    const isCollected = (await snapshot.get('collected')) as boolean
 
-    const groupAmount = snapshot.get('groupAmount') as number
+    const paidAmount = snapshot.get('groupAmount') as number
     const privateAmount = snapshot.get('privateAmount') as number
-    const unpaidAmount = collected ? 0 : groupAmount - privateAmount
+    const collectedAmount = isCollected ? paidAmount - privateAmount : 0
+    const uncollectedAmount = isCollected ? 0 : paidAmount - collectedAmount
 
     if (sumSnapshots.size === 0) {
       await db.collection(`groups/${groupID}/monthly-summaries`).add({
         _createdAt: admin.firestore.FieldValue.serverTimestamp(),
         _updatedAt: admin.firestore.FieldValue.serverTimestamp(),
-        groupAmount,
-        unpaidAmount,
-        yearMonth,
+        collectedGroupAmount: collectedAmount,
+        groupAmount: paidAmount,
+        isCollected: false,
+        month,
+        uncollectedGroupAmount: uncollectedAmount,
+        year,
       })
     } else {
       const sumSnapshot = sumSnapshots.docs[0]
       await sumSnapshot.ref.update({
         _updatedAt: admin.firestore.FieldValue.serverTimestamp(),
-        groupAmount: sumSnapshot.get('groupAmount') + groupAmount,
-        unpaidAmount: sumSnapshot.get('unpaidAmount') + unpaidAmount,
+        groupAmount: sumSnapshot.get('groupAmount') + paidAmount,
+        collectedGroupAmount:
+          sumSnapshot.get('collectedGroupAmount') + collectedAmount,
+        uncollectedGroupAmount:
+          sumSnapshot.get('uncollectedGroupAmount') + uncollectedAmount,
       })
     }
 
     if (sumUserSnapshots.size === 0) {
+      const uid = userRef.id
       await db.collection(`groups/${groupID}/monthly-user-summaries`).add({
         _createdAt: admin.firestore.FieldValue.serverTimestamp(),
         _updatedAt: admin.firestore.FieldValue.serverTimestamp(),
-        groupAmount,
-        unpaidAmount,
+        isCollected: false,
+        month,
+        paidAmount,
+        collectedAmount,
+        uncollectedAmount,
         user: {
+          id: uid,
           ref: userRef,
         },
-        yearMonth,
+        year,
       })
     } else {
       const sumUserSnapshot = sumUserSnapshots.docs[0]
       await sumUserSnapshot.ref.update({
         _updatedAt: admin.firestore.FieldValue.serverTimestamp(),
-        groupAmount: sumUserSnapshot.get('groupAmount') + groupAmount,
-        unpaidAmount: sumUserSnapshot.get('unpaidAmount') + unpaidAmount,
+        paidAmount: sumUserSnapshot.get('paidAmount') + paidAmount,
+        collectedAmount:
+          sumUserSnapshot.get('collectedAmount') + collectedAmount,
+        uncollectedAmount:
+          sumUserSnapshot.get('uncollectedAmount') + uncollectedAmount,
       })
     }
   })
@@ -88,14 +104,12 @@ export const onUpdatePayment = functions
     )) as admin.firestore.Timestamp
 
     const year = purchaseDate.toDate().getFullYear()
-    const thisMonth = purchaseDate.toDate().getMonth() + 1
-    const month = thisMonth < 10 ? '0' + thisMonth : thisMonth
-
-    const yearMonth = `${year}${month}`
+    const month = purchaseDate.toDate().getMonth() + 1
 
     const sumColRef = db
       .collection(`groups/${groupID}/monthly-summaries`)
-      .where('yearMonth', '==', yearMonth)
+      .where('year', '==', year)
+      .where('month', '==', month)
     const sumSnapshots = await sumColRef.get()
 
     const userRef = snapshot.before.get('user.ref')
@@ -103,40 +117,58 @@ export const onUpdatePayment = functions
     const sumUserColRef = db
       .collection(`groups/${groupID}/monthly-user-summaries`)
       .where('user.ref', '==', userRef)
-      .where('yearMonth', '==', yearMonth)
+      .where('year', '==', year)
+      .where('month', '==', month)
     const sumUserSnapshots = await sumUserColRef.get()
 
     const collectedBefore = (await snapshot.before.get('collected')) as boolean
     const collectedAfter = (await snapshot.after.get('collected')) as boolean
 
-    const groupAmountBefore = snapshot.before.get('groupAmount') as number
-    const groupAmountAfter = snapshot.after.get('groupAmount') as number
-    const groupAmountDiff = groupAmountAfter - groupAmountBefore
+    const paidAmountBefore = snapshot.before.get('groupAmount') as number
+    const paidAmountAfter = snapshot.after.get('groupAmount') as number
+    const paidAmountDiff = paidAmountAfter - paidAmountBefore
 
     const privateAmountBefore = snapshot.before.get('privateAmount') as number
     const privateAmountAfter = snapshot.after.get('privateAmount') as number
 
-    const unpaidAmountBefore = collectedBefore
-      ? 0
-      : groupAmountBefore - privateAmountBefore
+    const collectedAmountBefore = collectedBefore
+      ? paidAmountBefore - privateAmountBefore
+      : 0
 
-    const unpaidAmountAfter = collectedAfter
-      ? 0
-      : groupAmountAfter - privateAmountAfter
+    const collectedAmountAfter = collectedAfter
+      ? paidAmountAfter - privateAmountAfter
+      : 0
 
-    const unpaidAmountDiff = unpaidAmountAfter - unpaidAmountBefore
+    const collectedAmountDiff = collectedAmountAfter - collectedAmountBefore
+
+    const uncollectedAmountBefore = collectedBefore
+      ? 0
+      : paidAmountBefore - collectedAmountBefore
+
+    const uncollectedAmountAfter = collectedAfter
+      ? 0
+      : paidAmountAfter - collectedAmountAfter
+
+    const uncollectedAmountDiff =
+      uncollectedAmountAfter - uncollectedAmountBefore
 
     const sumSnapshot = sumSnapshots.docs[0]
     await sumSnapshot.ref.update({
       _updatedAt: admin.firestore.FieldValue.serverTimestamp(),
-      groupAmount: sumSnapshot.get('groupAmount') + groupAmountDiff,
-      unpaidAmount: sumSnapshot.get('unpaidAmount') + unpaidAmountDiff,
+      groupAmount: sumSnapshot.get('groupAmount') + paidAmountDiff,
+      collectedGroupAmount:
+        sumSnapshot.get('collectedGroupAmount') + collectedAmountDiff,
+      uncollectedGroupAmount:
+        sumSnapshot.get('uncollectedGroupAmount') + uncollectedAmountDiff,
     })
 
     const sumUserSnapshot = sumUserSnapshots.docs[0]
     await sumUserSnapshot.ref.update({
       _updatedAt: admin.firestore.FieldValue.serverTimestamp(),
-      groupAmount: sumUserSnapshot.get('groupAmount') + groupAmountDiff,
-      unpaidAmount: sumUserSnapshot.get('unpaidAmount') + unpaidAmountDiff,
+      paidAmount: sumUserSnapshot.get('groupAmount') + paidAmountDiff,
+      collectedAmount:
+        sumUserSnapshot.get('collectedAmount') + collectedAmountDiff,
+      uncollectedAmount:
+        sumUserSnapshot.get('uncollectedAmount') + uncollectedAmountDiff,
     })
   })

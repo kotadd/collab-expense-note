@@ -1,5 +1,6 @@
 import { User } from 'firebase'
 import { UserType } from '../../repository/firebase/users/user-types'
+import { MemberType } from './group/group.types'
 
 export type UserReduxTypes = {
   currentUser: User
@@ -9,7 +10,4 @@ export type UserReduxTypes = {
   }
 }
 
-export type UserListProps = {
-  id: string
-  name: string
-}[]
+export type UserListProps = MemberType[]

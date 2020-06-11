@@ -4,7 +4,7 @@ import { RouteProp } from '@react-navigation/native'
 import { HomeTabsParamList } from '../../../AppContainer'
 
 type TabBarIconProps = {
-  route: RouteProp<HomeTabsParamList, 'Home' | 'Profile'>
+  route: RouteProp<HomeTabsParamList, 'Home' | 'Profile' | 'Setting'>
   focused: boolean
   color: string
   size: number
@@ -21,6 +21,8 @@ const TabBarIcons: React.FC<TabBarIconProps> = ({
     iconName = focused ? 'information' : 'information-outline'
   } else if (route.name === 'Home') {
     iconName = focused ? 'home' : 'home-outline'
+  } else if (route.name === 'Setting') {
+    iconName = focused ? 'settings' : 'settings-outline'
   }
 
   return <MaterialCommunityIcons name={iconName} size={size} color={color} />
