@@ -13,9 +13,12 @@ web-report/
 # macOS
 .DS_Store
 
-#yarn
+# npm
+.npmrc
+
+# yarn
 yarn-error.log
 
-#firebase
+# firebase
 .firebaserc
 firestore.rules
