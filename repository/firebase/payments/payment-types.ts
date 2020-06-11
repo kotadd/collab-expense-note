@@ -21,21 +21,23 @@ export type PaymentProps = firebase.firestore.QueryDocumentSnapshot<
 
 export type MonthlySummaryProps = {
   id: string
-  groupAmount: number
   collectedGroupAmount: number
+  isCollected: boolean
+  groupAmount: number
+  month: number
   uncollectedGroupAmount: number
   year: number
-  month: number
 }
 
 export type MonthlyUserSummaryProps = {
   id: string
-  uid: string
-  paidAmount: number
   collectedAmount: number
+  isCollected: boolean
+  month: number
+  paidAmount: number
+  uid: string
   uncollectedAmount: number
   year: number
-  month: number
 }
 
 export type ModalProps = {

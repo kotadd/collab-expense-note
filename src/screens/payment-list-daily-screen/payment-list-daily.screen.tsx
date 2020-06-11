@@ -1,5 +1,5 @@
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native'
-import { Container, Content } from 'native-base'
+import { Container, Content, Card } from 'native-base'
 import React, { ReactElement } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import {
@@ -19,7 +19,7 @@ import {
   currentUserSelector,
   selectedUserSelector,
 } from '../../redux/user/user.selector'
-import { currentMemberSelector } from '../../redux/group/group.selector'
+import { membersSelector } from '../../redux/group/group.selector'
 import { Dispatch } from 'redux'
 import {
   SetCurrentMemberAction,
@@ -32,7 +32,7 @@ const PaymentListDailyScreen: React.FC = () => {
   const currentUser = useSelector(currentUserSelector)
   const currentGroupID = useSelector(currentGroupIDSelector)
   const selectedUserName = useSelector(selectedUserSelector)
-  const members = useSelector(currentMemberSelector)
+  const members = useSelector(membersSelector)
   const userList = useGroupUserList(members, currentUser, currentGroupID)
 
   const dispatch = useDispatch<Dispatch<SetCurrentMemberAction>>()
@@ -95,13 +95,15 @@ const PaymentListDailyScreen: React.FC = () => {
     <>
       <Container>
         <Content>
-          <ToggleMember
-            key={'DailyToggleMember'}
-            userList={userList}
-            selectedUserName={selectedUserName}
-          />
-          <PaymentListDailyHeader />
-          {paymentListDailyContent}
+          <Card key="PaymentListDailyScreen">
+            <ToggleMember
+              key={'DailyToggleMember'}
+              userList={userList}
+              selectedUserName={selectedUserName}
+            />
+            <PaymentListDailyHeader />
+            {paymentListDailyContent}
+          </Card>
         </Content>
       </Container>
     </>

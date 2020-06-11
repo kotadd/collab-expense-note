@@ -1,4 +1,4 @@
-import { Container, Content } from 'native-base'
+import { Container, Content, Card } from 'native-base'
 import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import PaymentListMonthlyContent from '../../components/payment-list-monthly-content/payment-list-monthly-content.component'
@@ -16,9 +16,9 @@ import {
   selectedUserSelector,
 } from '../../redux/user/user.selector'
 import {
-  currentMemberSelector,
-  currentMonthlyPaymentsSelector,
-  currentMonthlyUserPaymentsSelector,
+  membersSelector,
+  monthlySummariesSelector,
+  monthlyUserSummariesSelector,
 } from '../../redux/group/group.selector'
 import {
   SetCurrentMemberAction,
@@ -34,10 +34,10 @@ const PaymentListMonthlyScreen: React.FC = () => {
   const currentUser = useSelector(currentUserSelector)
   const currentGroupID = useSelector(currentGroupIDSelector)
   const selectedUserName = useSelector(selectedUserSelector)
-  const members = useSelector(currentMemberSelector)
+  const members = useSelector(membersSelector)
   const userList = useGroupUserList(members, currentUser, currentGroupID)
-  const groupPayments = useSelector(currentMonthlyPaymentsSelector)
-  const userPayments = useSelector(currentMonthlyUserPaymentsSelector)
+  const groupPayments = useSelector(monthlySummariesSelector)
+  const userPayments = useSelector(monthlyUserSummariesSelector)
 
   const dispatch = useDispatch<
     Dispatch<
@@ -82,7 +82,7 @@ const PaymentListMonthlyScreen: React.FC = () => {
       )
       return summaries?.map((summary) => (
         <PaymentListMonthlyContent
-          key={summary.uid}
+          key={summary.id}
           year={summary.year}
           month={summary.month}
           groupAmount={summary.paidAmount}
@@ -106,13 +106,15 @@ const PaymentListMonthlyScreen: React.FC = () => {
     <>
       <Container>
         <Content>
-          <ToggleMember
-            key={'MonthlyToggleMember'}
-            userList={userList}
-            selectedUserName={selectedUserName}
-          />
-          <PaymentListMonthlyHeader />
-          {monthlySummaries}
+          <Card key="PaymentListMonthlyScreen">
+            <ToggleMember
+              key={'MonthlyToggleMember'}
+              userList={userList}
+              selectedUserName={selectedUserName}
+            />
+            <PaymentListMonthlyHeader />
+            {monthlySummaries}
+          </Card>
         </Content>
       </Container>
     </>

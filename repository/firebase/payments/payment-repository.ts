@@ -3,11 +3,10 @@ import { fetchGroupIDByUID, firestore } from '../firebase.utils'
 import {
   ModalProps,
   MonthlySummaryProps,
+  MonthlyUserSummaryProps,
   PaymentProps,
   PaymentType,
-  MonthlyUserSummaryProps,
 } from './payment-types'
-import { MemberType } from '../../../src/redux/group/group.types'
 
 export const setMonthlyPayments: (
   uid: string,
@@ -28,12 +27,12 @@ export const setMonthlyPayments: (
       const map: MonthlySummaryProps[] = querySnapshot.docs.map((summary) => {
         return {
           id: summary.id,
-          uid: summary.get('user.id'),
-          groupAmount: summary.get('groupAmount'),
           collectedGroupAmount: summary.get('collectedGroupAmount'),
+          groupAmount: summary.get('groupAmount'),
+          isCollected: summary.get('isCollected'),
+          month: summary.get('month'),
           uncollectedGroupAmount: summary.get('uncollectedGroupAmount'),
           year: summary.get('year'),
-          month: summary.get('month'),
         }
       })
       setPayments(map)
@@ -71,11 +70,12 @@ export const setMonthlyUserPayments: (
           return {
             id: summary.id,
             uid: summary.get('user.id'),
-            paidAmount: summary.get('paidAmount'),
             collectedAmount: summary.get('collectedAmount'),
+            isCollected: summary.get('isCollected'),
+            month: summary.get('month'),
+            paidAmount: summary.get('paidAmount'),
             uncollectedAmount: summary.get('uncollectedAmount'),
             year: summary.get('year'),
-            month: summary.get('month'),
           }
         }
       )
@@ -217,13 +217,4 @@ export const editPaymentsData: (
   }
 
   return payment
-}
-
-const fetchUnpaidAmounts = async (members: MemberType[]) => {
-  const query = firestore
-    .collection('monthly-user-summaries')
-    .where('yearMonth', '==', '202004')
-
-  const monthlyUserSummaries = await query.get()
-  monthlyUserSummaries.docs.map((maonthUserSummarySnapshot) => {})
 }

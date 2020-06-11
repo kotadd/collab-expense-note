@@ -1,21 +1,23 @@
 export type MemberType = Readonly<{ id: string; displayName: string }>
 export type MonthlySummaryType = Readonly<{
   id: string
-  groupAmount: number
   collectedGroupAmount: number
+  groupAmount: number
+  isCollected: boolean
+  month: number
   uncollectedGroupAmount: number
   year: number
-  month: number
 }>
 
 export type MonthlyUserSummaryType = Readonly<{
   id: string
   uid: string
-  paidAmount: number
   collectedAmount: number
+  isCollected: boolean
+  month: number
+  paidAmount: number
   uncollectedAmount: number
   year: number
-  month: number
 }>
 
 export type CurrentGroupProps = Readonly<{

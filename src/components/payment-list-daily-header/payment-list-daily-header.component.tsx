@@ -1,4 +1,4 @@
-import { CardItem, Left, Right, Text } from 'native-base'
+import { CardItem, Left, Right, Text, Body } from 'native-base'
 import React from 'react'
 
 const PaymentListDailyHeader: React.FC = () => (
@@ -11,15 +11,9 @@ const PaymentListDailyHeader: React.FC = () => (
     <Left>
       <Text>日付</Text>
     </Left>
-    <Left>
-      <Text>店舗</Text>
-    </Left>
-    <Left>
-      <Text>家計費</Text>
-    </Left>
-    <Left>
-      <Text>自分用</Text>
-    </Left>
+    <Body>
+      <Text>家計費（支出額）</Text>
+    </Body>
     <Right>
       <Text>精算済</Text>
     </Right>

@@ -5,14 +5,14 @@ import {
   MonthlyUserSummaryType,
 } from './group.types'
 
-export const currentMemberSelector: (
+export const membersSelector: (
   state: ReduxCurrentGroupProps
 ) => MemberType[] = (state) => state.group.members
 
-export const currentMonthlyPaymentsSelector: (
+export const monthlySummariesSelector: (
   state: ReduxCurrentGroupProps
 ) => MonthlySummaryType[] = (state) => state.group.monthlySummaries
 
-export const currentMonthlyUserPaymentsSelector: (
+export const monthlyUserSummariesSelector: (
   state: ReduxCurrentGroupProps
 ) => MonthlyUserSummaryType[] = (state) => state.group.monthlyUserSummaries
