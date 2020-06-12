@@ -165,7 +165,6 @@ export const onUpdatePayment = functions
     const sumUserSnapshot = sumUserSnapshots.docs[0]
     await sumUserSnapshot.ref.update({
       _updatedAt: admin.firestore.FieldValue.serverTimestamp(),
-      paidAmount: sumUserSnapshot.get('groupAmount') + paidAmountDiff,
       collectedAmount:
         sumUserSnapshot.get('collectedAmount') + collectedAmountDiff,
       uncollectedAmount:
