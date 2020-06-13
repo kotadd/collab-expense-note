@@ -26,11 +26,13 @@ import { currentUserSelector } from '../../redux/user/user.selector'
 import DatePicker from '../datepicker/datepicker-component'
 import PickerInput from '../picker-input/picker-input.component'
 import OPTIONS from '../picker-input/picker-options'
+import { membersSelector } from '../../redux/group/group.selector'
 
 type EditScreenRouteProp = RouteProp<ModalStackParamList, 'Edit'>
 
 const EditPaymentForm: React.FC = () => {
   const currentUser = useSelector(currentUserSelector)
+  const members = useSelector(membersSelector)
   const route = useRoute<EditScreenRouteProp>()
   const { payment, paymentID } = route.params
 
@@ -46,6 +48,8 @@ const EditPaymentForm: React.FC = () => {
     payment.purchaseDate.toDate()
   )
   const [groupAmount, setGroupAmount] = useState(payment.groupAmount)
+  const [memberName, setMemberName] = useState(payment.memberName)
+
   const [purchaseMemo, setPurchaseMemo] = useState(payment.purchaseMemo)
   const [show, setShow] = useState(false)
   const [shopName, setShopName] = useState(payment.shopName)
@@ -61,6 +65,11 @@ const EditPaymentForm: React.FC = () => {
   ) => {
     setShow(Platform.OS === 'ios' ? true : false)
     setPurchaseDate(selectedDate || purchaseDate)
+  }
+
+  const changeMember: (value: string) => void = (value) => {
+    setMemberName(value)
+    setShow(false)
   }
 
   const changeShop: (value: string) => void = (value) => {
@@ -82,6 +91,7 @@ const EditPaymentForm: React.FC = () => {
     const state: ModalProps = {
       collected,
       groupAmount,
+      memberName,
       privateAmount,
       purchaseDate,
       purchaseMemo,
@@ -98,9 +108,8 @@ const EditPaymentForm: React.FC = () => {
         })
 
         navigation.navigate('Daily', {
-          yearMonth: purchaseDate
-            .toLocaleDateString('ja-JP', dateOption)
-            .replace(/(\d\d|\d)日.*/, ''),
+          year: purchaseDate.getFullYear(),
+          month: purchaseDate.getMonth() + 1,
         })
       } else {
         Toast.show({
@@ -116,6 +125,13 @@ const EditPaymentForm: React.FC = () => {
 
   const displayDate = purchaseDate
 
+  const memberItems = members.map((member) => {
+    return {
+      key: member.id,
+      label: member.displayName,
+    }
+  })
+
   return (
     <Form style={{ marginRight: 16 }}>
       <Item fixedLabel>
@@ -129,6 +145,15 @@ const EditPaymentForm: React.FC = () => {
       </Item>
 
       {show && <DatePicker value={displayDate} onChange={setDate} />}
+
+      <PickerInput
+        key="buyer"
+        title="購入者"
+        items={memberItems}
+        item={memberName}
+        onChange={changeMember}
+      />
+
       <PickerInput
         key="shop"
         title="店舗"

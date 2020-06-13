@@ -25,14 +25,16 @@ import { ModalProps } from '../../../repository/firebase/payments/payment-types'
 import DatePicker from '../../components/datepicker/datepicker-component'
 import PickerInput from '../../components/picker-input/picker-input.component'
 import OPTIONS from '../../components/picker-input/picker-options'
+import { membersSelector } from '../../redux/group/group.selector'
 import { currentUserSelector } from '../../redux/user/user.selector'
 
 type ModalScreenRouteProp = RouteProp<ModalStackParamList, 'CreateNew'>
 
 const CreatePaymentForm: React.FC = () => {
   const currentUser = useSelector(currentUserSelector)
+  const members = useSelector(membersSelector)
   const route = useRoute<ModalScreenRouteProp>()
-  const { from, yearMonth } = route.params
+  const { from, year, month } = route.params
 
   const dateOption = {
     year: 'numeric',
@@ -47,6 +49,7 @@ const CreatePaymentForm: React.FC = () => {
   const [purchaseMemo, setPurchaseMemo] = useState('')
   const [show, setShow] = useState(false)
   const [shopName, setShopName] = useState('')
+  const [memberName, setMemberName] = useState(currentUser.displayName!)
   const [privateAmount, setPrivateAmount] = useState(0)
   const [usage, setUsage] = useState('')
 
@@ -58,6 +61,11 @@ const CreatePaymentForm: React.FC = () => {
   ) => {
     setShow(Platform.OS === 'ios' ? true : false)
     setPurchaseDate(selectedDate || purchaseDate)
+  }
+
+  const changeMember: (value: string) => void = (value) => {
+    setMemberName(value)
+    setShow(false)
   }
 
   const changeShop: (value: string) => void = (value) => {
@@ -78,6 +86,7 @@ const CreatePaymentForm: React.FC = () => {
       })
     }
     const state: ModalProps = {
+      memberName,
       collected,
       groupAmount,
       privateAmount,
@@ -95,9 +104,10 @@ const CreatePaymentForm: React.FC = () => {
           type: 'success',
         })
 
-        if (from === 'daily' && yearMonth) {
+        if (from === 'daily' && year && month) {
           navigation.navigate('Daily', {
-            yearMonth,
+            year,
+            month,
           })
         } else {
           navigation.navigate('Monthly')
@@ -109,6 +119,13 @@ const CreatePaymentForm: React.FC = () => {
   }
 
   const displayDate = purchaseDate as Date
+
+  const memberItems = members.map((member) => {
+    return {
+      key: member.id,
+      label: member.displayName,
+    }
+  })
 
   return (
     <Form style={{ marginRight: 16 }}>
@@ -123,6 +140,15 @@ const CreatePaymentForm: React.FC = () => {
       </Item>
 
       {show && <DatePicker value={displayDate} onChange={setDate} />}
+
+      <PickerInput
+        key="buyer"
+        title="購入者"
+        item={memberName}
+        items={memberItems}
+        onChange={changeMember}
+      />
+
       <PickerInput
         key="shop"
         title="店舗"

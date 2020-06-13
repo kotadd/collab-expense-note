@@ -32,6 +32,14 @@ const PaymentListDetailForm: React.FC<PaymentForm> = ({
       />
     </Item>
     <Item fixedLabel>
+      <Label>購入者</Label>
+      <Input
+        disabled={disabled}
+        value={payment.memberName}
+        style={{ textAlign: 'right', lineHeight: 18 }}
+      />
+    </Item>
+    <Item fixedLabel>
       <Label>店舗</Label>
       <Input
         disabled={disabled}
