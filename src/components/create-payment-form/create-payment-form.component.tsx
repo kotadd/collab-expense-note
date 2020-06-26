@@ -49,7 +49,7 @@ const CreatePaymentForm: React.FC = () => {
   const [purchaseMemo, setPurchaseMemo] = useState('')
   const [show, setShow] = useState(false)
   const [shopName, setShopName] = useState('')
-  const [memberName, setMemberName] = useState(currentUser.displayName!)
+  const [memberName, setMemberName] = useState(currentUser.displayName || '')
   const [privateAmount, setPrivateAmount] = useState(0)
   const [usage, setUsage] = useState('')
 
