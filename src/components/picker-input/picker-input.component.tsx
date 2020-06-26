@@ -4,10 +4,9 @@ import SelectListHeader from '../select-list-header/select-list-header.component
 
 type PickerInputProps = {
   title: string
-  placeholder: string
+  placeholder?: string
   items: {
     key: string
-    type: string
     label: string
   }[]
   item?: string

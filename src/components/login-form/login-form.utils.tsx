@@ -38,8 +38,8 @@ export const validateLogin: (
   password: string,
   dispatch: Dispatch,
   navigation: RootScreenNavigationProp
-) => Promise<void | null> = async (email, password, dispatch, navigation) => {
-  if (!email || !password) return null
+) => Promise<void> = async (email, password, dispatch, navigation) => {
+  if (!email || !password) return
   try {
     const credentialedUser = await auth.signInWithEmailAndPassword(
       email,

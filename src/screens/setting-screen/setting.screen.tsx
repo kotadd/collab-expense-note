@@ -1,18 +1,17 @@
+import { useNavigation } from '@react-navigation/native'
 import { Card, CardItem, Container, Content, Left, Text } from 'native-base'
-import React, { useState } from 'react'
-import dayjs from 'dayjs'
+import React from 'react'
 import { useSelector } from 'react-redux'
+import { RootScreenNavigationProp } from '../../../AppContainer'
 import {
   membersSelector,
-  monthlyUserSummariesSelector,
   monthlySummariesSelector,
+  monthlyUserSummariesSelector,
 } from '../../redux/group/group.selector'
 import {
   findInCollectedLastMonthSummary,
   getTargetUserSummaries,
 } from './setting.utils'
-import { useNavigation } from '@react-navigation/native'
-import { RootScreenNavigationProp } from '../../../AppContainer'
 
 const SettingScreen: React.FC = () => {
   const members = useSelector(membersSelector)

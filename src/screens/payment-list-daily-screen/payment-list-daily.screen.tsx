@@ -53,20 +53,6 @@ const PaymentListDailyScreen: React.FC = () => {
   const route = useRoute<DailyScreenRouteProp>()
   const { year, month } = route.params
 
-  navigation.setOptions({
-    headerTitle: `${year}年${month}月`,
-    headerRight: (): ReactElement => {
-      const rightButton = (
-        <HeaderRightCreateButton
-          navigation={navigation}
-          from="daily"
-          yearMonth={`${year}年${month}月`}
-        />
-      )
-      return rightButton
-    },
-  })
-
   const payments = useSpecificMonthPayments(
     currentUser.uid,
     currentGroupID,
@@ -91,6 +77,19 @@ const PaymentListDailyScreen: React.FC = () => {
     <></>
   )
 
+  navigation.setOptions({
+    headerTitle: `${year}年${month}月`,
+    headerRight: (): ReactElement => {
+      const rightButton = (
+        <HeaderRightCreateButton
+          navigation={navigation}
+          from="daily"
+          yearMonth={`${year}年${month}月`}
+        />
+      )
+      return rightButton
+    },
+  })
   return (
     <>
       <Container>

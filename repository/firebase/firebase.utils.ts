@@ -3,7 +3,6 @@ import 'firebase/auth'
 import 'firebase/firestore'
 import { config, prodConfig } from './firebase.config'
 
-console.log(`process.env.NODE_ENV: ${process.env.NODE_ENV}`)
 if (process.env.NODE_ENV === 'development') {
   firebase.initializeApp(config)
 } else {
